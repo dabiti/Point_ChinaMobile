@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+           http://www.springframework.org/schema/aop 
+           http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+           http://www.springframework.org/schema/tx
+     	   http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+           http://www.springframework.org/schema/context
+           http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+           	
+	<!-- 采用注释的方式配置bean -->  
+    <context:annotation-config /> 
+    <!-- 配置要扫描的包 -->  
+    <context:component-scan base-package="com.point.web" />
+
+
+<!-- 配置数据源(连接池，druid) -->
+	<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">  
+		<!-- for Oracle -->
+		<property name="driverClassName" value="oracle.jdbc.OracleDriver"/>
+		<property name="url" value="jdbc:oracle:thin:@192.168.12.99:1521:orcl" />
+		<property name="username" value="cmpoint" /> 
+		<property name="password" value="cmpoint" />
+		<property name="initialSize" value="10" />  
+		<property name="minIdle" value="10" />  
+		<property name="maxActive" value="50" />   
+		<property name="removeAbandoned" value="true" /> <!-- 打开removeAbandoned功能 -->
+  		<property name="removeAbandonedTimeout" value="1800" /> <!-- 1800秒，也就是30分钟 -->
+  		<property name="logAbandoned" value="true" /> <!-- 关闭abanded连接时输出错误日志 -->
+   		<property name="maxWait" value="60000" /> <!-- 配置获取连接等待超时的时间 -->
+   		<property name="timeBetweenEvictionRunsMillis" value="60000" /> <!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
+   		<property name="minEvictableIdleTimeMillis" value="300000" />  <!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
+		<property name="validationQuery" value="SELECT 'x' from dual" />    
+		<property name="testWhileIdle" value="true" />  
+		<property name="testOnBorrow" value="false" />  
+		<property name="testOnReturn" value="false" /> 
+		<property name="poolPreparedStatements" value="false" />  
+		<property name="maxPoolPreparedStatementPerConnectionSize" value="100" />  
+		<property name="filters" value="stat" />
+	</bean>
+	
+
+	<!-- Session工厂 -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<!-- mybatis配置文件 -->
+		<property name="configLocation" value="classpath:mybatis.xml" />
+	</bean>
+	
+	<!-- 配置SqlSessionTemplate -->  
+    <bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">  
+        <constructor-arg name="sqlSessionFactory" ref="sqlSessionFactory" />  
+    </bean>
+
+
+	<!-- 开启事务注解驱动 -->  
+	<!-- <tx:annotation-driven /> -->
+
+	<!-- transaction manager, use DataSourceTransactionManager -->
+	<bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+	      <property name="dataSource" ref="dataSource" />
+	</bean>
+	<!-- spring declarative transaction management -->
+	<aop:config>
+		<aop:pointcut id="fooServiceMethods" 
+			expression="execution(* com.point.web.service.impl.*.*(..))"/> 
+		<aop:advisor advice-ref="txAdvice" pointcut-ref="fooServiceMethods"/> 
+	</aop:config>
+	<tx:advice id="txAdvice" transaction-manager="txManager">
+		<tx:attributes>
+		  <tx:method name="add*" propagation="REQUIRED" rollback-for="Exception"/>
+		  <tx:method name="delete*" propagation="REQUIRED" rollback-for="Exception"/>
+		  <tx:method name="update*" propagation="REQUIRED" rollback-for="Exception"/>
+		  <tx:method name="find*" read-only="true" />
+		  <tx:method name="load*" read-only="true"/>
+		  <tx:method name="*" rollback-for="Exception"/>
+		</tx:attributes>
+	</tx:advice>
+
+    
+</beans>
