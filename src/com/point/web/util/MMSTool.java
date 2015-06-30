@@ -5,8 +5,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLConnection;
 import java.security.MessageDigest;
 import java.util.Date;
 import java.util.HashMap;
@@ -80,16 +80,16 @@ public class MMSTool {
 	
 	
 	
-	private static String sendPost(String param,Map<String,String> userMap) {
+	private static String sendPost(String param,Map<String,String> userMap) throws Exception {
 	        PrintWriter out = null;
 	        BufferedReader in = null;
 	        String result = "";
 	        try {
 	            URL realUrl = new URL(MMSMap.get("Host"));
 	            // 打开和URL之间的连接
-//	            URLConnection conn = realUrl.openConnection();
-	            HttpURLConnection conn = (HttpURLConnection)realUrl.openConnection();
-	            conn.setRequestMethod("POST");
+	            URLConnection conn = realUrl.openConnection();
+//	            HttpURLConnection conn = (HttpURLConnection)realUrl.openConnection();
+//	            conn.setRequestMethod("POST");
 	            conn.setRequestProperty("Accept-Charset", "utf-8");
 	            conn.setRequestProperty("Charsert", "UTF-8");
 	            conn.setUseCaches(false);
@@ -106,7 +106,7 @@ public class MMSTool {
 	            conn.setRequestProperty("Content-Length",String.valueOf(param.length()));
 	            conn.setRequestProperty("Connection", "Keep-Alive");
 	            
-//	            conn.setRequestProperty("accept", "*/*");
+	            conn.setRequestProperty("accept", "*/*");
 	            // 发送POST请求必须设置如下两行
 	            conn.setDoOutput(true);
 	            conn.setDoInput(true);
@@ -114,6 +114,7 @@ public class MMSTool {
 	            out = new PrintWriter(conn.getOutputStream());
 	            // 发送请求参数
 //	            param = URLEncoder.encode(param);
+//	            param = URIUtil.encodePath(param, "UTF-8");
 	            out.print(param);
 	            // flush输出流的缓冲
 	            out.flush();
@@ -128,6 +129,7 @@ public class MMSTool {
 	        	log.error(e.getMessage());
 	            System.out.println("发送 POST 请求出现异常！"+e);
 	            e.printStackTrace();
+	            throw new Exception(e);
 	        }
 	        //使用finally块来关闭输出流、输入流
 	        finally{

@@ -217,10 +217,10 @@ public class MobileMallController {
 			} else {
 				// Base64解密
 				log.info("开始Base64解密");
-//				req = req.replace(" ", "+");
-//				 req = Base64Coder.decodeString(req);
-			req = "df882ed62782ddf7cd7afbc73f762411{\"source\":\"2\",\"version\":\"1.0\",\"identity_id\":\"123456\","
-						+ "\"data\":{\"orderId\":\"123\",\"phone\":\"13581761989\",\"itemId\":\"123\",\"title\":\"123\",\"price\":\"123\",\"quantity\":\"123\",\"finalFee\":\"123\",\"discount\":\"123\"}}";
+				req = req.replace(" ", "+");
+				 req = Base64Coder.decodeString(req);
+//				req = "df882ed62782ddf7cd7afbc73f762411{\"source\":\"2\",\"version\":\"1.0\",\"identity_id\":\"123456\","
+//					+ "\"data\":{\"orderId\":\"123\",\"phone\":\"13581761989\",\"itemId\":\"123\",\"title\":\"123\",\"price\":\"123\",\"quantity\":\"123\",\"finalFee\":\"123\",\"discount\":\"123\"}}";
 				log.info("Base64解密后报文:"+req);
 				// 签名
 				String sign = req.substring(0, req.indexOf("{"));
@@ -274,9 +274,14 @@ public class MobileMallController {
 						// 发送
 						log.info("准备发送短信,参数:"+userMap);
 						
-						MMSTool.sendMMS(userMap);
-						log.info("发送成功");
-						rj = new VGReturnJson("0", "ok");
+						String MMSReturn = MMSTool.sendMMS(userMap);
+						if(MMSReturn.contains("1000")){
+							log.info("发送成功");
+							rj = new VGReturnJson("0", "ok");
+						}else{
+							log.info("发送失败");
+							rj = new VGReturnJson("9999", "短信发送失败,返回："+MMSReturn);
+						}
 					}
 				}
 			}
