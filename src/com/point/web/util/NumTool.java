@@ -2,8 +2,6 @@ package com.point.web.util;
 
 import java.util.Random;
 
-import com.point.web.entity.Order;
-
 public class NumTool {
 	
     public static String checkCode(int count){
@@ -20,3 +18,4 @@ public class NumTool {
     
   
 }
+

@@ -24,12 +24,13 @@
 		WHERE O.ORDERID = #{orderid}
 	</select>
 	
+
 	<select id="getNextSysNo" resultType="long" >
 		SELECT SEQ_ORDER.NEXTVAL 
 	    FROM DUAL
 	</select>
 	
-	
+
 	<select id="getSysTime"  resultType="string">
 		SELECT TO_CHAR(SYSDATE,'yyyy-MM-dd HH24:mi:ss') FROM DUAL
 	</select>

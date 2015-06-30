@@ -4,7 +4,6 @@ import java.io.Serializable;
 
 import org.apache.ibatis.type.Alias;
 
-import com.sun.xml.internal.bind.v2.runtime.RuntimeUtil.ToStringAdapter;
 
 /**
  * 
@@ -47,6 +46,7 @@ public class Order implements Serializable {
 		this.createtime = createtime;
 	}
 
+
 	@Override
 	public String toString() {
 		return "Order [orderid=" + orderid
@@ -57,6 +57,7 @@ public class Order implements Serializable {
 				+ ", createtime=" + createtime + "]";
 	}
 	
+
 	public String getOrderid() {
 		return orderid;
 	}

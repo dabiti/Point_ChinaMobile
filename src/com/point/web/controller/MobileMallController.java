@@ -34,11 +34,13 @@ public class MobileMallController {
 
 	private static Logger log = Logger.getLogger(MobileMallController.class);
 
+
 	@Resource
 	private OrderService orderService;
 
 	@Resource
 	private VirtualCodeService virtualCodeService;
+
 
 	@RequestMapping("/test")
 	public void getOrgnizationTree(HttpSession session,
@@ -377,6 +379,7 @@ public class MobileMallController {
 				e.printStackTrace();
 			}
 		}
+
 	}
 
 }
