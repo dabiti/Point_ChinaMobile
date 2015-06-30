@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+	<mapper namespace="com.point.web.dao.OrderDao">
+
+	<resultMap id="resultOrder" type="order" >
+		<id column="ORDERID" property="orderid"/>
+		<result column="PHONE" property="phone"/>
+		<result column="ITEMID" property="itemid"/>
+		<result column="TITLE" property="title"/>
+		<result column="PRICE" property="price"/>
+		<result column="QUANTITY" property="quantity"/>
+		<result column="FINALFEE" property="finalfee"/>
+		<result column="DISCOUNT" property="discount"/>
+		<result column="CREATEDATE" property="createdate"/>
+		<result column="CREATETIME" property="createtime"/>
+	</resultMap>
+	
+	<select id="get" resultMap="resultOrder" parameterType="string">
+		SELECT O.ORDERID,O.PHONE,O.ITEMID,O.TITLE,O.PRICE,O.QUANTITY,O.FINALFEE,O.DISCOUNT,O.CREATEDATE,O.CREATETIME
+	    FROM ORDER_T O
+		WHERE O.ORDERID = #{orderid}
+	</select>
+	
+	<select id="getSysTime"  resultType="string">
+		SELECT TO_CHAR(SYSDATE,'yyyy-MM-dd HH24:mi:ss') FROM DUAL
+	</select>
+	
+	
+	<insert id="save" parameterType="order">
+        	insert into ORDER_T (ORDERID,PHONE,ITEMID,TITLE,PRICE,QUANTITY,FINALFEE,DISCOUNT,CREATEDATE,CREATETIME) values(#{orderid},#{phone},#{itemid},#{title},#{price},#{quantity},#{finalfee},#{discount},#{createdate},#{createtime}) 
+	</insert>
+	
+	
+</mapper>

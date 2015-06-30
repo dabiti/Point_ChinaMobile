@@ -1,0 +1,351 @@
+@charset "utf-8";
+/* CSS Document */
+
+body {
+	margin: 0px;
+	padding: 0px;
+	background-color:#dfe7e9;
+	font: 12px/1.7 "Microsoft YaHei", "Helvetica Neue", arial, sans-serif, "Hiragino Sans GB", Tahoma;
+}
+a {
+	color:#575757;
+	font-size:12px;
+	text-decoration:none;
+}
+ul {
+	margin: 0px;
+	padding: 0px;
+	list-style: none;
+}
+#nav {
+	width:100%;
+	height:40px;
+	background-image: url(../style/images/bg.jpg);
+	background-repeat: repeat-x;
+	background-color:#bfbfbf;
+	font-size:14px;
+	color:#cccccc;
+	border-bottom:2px #fff solid;
+}
+.nav1 {
+	float:left;
+	width: 750px;
+}
+.nav1 ul {
+	margin: 0px;
+	padding: 0px;
+	list-style: none;
+}
+.nav1 ul li {
+	float:left;
+	width:80px;
+	padding-top:2px;
+}
+.nav1 ul li a {
+	color:#fff;
+	font-size:14px;
+	text-decoration:none;
+}
+.nav1 ul li a:hover {
+	color:#fff;
+	font-size:14px;
+	text-decoration:underline;
+}
+#register {
+	margin: 0px auto;
+	width: 960px;
+	border-right-color: transparent;
+	border-bottom-color: rgb(193, 194, 192);
+	border-left-color: transparent;
+	border-right-width: 7px;
+	border-bottom-width: 7px;
+	border-left-width: 7px;
+	border-right-style: dashed;
+	border-bottom-style: solid;
+	border-left-style: dashed;
+}
+#register_space {
+	margin: 0px auto;
+	width: 960px;
+	height:40px;
+}
+#borde {
+	border-radius: 5px;
+	border: 1px solid rgb(195, 195, 195);
+	width: 55px;
+	height: 470px;
+	text-align: center;
+	font-size: 12px;
+	margin-top: 10px;
+	margin-right: 15px;
+	margin: 0px auto;
+	width: 740px;
+	box-shadow: 0px 1px 0px rgba(0, 0, 0, 0.1);
+	background-color: rgb(245, 245, 245);
+}
+#bottom_div {
+	margin: 0px auto;
+	position:fixed;
+	float:left;
+	bottom:0px;
+	color:#575757;
+	background-color:#e8e8e8;
+	height:80px;
+	width:100%;
+	border-top:2px #fff solid;
+}
+#rightbq {
+	margin: 0px auto;
+	margin-top:10px;
+	margin-bottom:10px;
+	width:970px;
+}
+.rightcon {
+	float:left;
+	width:500px;
+}
+.rightcon ul {
+	margin: 0px;
+	padding: 0px;
+	list-style: none;
+}
+.rightcon ul li {
+	height:20px;
+	font-size:12px;
+	color:#575757;
+}
+.rightcon ul li a {
+	height:20px;
+	font-size: 12px;
+	color:#575757;
+}
+.rightcon ul li a:hover {
+	height:20px;
+	font-size: 12px;
+	color:#0088cc;
+	text-decoration:underline;
+}
+.rightcon1 {
+	float:right;
+	text-align:right;
+	width:300px;
+}
+/*register*/
+
+input {
+	margin: 0px;
+	padding: 8px;
+	border-radius: 3px;
+	border: 1px solid rgb(204, 204, 204);
+	color: rgb(92, 92, 92);
+	display: inline-block;
+	background-color: rgb(255, 255, 255);
+	width:300px;
+}
+.inputwidth {
+	width:270px;
+	padding-left:30px;
+}
+input:focus {
+	border: 1px solid #2c7600;
+	color: #5c5c5c;
+	box-shadow: inset 0px 0px 1px rgba(0, 0, 0, 0.05), 0px 0px 8px rgba(96, 255, 0, 0.6);
+}
+.regi_left {
+	float:left;
+	width:460px;
+	height:380px;
+	margin:40px;
+	padding-top:10px;
+	padding-left:5px;
+	border-right:1px #CCC solid;
+}
+.regi_left ul {
+	margin: 0px;
+	padding: 0px;
+	list-style: none;
+}
+.regi_left ul li {
+	height:55px;
+	font-size:12px;
+	width:400px;
+	color:#575757;
+}
+.regi_left ul li span {
+	float:left;
+	width:60px;
+	height:44px;
+	padding-top:6px;
+}
+.login_name {
+	background: url("../style/images/name.png") no-repeat 7px 6px;
+}
+.login_password {
+	background: url("../style/images/password.png") no-repeat 7px 6px;
+}
+.login_email {
+	background: url("../style/images/email.png") no-repeat 7px 6px;
+}
+input[type='radio'] {
+	margin: 3px 0px;
+	padding: 0px;
+	border: currentColor;
+	width: auto;
+	height: auto;
+	line-height: normal;
+	cursor: pointer;
+	background-color: transparent;
+}
+.radio_div {
+	float:right;
+	width:325px;
+	text-align:left;
+	padding-top:7px;
+}
+input[type='checkbox'] {
+	margin: 3px 0px;
+	padding: 0px;
+	border: currentColor;
+	width: auto;
+	height: auto;
+	line-height: normal;
+	cursor: pointer;
+	background-color: transparent;
+}
+a.logoin {
+	float:right;
+	background: url("../style/images/login.png");
+	margin-right: 15px;
+	margin-left: 20px;
+	width:256px;
+	height:34px;
+}
+a.logoin ：hover {
+	background-color:blue;
+	margin-right: 15px;
+	margin-left: 20px;
+	width:256px;
+	height:34px;
+}
+.btn {
+	padding: 7px 12px;
+	border-radius: 4px;
+	border: 1px solid #fff;
+	color: rgb(255, 255, 255);
+	line-height: 18px;
+	overflow: visible;
+	font-size: 12px;
+	font-weight: bold;
+	font-family:"Microsoft YaHei";
+	display: inline-block;
+	position: relative;
+	cursor: pointer;
+	background-color: #ff6029;
+	box-shadow: 0px 0px 1px rgba(0, 0, 0, 0.3);
+}
+.denglu {
+	float:right;
+	text-align:center;
+	width:70px;
+	height:24px;
+	background-color:#39a244;
+	color:#fff;
+}
+.denglu a, .denglu a:hover {
+	color:#fff;
+	text-decoration:none;
+}
+.nav2 {
+	margin: 0px auto;
+	width: 960px;
+	padding-top:6px;
+}
+/*注册*/
+#llogin {
+	margin:auto;
+	width: 960px;
+	height:350px;
+}
+.login_pic {
+	float:left;
+	width:630px;
+	height:300px;
+	background-color:white;
+}
+.login_con {
+	float:right;
+	width:320px;
+	background-color:white;
+	border-radius: 5px;
+	border: 1px solid rgb(195, 195, 195);
+	box-shadow: 0px 1px 0px rgba(0, 0, 0, 0.1);
+	height:300px;
+}
+.login_input {
+	float:left;
+	padding:20px;
+	width:270px;
+}
+.login_input ul {
+	margin: 0px;
+	padding: 0px;
+	list-style: none;
+}
+.login_input ul li {
+	height:40px;
+	padding:4px;
+}
+
+.login_input ul li span {
+	float:left;
+	width:65px;
+	height:30px;
+	padding-top:6px;
+	font-size:14px;
+}
+.inputwidth2 {
+	width:155px;
+	padding-left:25px;
+}
+.login_lock {
+	background: url("../style/images/lock.png") no-repeat 7px 6px;
+}
+.login_name1{
+	background: url("../style/images/name.png") no-repeat 7px 6px;
+}
+.login_password1 {
+	background: url("../style/images/password.png") no-repeat 7px 6px;
+}
+.inputwidth3 {
+	width:60px;
+	padding-left:25px;
+}
+.img_code{
+	float:right;
+	padding-right:15px;
+	width:80px;
+	height:35px;}
+.radio_div1 {
+	float:right;
+	width:150px;
+	text-align:right;
+	padding-top:7px;
+	padding-right:10px;
+}
+
+.login_btn {
+	padding: 7px 12px;
+	border-radius: 4px;
+	border: 1px solid #fff;
+	color: rgb(255, 255, 255);
+	line-height: 18px;
+	overflow: visible;
+	font-size: 14px;
+	font-weight: bold;
+	font-family:"Microsoft YaHei";
+	display: inline-block;
+	position: relative;
+	cursor: pointer;
+	background-color: #ff6029;
+	box-shadow: 0px 0px 1px rgba(0, 0, 0, 0.3);
+}
