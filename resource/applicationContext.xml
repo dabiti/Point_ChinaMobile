@@ -52,6 +52,11 @@
 		<property name="configLocation" value="classpath:mybatis.xml" />
 	</bean>
 	
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.point.web.dao" />
+		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"></property>
+	</bean>
+	
 	<!-- 配置SqlSessionTemplate -->  
     <bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">  
         <constructor-arg name="sqlSessionFactory" ref="sqlSessionFactory" />  
