@@ -8,9 +8,7 @@
 	<resultMap id="resultVirtualcode" type="virtualcode" >
 		<id column="ORDERID" property="orderid"/>
 		<result column="VCODE" property="vcode"/>
-		<result column="VCODEPASS" property="vcodepass"/>
 		<result column="STATUS" property="status"/>
-		<result column="CREATEDATE" property="createdate"/>
 		<result column="CREATETIME" property="createtime"/>
 	</resultMap>
 	
@@ -22,7 +20,7 @@
 	</select>
 	
 	<insert id="save" parameterType="virtualcode">
-        	insert into VIRTUALCODE (ORDERID,VCODE,VCODEPASS,STATUS,CREATEDATE,CREATETIME) values(#{orderid},#{vcode},#{vcodepass},#{status},#{createdate},#{createtime}) 
+        	insert into VIRTUALCODE (ORDERID,VCODE,VCODEPASS,STATUS,CREATETIME) values(#{orderid},#{vcode},#{vcodepass},#{status},sysdate) 
 	</insert>
 	
 	

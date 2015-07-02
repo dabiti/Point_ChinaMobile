@@ -14,7 +14,6 @@
 		<result column="QUANTITY" property="quantity"/>
 		<result column="FINALFEE" property="finalfee"/>
 		<result column="DISCOUNT" property="discount"/>
-		<result column="CREATEDATE" property="createdate"/>
 		<result column="CREATETIME" property="createtime"/>
 	</resultMap>
 	
@@ -37,7 +36,7 @@
 	
 	
 	<insert id="save" parameterType="order">
-        	insert into ORDER_T (ORDERID,PHONE,ITEMID,TITLE,PRICE,QUANTITY,FINALFEE,DISCOUNT,CREATEDATE,CREATETIME) values(#{orderid},#{phone},#{itemid},#{title},#{price},#{quantity},#{finalfee},#{discount},#{createdate},#{createtime}) 
+        	insert into ORDER_T (ORDERID,PHONE,ITEMID,TITLE,PRICE,QUANTITY,FINALFEE,DISCOUNT,CREATETIME) values(#{orderid},#{phone},#{itemid},#{title},#{price},#{quantity},#{finalfee},#{discount},sysdate) 
 	</insert>
 	
 	
