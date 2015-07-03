@@ -1,6 +1,7 @@
 package com.point.web.service.impl;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
@@ -38,9 +39,6 @@ public class OrderServiceImpl implements OrderService {
 		return Order;
 	}
 	
-
-	
-	
 	@Override
 	public boolean save(Order order,String systime) throws Exception{
 		log.info("准备保存订单相关操作");
@@ -71,26 +69,23 @@ public class OrderServiceImpl implements OrderService {
 		reslut = true;
 		return reslut;
 
-	}
-	
-	
+	}	
 	
 	@Override
 	public String getSysTime(){
-		orderDao = sqlSessionTemplate.getMapper(OrderDao.class);
 		return orderDao.getSysTime();
 	}
 
-
-
-
 	@Override
 	public long getNextSysNo() {
-		orderDao = sqlSessionTemplate.getMapper(OrderDao.class);
 		return orderDao.getNextSysNo();
 	}
 	
-	
+	@Override
+	public List<Order> findByCreateDate(Map createtime){
+		orderDao = sqlSessionTemplate.getMapper(OrderDao.class);
+		return orderDao.findByCreateDate(createtime);
+	}
 
 	
 }
