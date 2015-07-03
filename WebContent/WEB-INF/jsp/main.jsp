@@ -1,6 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
     pageEncoding="utf-8"%>
 <%@ page isELIgnored="false" %>
+<%
+    String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+request.getContextPath()+"/";
+%>
 <%@ taglib uri="http://shiro.apache.org/tags" prefix="shiro"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "hkp://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -118,6 +121,13 @@
 						<ul style="padding:0;margin:4px 0 0 0;">
 							<li>
 								<a  onclick="addTab('上传测试','progressBarView.do')"><span class="nav nav-checkaccount"></span>上传测试</a>
+							</li>
+						</ul>
+					</div>
+					<div title="渠道商管理" data-options="iconCls:'icon-ok'" icon="icon-sys" style="overflow:auto;">
+						<ul style="padding:0;margin:4px 0 0 0;">
+							<li>
+								<a  onclick="addTab('渠道商资料','toChannelview.do')"><span class="nav nav-checkaccount"></span>渠道商资料</a>
 							</li>
 						</ul>
 					</div>

@@ -14,6 +14,6 @@ public interface OrderService {
 	public long getNextSysNo();
 
 	//保存
-	public boolean save (Order order,String systime) throws Exception;
+	public void save (Order order) throws Exception;
 
 }

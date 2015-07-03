@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.point.web.dao.ChannelDao">
+	<!-- author liuhao date:2015-07-01 -->
+	<resultMap id="resultChannel" type="Channel">
+		<id column="ID" property="id" />
+		<result column="NAME" property="name" />
+		<result column="EMAIL" property="email" />
+		<result column="PHONE" property="phone" />
+		<result column="CNO" property="cno" />
+		<result column="PASSWORD" property="password" />
+	</resultMap>
+	<!-- 查询全部 -->
+	<select id="findAll" resultMap="resultChannel">
+		SELECT
+		ID,NAME,EMAIL,PHONE,CNO,PASSWORD,CREATETIME FROM BLQL_CHANNEL
+	</select>
+	<!-- 根据ID查询单条记录 -->
+	<select id="findById" resultMap="resultChannel" parameterType="String">
+		SELECT ID,NAME,EMAIL,PHONE,CNO,PASSWORD,CREATETIME FROM BLQL_CHANNEL
+		WHERE ID=#{id}
+	</select>
+	<!-- 插入一条记录 -->
+	<insert id="insert" parameterType="Channel">
+		INSERT INTO
+		BLQL_CHANNEL(ID,NAME,EMAIL,PHONE,CNO,PASSWORD,CREATETIME)VALUES(
+		to_char(sysdate,'yyyyMMdd')||seq_blql_channel.nextval
+		,#{name},#{email},#{phone},#{cno},#{password},SYSDATE)
+	</insert>
+	<!-- 更新记录 -->
+	<update id="update" parameterType="Channel">
+		UPDATE BLQL_CHANNEL
+		<set>
+			<if test="name!= null">NAME=#{name},</if>
+			<if test="email!= null">EMAIL=#{email},</if>
+			<if test="phone!= null">PHONE=#{phone},</if>
+			<if test="cno!= null">CNO=#{cno},</if>
+			<if test="password!= null">PASSWORD=#{password}</if>
+		</set>
+		WHERE ID=#{id}
+	</update>
+	<!-- 批量删除记录 -->
+	<delete id="deleteByParams" parameterType="String">
+		DELETE FROM BLQL_CHANNEL WHERE ID IN
+		<foreach item="item" index="index" collection="array" open="("
+			separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+	<!-- 删除单条记录 -->
+	<delete id="delete" parameterType="Channel">
+		DELETE FROM BLQL_CHANNEL WHERE ID=#{id}
+	</delete>
+
+	<!-- 根据渠道商名称，商号，邮箱 联合查询 -->
+	<select id="findAllByCondition" resultMap="resultChannel"
+		parameterType="map">
+	
+		SELECT ID,NAME,EMAIL,PHONE,CNO,PASSWORD,CREATETIME FROM BLQL_CHANNEL
+
+		<where>
+			1=1
+			<if test="name!=null">
+				AND NAME LIKE '%${name}%'
+			</if>
+			<if test="name!=null">
+				AND PHONE LIKE '%${phone}%'
+			</if>
+			<if test="name!=null">
+				AND CNO LIKE '%${cno}%'
+			</if>
+			ORDER BY CREATETIME
+		</where>
+		
+
+
+	</select>
+</mapper>
