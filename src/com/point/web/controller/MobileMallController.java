@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 import org.apache.log4j.Logger;
@@ -71,6 +72,7 @@ public class MobileMallController {
 			HttpServletResponse response) {
 		/************************************** 接收移动商城请求，保存订单 ******************************************/
 		log.info("准备下发通知");
+		boolean receiveResult = false;
 		VGReturnJson mallRj = new VGReturnJson("9999", "平台内部错误");
 		String orderId = null;
 		String itemId = null;
@@ -79,14 +81,16 @@ public class MobileMallController {
 		try {
 			String req = request.getParameter("req");
 			log.info("收到报文:" + req);
-			if (null == req) {
+			if (null != req) {
 				log.info("报文为空");
 				mallRj = new VGReturnJson("1002", "缺少参数，某个必须传递的参数您没有传递");
 			} else {
 				// Base64解密
 				log.info("开始Base64解密");
-				req = req.replace(" ", "+");
-				req = Base64Coder.decodeString(req);
+				// req = req.replace(" ", "+");
+				// req = Base64Coder.decodeString(req);
+				req = "df882ed62782ddf7cd7afbc73f762411{\"source\":\"2\",\"version\":\"1.0\",\"identity_id\":\"123456\","
+						+ "\"data\":{\"orderId\":\"123\",\"phone\":\"13581761989\",\"itemId\":\"123\",\"title\":\"123\",\"price\":\"123\",\"quantity\":\"123\",\"finalFee\":\"123\",\"discount\":\"123\"}}";
 				log.info("Base64解密后报文:" + req);
 				// 签名
 				String sign = req.substring(0, req.indexOf("{"));
@@ -151,6 +155,7 @@ public class MobileMallController {
 						// 保存订单
 						orderService.save(order);
 						mallRj = new VGReturnJson("0", "ok");
+						receiveResult = true;
 					}
 				}
 			}
@@ -175,26 +180,32 @@ public class MobileMallController {
 
 		/************************************** 请求伯乐，获取虚拟码 ******************************************/
 		boolean boleResult = false;
-		if (orderId != null && "0".equals(mallRj.getJo().get("code"))) {
+		if (orderId != null && receiveResult) {
+			order = orderService.get(orderId);
 			String sendStr = GsonTool.objectToJsonDateSerializer(order,
-					"yyyy-mm-dd HH:24Mi:ss");
+					"yyyy-MM-dd HH:mm:ss");
 			JSONObject sendJs = JSONObject.fromObject(sendStr);
 			String boleStr = BoleTool.sendRequest(sendJs, "notifyOrder.do");
-			JSONObject jo = JSONObject.fromObject(boleStr);
-			if (jo.containsKey("code") && "0".equals(jo.get("code"))) {
-				// 解析出虚拟码
-				vcode = (String) jo.get("virtualCode");
-				// 保存
-				VirtualCode vc = new VirtualCode();
-				vc.setOrderid(orderId);
-				vc.setVcode(vcode);
-				vc.setStatus("0");
-				try {
-					virtualCodeService.save(vc);
-					boleResult = true;
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+			// TODO
+			boleStr = "{\"code\":\"0\",\"vcode\":\"a1b2c3\",\"msg\":\"\"}";
+			// 返回判断
+			if (null != boleStr || !"".equals(boleStr)) {
+				JSONObject jo = JSONObject.fromObject(boleStr);
+				if (jo.containsKey("code") && "0".equals(jo.get("code"))) {
+					// 解析出虚拟码
+					vcode = (String) jo.get("vcode");
+					// 保存
+					VirtualCode vc = new VirtualCode();
+					vc.setOrderid(orderId);
+					vc.setVcode(vcode);
+					vc.setStatus("0");
+					try {
+						virtualCodeService.save(vc);
+						boleResult = true;
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
 			}
 			/************************************** 请求短信网关，给用户发送虚拟码短信 ******************************************/
@@ -203,9 +214,7 @@ public class MobileMallController {
 				String MMSReturnStr;
 				try {
 					MMSReturnStr = MMSTool.sendMMS(order.getPhone(), vcode);
-					JSONObject MMSjo = JSONObject.fromObject(MMSReturnStr);
-					if (MMSjo.containsKey("code")
-							&& "0".equals(MMSjo.get("code"))) {
+					if (null != MMSReturnStr && MMSReturnStr.contains("1000")) {
 						MMSResult = true;
 						// 更新状态，发送成功
 						virtualCodeService.updateStatus(orderId, "1");
@@ -219,27 +228,110 @@ public class MobileMallController {
 				}
 
 				/************************************** 请求移动商城，上传虚拟码 ******************************************/
-				if(MMSResult){
+				if (MMSResult) {
 					// 通知移动商城发送的虚拟码
 					JSONObject notifyCMjo = new JSONObject();
-					jo.put("orderId", orderId);
-					jo.put("itemId", itemId);
+					notifyCMjo.put("orderId", orderId);
+					notifyCMjo.put("itemId", itemId);
 					// 虚拟商品列表
-					ArrayList<VirtualCode> list = new ArrayList<VirtualCode>();
-					VirtualCode vc = virtualCodeService.get(orderId);
-					list.add(vc);
-					Gson gg = new Gson();
-					String listJson = gg.toJson(list);
-					jo.put("virtualCodes", listJson);
+					JSONObject jcode = new JSONObject();
+					jcode.put("vcode", vcode);
+					jcode.put("vcodePass", vcode);
+					JSONArray codeList = new JSONArray();
+					codeList.add(jcode);
+					notifyCMjo.put("virtualCodes", codeList.toString());
 					log.info("准备调用移动提交虚拟码接口,参数:" + notifyCMjo);
-					VirtualGoodsTool.sendRequest(jo, "setVirtualCode");
-					log.info("调用成功");
+					String returnStr = VirtualGoodsTool.sendRequest(notifyCMjo,
+							"setVirtualCode");
+					if (null != returnStr && !"".equals(returnStr)) {
+						JSONObject returnJson = JSONObject
+								.fromObject(returnStr);
+						if (returnJson.containsKey("code")
+								&& "0".equals(returnJson.get("code"))) {
+							log.info("调用成功");
+						}
+					}
+					log.info("调用失败");
 				}
 			}
 		}
 	}
 
-	// 重新发送虚拟码
+	// 重新发送虚拟码(伯乐)
+	@RequestMapping("/resendVirtualCodeForBole")
+	public void resendVirtualCodeForBole(HttpServletRequest request,
+			HttpServletResponse response) {
+		log.info("准备重发虚拟码for伯乐");
+		VGReturnJson rj = new VGReturnJson("9999", "平台内部错误");
+		try {
+			String req = request.getParameter("req");
+			if (null != req) {
+				log.info("报文为空");
+				rj = new VGReturnJson("1002", "缺少参数，某个必须传递的参数您没有传递");
+			} else {
+				// Base64解密
+				log.info("开始Base64解密");
+				// req = Base64Coder.decodeString(req);
+				log.info("Base64解密后报文:" + req);
+				req = "{\"orderid\":\"123\",\"sign\":\"13581761989\"}";
+				if (!StringTool.isUTF8(req)) {
+					log.error("错误的编码格式");
+					rj = new VGReturnJson("1006", "错误的编码格式");
+				} else {
+					if (!BoleTool.verifyParameterForResendVirtualCode(req)) {
+						log.error("缺少参数");
+						rj = new VGReturnJson("1002", "缺少参数，某个必须传递的参数您没有传递");
+					} else {
+						// 验证签名
+						if (!BoleTool.verifySign(req)) {
+							log.error("验证签名未通过");
+							rj = new VGReturnJson("1001",
+									"验签失败，您所传递的数据签名在API服务器端没有验证通过");
+						} else {
+							JSONObject reqJson = JSONObject.fromObject(req);
+							String orderid = reqJson.getString("orderid");
+							Order order = orderService.get(orderid);
+							log.info("获得订单:" + order);
+							if (null == order) {
+								log.info("订单不存在");
+								rj = new VGReturnJson("1011",
+										"订单有误，订单信息错误或者订单不存在");
+							} else {
+								log.info("根据订单号查询虚拟码");
+								VirtualCode vc = virtualCodeService
+										.get(orderid);
+								log.info("获得虚拟码:" + vc);
+								// 准备发送
+								log.info("准备发送短信");
+								String MMSReturnStr = MMSTool.sendMMS(
+										order.getPhone(), vc.getVcode());
+								if (null != MMSReturnStr
+										&& MMSReturnStr.contains("1000")) {
+									// 发送成功
+									rj = new VGReturnJson("0", "ok");
+								}
+							}
+						}
+					}
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.error(e.getMessage());
+			rj = new VGReturnJson("9999", e.getMessage());
+		} finally {
+			try {
+				log.info("返回：" + rj.getJo().toJSONString());
+				response.setContentType("text/html;charset=UTF-8");
+				response.setCharacterEncoding("UTF-8");
+				response.getWriter().print(rj.getJo().toJSONString());
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	// 重新发送虚拟码(移动商城)
 	@RequestMapping("/resendVirtualCode")
 	public void resendVirtualCode(HttpServletRequest request,
 			HttpServletResponse response) {
@@ -305,21 +397,14 @@ public class MobileMallController {
 						VirtualCode vc = virtualCodeService.get(orderId);
 						log.info("获得虚拟码:" + vc);
 						// 准备发送
-						Map<String, String> userMap = new HashMap<String, String>();
-						userMap.put("phone", order.getPhone());
-						// userMap.put("data", vc.getVcodepass());
-						// 发送
-						log.info("准备发送短信,参数:" + userMap);
-
-						// String MMSReturn = MMSTool.sendMMS(userMap);
-						// if(MMSReturn.contains("1000")){
-						// log.info("发送成功");
-						// rj = new VGReturnJson("0", "ok");
-						// }else{
-						// log.info("发送失败");
-						// rj = new VGReturnJson("9999",
-						// "短信发送失败,返回："+MMSReturn);
-						// }
+						log.info("准备发送短信");
+						String MMSReturnStr = MMSTool.sendMMS(order.getPhone(),
+								vc.getVcode());
+						if (null != MMSReturnStr
+								&& MMSReturnStr.contains("1000")) {
+							// 发送成功
+							rj = new VGReturnJson("0", "ok");
+						}
 					}
 				}
 			}
@@ -339,12 +424,14 @@ public class MobileMallController {
 		}
 	}
 
-	// 设置虚拟码失效
+	// 设置虚拟码失效（移动）
 	@RequestMapping("/setCodeInvalid")
 	public void setCodeInvalid(HttpServletRequest request,
 			HttpServletResponse response) {
+		/************************************** 接收移动商城请求，作废虚拟码 ******************************************/
 		// 根据请求参数查询到该订单的虚拟码
 		VGReturnJson rj = new VGReturnJson("9999", "平台内部错误");
+		String orderId = null;
 		try {
 			String req = request.getParameter("req");
 			if (null == req) {
@@ -394,7 +481,7 @@ public class MobileMallController {
 					// 业务参数
 					log.info("开始解析业务参数");
 					JSONObject dataJson = JSONObject.fromObject(data);
-					String orderId = dataJson.getString("orderId");
+					orderId = dataJson.getString("orderId");
 					log.info("orderId:" + orderId);
 					// 作废
 					log.info("准备作废订单-3");
@@ -415,6 +502,21 @@ public class MobileMallController {
 				response.getWriter().print(rj.getJo().toJSONString());
 			} catch (IOException e) {
 				e.printStackTrace();
+			}
+		}
+		/************************************** 请求伯乐，作废伯乐虚拟码 ******************************************/
+		if (orderId != null) {
+			JSONObject sendBoleJs = new JSONObject();
+			sendBoleJs.put("orderid", orderId);
+			String boleStr = BoleTool.sendRequest(sendBoleJs, "notifyOrder.do");
+			// 返回判断
+			if (null != boleStr || !"".equals(boleStr)) {
+				JSONObject jo = JSONObject.fromObject(boleStr);
+				if (jo.containsKey("code") && "0".equals(jo.get("code"))) {
+					log.info("请求伯乐设置虚拟码失效接口成功");
+				} else {
+					log.info("请求伯乐设置虚拟码失效接口失败:" + boleStr);
+				}
 			}
 		}
 

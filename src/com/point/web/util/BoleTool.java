@@ -69,14 +69,14 @@ public class BoleTool {
 
 
 	private static String creatSign(JSONObject userJson){
-	        Iterator it = userJson.keys();
-	        List<Integer> keyList = new ArrayList<Integer>();
-	        while(it.hasNext()){
-	            keyList.add(Integer.parseInt(it.next().toString()));
-	        }
+		List<String> keyList = new ArrayList<String>();
+			for (Object key : userJson.keySet()) {  
+			      System.out.println(key);
+			      keyList.add(key.toString());
+			}  
 	        Collections.sort(keyList);
 	        StringBuffer valueSb = new StringBuffer();
-	        for(Integer i : keyList){
+	        for(String i : keyList){
 	        	valueSb.append(userJson.get(i));
 	        }
 	        return StringTool.MD5_32(PublicMap.get("secretKey ")+valueSb.toString()).toLowerCase();
@@ -139,31 +139,22 @@ public class BoleTool {
 	
 
 	// 验证签名
-//	public final static boolean verifySign(String msg, String sign) {
-//		String sign2 = toSign(msg);
-//		System.out.println("sign2:"+sign2);
-//		if (sign.equals(sign2)) {
-//			return true;
-//		}
-//		return false;
-//	}
+	public final static boolean verifySign(String msg) {
+		JSONObject reqJson = JSONObject.fromObject(msg);
+		String sign  = (String) reqJson.get("sign");
+		reqJson.remove("sign");
+		String sign2 = creatSign(reqJson);
+		if (sign.equals(sign2)) {
+			return true;
+		}
+		return false;
+	}
 
 	// 验证参数
-	public final static boolean verifyParameterForNotifyOrder(String msg) {
+	public final static boolean verifyParameterForResendVirtualCode(String msg) {
 		JSONObject jo = JSONObject.fromObject(msg);
-		if (null != jo && jo.containsKey("version")
-				&& jo.containsKey("identity_id") && jo.containsKey("source")
-				&& jo.containsKey("data")) {
-			JSONObject data = JSONObject.fromObject(jo.getString("data"));
-			if (null != data && data.containsKey("orderId")
-					&& data.containsKey("phone") && data.containsKey("itemId")
-					&& data.containsKey("title") && data.containsKey("price")
-					&& data.containsKey("quantity")
-					&& data.containsKey("finalFee")) {
-				return true;
-			} else {
-				return false;
-			}
+		if (null != jo && jo.containsKey("orderid")&& jo.containsKey("sign")){
+			return true;
 		}
 		return false;
 	}

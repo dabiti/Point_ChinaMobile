@@ -9,23 +9,23 @@
 		<id column="ORDERID" property="orderid"/>
 		<result column="VCODE" property="vcode"/>
 		<result column="STATUS" property="status"/>
-		<result column="CREATETIME" property="createtime"/>
+		<result column="CREATETIME" property="createtime" javaType="java.util.Date"/>
 	</resultMap>
 	
 	
 	<select id="get" resultMap="resultVirtualcode" parameterType="string">
-		SELECT O.ORDERID,O.VCODE,O.VCODEPASS,O.STATUS,O.CREATEDATE,O.CREATETIME
-	    FROM VIRTUALCODE O
+		SELECT O.ORDERID,O.VCODE,O.STATUS,O.CREATETIME
+	    FROM BLQL_VIRTUALCODE O
 		WHERE O.ORDERID = #{orderid}
 	</select>
 	
 	<insert id="save" parameterType="virtualcode">
-        	insert into VIRTUALCODE (ORDERID,VCODE,VCODEPASS,STATUS,CREATETIME) values(#{orderid},#{vcode},#{vcodepass},#{status},sysdate) 
+        	insert into BLQL_VIRTUALCODE (ORDERID,VCODE,STATUS,CREATETIME) values(#{orderid},#{vcode},#{status},sysdate) 
 	</insert>
 	
 	
 	<update id="updateStatus" parameterType="map">
-        	update VIRTUALCODE set STATUS=#{status} WHERE ORDERID= #{orderid}
+        	update BLQL_VIRTUALCODE set STATUS=#{status} WHERE ORDERID= #{orderid}
 	</update>
 	
 </mapper>
