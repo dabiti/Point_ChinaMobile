@@ -34,7 +34,6 @@ public class OrderServiceImpl implements OrderService {
 	public Order get(String id) {
 		orderDao = sqlSessionTemplate.getMapper(OrderDao.class);
 		Order Order = orderDao.get(id);
-
 		return Order;
 	}
 	

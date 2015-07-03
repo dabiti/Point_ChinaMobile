@@ -59,11 +59,11 @@ public class MobileMallController {
 	public String jumpToLoginView(HttpServletRequest request,
 			HttpServletResponse response) {
 		// 如果已登录，直接跳到主页面，否则跳转到登陆页面
-		Subject subject = SecurityUtils.getSubject();
-		if (subject.isRemembered() == true || subject.isAuthenticated() == true) {
+		//Subject subject = SecurityUtils.getSubject();
+		//if (subject.isRemembered() == true || subject.isAuthenticated() == true) {
 			return "main";
-		} else
-			return "login";
+		//} else
+		//	return "login";
 	}
 
 	// ***正式编码***//
