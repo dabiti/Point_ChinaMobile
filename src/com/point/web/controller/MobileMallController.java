@@ -15,8 +15,11 @@ import net.sf.json.JSONObject;
 import org.apache.log4j.Logger;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.context.support.WebApplicationContextUtils;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.google.gson.Gson;
 import com.point.web.entity.Order;
@@ -25,6 +28,7 @@ import com.point.web.entity.VirtualCode;
 import com.point.web.service.OrderService;
 import com.point.web.service.VirtualCodeService;
 import com.point.web.util.Base64Coder;
+import com.point.web.util.CreateMenuTool;
 import com.point.web.util.MMSTool;
 import com.point.web.util.StringTool;
 import com.point.web.util.VirtualGoodsTool;
@@ -40,7 +44,10 @@ public class MobileMallController {
 
 	@Resource
 	private VirtualCodeService virtualCodeService;
-
+	
+	@Resource
+	private CreateMenuTool createMenuTool;
+	
 
 	@RequestMapping("/test")
 	public void getOrgnizationTree(HttpSession session,
@@ -60,7 +67,8 @@ public class MobileMallController {
 			HttpServletResponse response) {
 		// 如果已登录，直接跳到主页面，否则跳转到登陆页面
 		Subject subject = SecurityUtils.getSubject();
-		if (subject.isRemembered() == true || subject.isAuthenticated() == true) {
+		if (subject.isAuthenticated() == true) {
+			request.setAttribute("menu", createMenuTool.getMenu(subject));
 			return "main";
 		} else
 			return "login";

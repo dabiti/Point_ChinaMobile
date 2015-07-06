@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+	<mapper namespace="com.point.web.dao.RoleDao">
+
+	<resultMap id="resultRole" type="Role" >
+		<id column="id" property="id"/>
+		<result column="rolename" property="rolename"/>
+		<result column="roledesc" property="roledesc"/>
+		<result column="rolecode" property="rolecode"/>
+	</resultMap>
+	
+	<select id="getRolesByUsername" resultMap="resultRole" parameterType="string">
+		select r.id,r.rolename,r.roledesc,r.rolecode from 
+		  blql_role r,blql_user_role ur,blql_user u 
+		  where 
+		  	r.id = ur.role_id and u.id = ur.user_id
+		  	and u.username = #{username}
+	</select>
+	
+</mapper>
