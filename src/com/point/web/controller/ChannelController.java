@@ -1,9 +1,11 @@
 package com.point.web.controller;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -68,7 +70,7 @@ public class ChannelController {
 		List<Channel> cha = channelService.findAll(map);//此方法是为了取到联合查询后的总记录数
 		
 		String total=String.valueOf(cha.size());//total: 总的记录条数；
-	
+	System.out.println(total);
 //		Gson gson=new Gson();
 //		gson.toJson(channels);
 //		System.out.println(gson.toJson(channels));
@@ -149,5 +151,51 @@ String result="{\"total\":\""+total+"\","+"\"rows\":"+json.toString()+"}";//rows
 
 		return "channel/channelView";
 	}
+	
+	@RequestMapping("exportChannel")
+	public void exportChannel(HttpServletRequest request,
+			HttpServletResponse response) throws IOException {
+response.setCharacterEncoding("utf-8");
+
+String name=request.getParameter("name");
+String phone=request.getParameter("phone");
+String cno=request.getParameter("cno");
+		String fileName ="渠道商表";//设置导出的文件名称
+		Map map = new HashMap<String, String>();// map传入多个参数•page: 页号，从1计起。 •rows: 每页记录大小。 
+		map.put("name", name);
+		map.put("phone", phone);
+		map.put("cno", cno);
+		 List<Channel>channels=channelService.findAll(map);
+		 
+		 
+		 
+		 String strchannel="";
+		 strchannel+="<table border='1'>";
+		 strchannel+="<tr><td>商号</td><td>渠道商名称</td><td>密码</td><td>电话</td><td>邮箱</td><td>创建时间</td></tr>";
+		 
+		 for(Channel channel:channels){
+			 strchannel+="<tr><td>"+channel.getCno()+"</td><td>"+channel.getName()+"</td><td>"+channel.getPassword()+"</td><td>"+channel.getPhone()+"</td><td>"+channel.getEmail()+"</td><td>"+channel.getCreatetime()+"</td></tr>";
+			 
+			 
+		 }
+		 strchannel+="</table>";
+		 System.out.println(strchannel);
+	        
+	        StringBuffer sb = new StringBuffer(strchannel);//将表格信息放入内存
+	        
+	        
+	        String contentType ="application/vnd.ms-excel";//定义导出文件的格式的字符串
+	        String recommendedName = new String(fileName.getBytes(),"ISO-8859-1");//设置文件名称的编码格式
+	        response.setContentType(contentType);//设置导出文件格式
+	        response.setHeader("Content-Disposition", "attachment; filename=" + recommendedName + ".XLS");//
+	        response.resetBuffer();
+	        //利用输出输入流导出文件
+	        ServletOutputStream sos = response.getOutputStream();
+	        sos.write(sb.toString().getBytes());
+	        sos.flush();
+	        sos.close();
+	        
+	}
+	
 
 }

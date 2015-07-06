@@ -14,6 +14,16 @@
 <meta charset="UTF-8">
 <title>主页面</title>
 <script>
+//导出表
+	function exportchannel(){
+		$('#man').val($('#name').val());
+		$('#ph').val($('#phone').val());
+		$('#onc').val($('#cno').val());
+		$("#exportform").submit();
+		
+	}
+	
+	
 	//查询展示
 	function searchData() {//把name,phone,cno的值传到后台doChannelview.do对应的方法中同时接受后台传过来的值
 		$('#demoTable').datagrid('load', {
@@ -263,12 +273,20 @@
 				iconCls="icon-remove" plain="true">删除</a>
 		</div>
 		<div>
-			<span>渠道商名称:</span><input class="easyui-textbox" id="name"
+			<span>渠道商名称:</span><input class="easyui-textbox" id="name" 
 				style="width: 80px" /> <span>渠道商手机号:</span><input
-				class="easyui-textbox" id="phone" style="width: 80px" /> <span>商号:
-			</span><input class="easyui-textbox" id="cno" style="width: 80px" /> <a
+				class="easyui-textbox" id="phone"  style="width: 80px" /> <span>商号:
+			</span><input class="easyui-textbox" id="cno"  style="width: 80px" /> <a
 				href="javascript:searchData()" class="easyui-linkbutton"
 				data-options="iconCls:'icon-search'">查询</a>
+				<a
+				href="javascript:exportchannel()" class="easyui-linkbutton"
+				>导出</a>
+				<form method="post" action="exportChannel.do" id="exportform">
+<input type="hidden" name="name" id="man">
+<input type="hidden" name="phone" id="ph">
+<input type="hidden" name="cno" id="onc">
+</form>
 		</div>
 	</div>
 
