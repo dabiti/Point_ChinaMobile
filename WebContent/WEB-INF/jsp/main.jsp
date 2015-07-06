@@ -36,7 +36,6 @@
 		}
 		
 		.nav-user{
-/* 			background-position:0px 0px; */
  			background-position:-100px -480px;
 		}
 		.nav-role{
@@ -118,6 +117,22 @@
 						<ul style="padding:0;margin:4px 0 0 0;">
 							<li>
 								<a  onclick="addTab('上传测试','progressBarView.do')"><span class="nav nav-checkaccount"></span>上传测试</a>
+							</li>
+						</ul>
+					</div>
+					<div title="运营人员管理" data-options="iconCls:'icon-ok'" icon="icon-sys" style="overflow:auto;">
+						<ul style="padding:0;margin:4px 0 0 0;">
+							<li>
+								<a  onclick="addTab('运营人员管理','toUserPage')">
+								<span class="nav nav-checkaccount"></span>运营人员管理</a>
+							</li>
+						</ul>
+					</div>
+					<div title="渠道商管理" data-options="iconCls:'icon-ok'" icon="icon-sys" style="overflow:auto;">
+						<ul style="padding:0;margin:4px 0 0 0;">
+							<li>
+								<a  onclick="addTab('渠道商资料','toChannelview.do')">
+								<span class="nav nav-checkaccount"></span>渠道商资料</a>
 							</li>
 						</ul>
 					</div>

@@ -23,9 +23,9 @@
 	<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">  
 		<!-- for Oracle -->
 		<property name="driverClassName" value="oracle.jdbc.OracleDriver"/>
-		<property name="url" value="jdbc:oracle:thin:@192.168.12.99:1521:orcl" />
-		<property name="username" value="cmpoint" /> 
-		<property name="password" value="cmpoint" />
+		<property name="url" value="jdbc:oracle:thin:@192.168.119.44:1521:aspiredb" />
+		<property name="username" value="sinopec" /> 
+		<property name="password" value="S119iNo4PecF135Db" />
 		<property name="initialSize" value="10" />  
 		<property name="minIdle" value="10" />  
 		<property name="maxActive" value="50" />   
@@ -52,8 +52,13 @@
 		<property name="configLocation" value="classpath:mybatis.xml" />
 	</bean>
 	
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.point.web.dao" />
+		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"></property>
+	</bean>
+	
 	<!-- 配置SqlSessionTemplate -->  
-    <bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">  
+    <bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate" scope="prototype">  
         <constructor-arg name="sqlSessionFactory" ref="sqlSessionFactory" />  
     </bean>
 

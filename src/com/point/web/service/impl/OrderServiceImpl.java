@@ -20,11 +20,11 @@ import com.point.web.util.MMSTool;
 @Service("OrderService")
 public class OrderServiceImpl implements OrderService {
 
+	
+	
 	@Resource
-	private SqlSessionTemplate sqlSessionTemplate;
-	
 	private OrderDao orderDao;
-	
+	@Resource
 	private VirtualCodeDao virtualCodeDao;
 	
 	
@@ -32,7 +32,6 @@ public class OrderServiceImpl implements OrderService {
 
 	@Override
 	public Order get(String id) {
-		orderDao = sqlSessionTemplate.getMapper(OrderDao.class);
 		Order Order = orderDao.get(id);
 
 		return Order;
@@ -45,8 +44,6 @@ public class OrderServiceImpl implements OrderService {
 	public boolean save(Order order,String systime) throws Exception{
 		log.info("准备保存订单相关操作");
 		boolean reslut = false;
-		virtualCodeDao = sqlSessionTemplate.getMapper(VirtualCodeDao.class);
-		orderDao = sqlSessionTemplate.getMapper(OrderDao.class);
 		Map<String, String> userMap = new HashMap<String, String>();
 		userMap.put("phone", order.getPhone());
 		// 查询序列
@@ -77,8 +74,10 @@ public class OrderServiceImpl implements OrderService {
 	
 	@Override
 	public String getSysTime(){
-		orderDao = sqlSessionTemplate.getMapper(OrderDao.class);
-		return orderDao.getSysTime();
+//		orderDao = sqlSessionTemplate.getMapper(OrderDao.class);
+		String aaa = orderDao.getSysTime();
+		System.out.println(aaa);
+		return aaa;
 	}
 
 
@@ -86,7 +85,6 @@ public class OrderServiceImpl implements OrderService {
 
 	@Override
 	public long getNextSysNo() {
-		orderDao = sqlSessionTemplate.getMapper(OrderDao.class);
 		return orderDao.getNextSysNo();
 	}
 	
