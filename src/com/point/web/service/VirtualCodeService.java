@@ -10,5 +10,8 @@ public interface VirtualCodeService {
 	
 	//查询
 	public VirtualCode get(String orderId);
+
+	//保存虚拟码
+	void save(VirtualCode vc) throws Exception;
 	
 }

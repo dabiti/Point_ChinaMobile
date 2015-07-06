@@ -51,7 +51,7 @@ public class VirtualGoodsTool {
 		return PublicMap;
 	}
 
-	public static void sendRequest(JSONObject userJson,String endUrl) {
+	public static String sendRequest(JSONObject userJson,String endUrl) {
 		// 获得公共参数
 		JSONObject pulibcJson = createPublicJson();
 //		System.out.println("公共参数：" + pulibcJson.toString());
@@ -84,6 +84,7 @@ public class VirtualGoodsTool {
 		log.info("给移动商城发送请求,参数："+req);
 		String returnStr = sendPost(PublicMap.get("url")+endUrl, req);
 		log.info("移动商城返回："+returnStr);
+		return returnStr;
 	}
 
 	// 获得公共参数

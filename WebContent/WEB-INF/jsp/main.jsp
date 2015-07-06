@@ -117,7 +117,7 @@
 					<div title="测试" data-options="iconCls:'icon-ok'" icon="icon-sys" style="overflow:auto;">
 						<ul style="padding:0;margin:4px 0 0 0;">
 							<li>
-								<a  onclick="addTab('上传测试','progressBarView.do')"><span class="nav nav-checkaccount"></span>上传测试</a>
+								<a  onclick="addTab('上传测试','showdemolist.do')"><span class="nav nav-checkaccount"></span>上传测试</a>
 							</li>
 						</ul>
 					</div>
