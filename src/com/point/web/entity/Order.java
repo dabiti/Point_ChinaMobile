@@ -1,6 +1,7 @@
 package com.point.web.entity;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import org.apache.ibatis.type.Alias;
 
@@ -25,15 +26,14 @@ public class Order implements Serializable {
 	private String quantity = "";
 	private String finalfee = "";
 	private String discount = "";
-	private String createdate = "";
-	private String createtime = "";
+	private Date createtime ;
 	
 			
 	public Order(){
 		super();
 	}
 	
-	public Order(String orderid,String phone,String itemid,String title,String price,String quantity,String finalfee,String discount,String createdate,String createtime){
+	public Order(String orderid,String phone,String itemid,String title,String price,String quantity,String finalfee,String discount){
 		this.orderid = orderid;
 		this.phone = phone;
 		this.itemid = itemid;
@@ -42,8 +42,6 @@ public class Order implements Serializable {
 		this.quantity = quantity;
 		this.finalfee = finalfee;
 		this.discount = discount;
-		this.createdate = createdate;
-		this.createtime = createtime;
 	}
 
 
@@ -53,8 +51,7 @@ public class Order implements Serializable {
 				+ ", phone=" + phone + ", itemid="+ itemid 
 				+ ", title=" + title + ", price="+ price 
 				+ ", quantity=" + quantity + ", finalfee="+ finalfee 
-				+ ", discount=" + discount + ", createdate="+ createdate 
-				+ ", createtime=" + createtime + "]";
+				+ ", discount=" + discount + ", createtime=" + createtime + "]";
 	}
 	
 
@@ -122,21 +119,15 @@ public class Order implements Serializable {
 		this.discount = discount;
 	}
 
-	public String getCreatedate() {
-		return createdate;
-	}
-
-	public void setCreatedate(String createdate) {
-		this.createdate = createdate;
-	}
-
-	public String getCreatetime() {
+	public Date getCreatetime() {
 		return createtime;
 	}
 
-	public void setCreatetime(String createtime) {
+	public void setCreatetime(Date createtime) {
 		this.createtime = createtime;
 	}
+
+
 	
 	
 

@@ -1,4 +1,8 @@
+
 package com.point.web.service;
+
+import java.util.List;
+import java.util.Map;
 
 import com.point.web.entity.Order;
 
@@ -14,6 +18,9 @@ public interface OrderService {
 	public long getNextSysNo();
 
 	//保存
-	public boolean save (Order order,String systime) throws Exception;
-
+	public void save (Order order) throws Exception;
+	
+	//模糊搜索查询订单
+	public List<Order> findByCreateDate(Map createtime);
 }
+

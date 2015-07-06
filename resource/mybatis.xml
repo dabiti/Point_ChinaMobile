@@ -11,6 +11,7 @@
 	
 	<!-- 指定映射文件-->
 	<mappers>
+		<mapper resource="com/point/web/entity/sqlmap/Channel-sqlmap-mapping.xml" />
 		<mapper resource="com/point/web/entity/sqlmap/Order-sqlmap-mapping.xml" />
 		<mapper resource="com/point/web/entity/sqlmap/VirtualCode-sqlmap-mapping.xml" />
 		<mapper resource="com/point/web/entity/sqlmap/user-sqlmap-mapping.xml" />
