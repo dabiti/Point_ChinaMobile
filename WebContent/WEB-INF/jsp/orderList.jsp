@@ -8,6 +8,13 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<title>主页面</title>	
 	<script>
+		$(function(){
+			$('#demoTable').datagrid({
+				onLoadSuccess:function(data){
+					$('#myTotal').html(eval(data).total);
+				}
+			})
+		})
 		function searchData(){
 			$('#demoTable').datagrid('load',{
 				title: $('#title').val(),
@@ -25,7 +32,7 @@
 </head>
 <body> 
 <div class="easyui-layout" style="width:100%;height:100%;">
-	<table id='demoTable' class="easyui-datagrid" style="width:100%;height:100%" url="<%=basePath %>/listHandle" title="请输入查询条件" 
+	<table id='demoTable'  style="width:100%;height:100%" url="<%=basePath %>/listHandle" title="请输入查询条件" 
 		rownumbers="true" toolbar="#searchBar" loadMsg="正在查询..." pagination="true">
 		 
 		<thead> 
@@ -57,7 +64,7 @@
 	<div id="win" class="easyui-window" title="add window" style="width:600px;height:400px;" closed="true"  
 	        data-options="iconCls:'icon-save',modal:true">   </div>
 	<div data-options="region:'south',split:true" style="height:50px;">
-	<label>合计：${total}</label>
+	<label id="myTotal">合计：${total}</label>
 	<a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-print'">Print</a>
 	</div>         
 </div>	

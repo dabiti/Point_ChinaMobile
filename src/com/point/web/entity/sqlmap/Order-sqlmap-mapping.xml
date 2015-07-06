@@ -39,6 +39,7 @@
 			SELECT * FROM (SELECT * FROM BLQL_ORDER) 
 	]]>
 		<where>
+			1=1
 			<if test="price != null and sealType != ''">
 				and PRICE = #{price}
 			</if>
@@ -51,6 +52,7 @@
 			<if test="phone != null and phone != ''">
 				and PHONE = #{phone}
 			</if>
+			
 		</where>
 	</select>
 	

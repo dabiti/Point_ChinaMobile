@@ -69,6 +69,9 @@ public class OrderServiceImpl implements OrderService {
 		return orderDao.getNextSysNo();
 	}
 	
+	/**
+	 * 查询订单
+	 */
 	@Override
 	public List<Order> findByCreateDate(Map createtime){
 		return orderDao.findByCreateDate(createtime);

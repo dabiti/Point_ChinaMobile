@@ -20,7 +20,7 @@ public interface OrderService {
 	//保存
 	public void save (Order order) throws Exception;
 	
-	//按时间检索
+	//模糊搜索查询订单
 	public List<Order> findByCreateDate(Map createtime);
 }
 
