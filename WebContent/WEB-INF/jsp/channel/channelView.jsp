@@ -219,6 +219,7 @@
 </script>
 </head>
 <body>
+ 
 	<table id='demoTable' class="easyui-datagrid"
 		style="width: 100%; height: 100%" url="doChannelview.do"
 		title="请输入查询条件" rownumbers="true" toolbar="#searchBar" 
@@ -236,6 +237,18 @@
 			</tr>
 		</thead>
 	</table>
+	
+	
+	
+	
+	
+
+ 
+ 
+ 
+ 
+ 
+ 
  
 	<div id="searchBar" style="padding: 5px; height: auto">
 		<div style="margin-bottom: 5px">

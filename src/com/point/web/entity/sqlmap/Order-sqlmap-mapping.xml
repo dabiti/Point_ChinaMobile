@@ -34,10 +34,28 @@
 		SELECT TO_CHAR(SYSDATE,'yyyy-MM-dd HH24:mi:ss') FROM DUAL
 	</select>
 	
+		<select id="findByCreateDate"  resultType="order">
+		<![CDATA[
+			SELECT * FROM (SELECT * FROM BLQL_ORDER) 
+	]]>
+		<where>
+			<if test="price != null and sealType != ''">
+				and PRICE = #{price}
+			</if>
+			<if test="startdate != null and startdate != ''">
+				and CREATETIME >= #{startdate}
+			</if>
+			<if test="enddate != null and endSealDate != ''">
+				and CREATETIME &lt;= #{enddate}
+			</if>
+			<if test="phone != null and phone != ''">
+				and PHONE = #{phone}
+			</if>
+		</where>
+	</select>
 	
 	<insert id="save" parameterType="order">
         	insert into BLQL_ORDER (ORDERID,PHONE,ITEMID,TITLE,PRICE,QUANTITY,FINALFEE,DISCOUNT,CREATETIME) values(#{orderid},#{phone},#{itemid},#{title},#{price},#{quantity},#{finalfee},#{discount},sysdate) 
 	</insert>
-	
-	
+
 </mapper>

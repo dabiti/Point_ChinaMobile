@@ -13,9 +13,23 @@
 		<result column="PASSWORD" property="password" />
 	</resultMap>
 	<!-- 查询全部 -->
-	<select id="findAll" resultMap="resultChannel">
-		SELECT
-		ID,NAME,EMAIL,PHONE,CNO,PASSWORD,CREATETIME FROM BLQL_CHANNEL
+	<select id="findAll" resultMap="resultChannel" parameterType="map">
+		SELECT ID,NAME,EMAIL,PHONE,CNO,PASSWORD,CREATETIME FROM BLQL_CHANNEL
+
+		<where>
+			1=1
+			<if test="name!=null">
+				AND NAME LIKE '%${name}%'
+			</if>
+			<if test="name!=null">
+				AND PHONE LIKE '%${phone}%'
+			</if>
+			<if test="name!=null">
+				AND CNO LIKE '%${cno}%'
+			</if>
+			
+			ORDER BY CREATETIME
+		</where>
 	</select>
 	<!-- 根据ID查询单条记录 -->
 	<select id="findById" resultMap="resultChannel" parameterType="String">
@@ -57,8 +71,10 @@
 	<!-- 根据渠道商名称，商号，邮箱 联合查询 -->
 	<select id="findAllByCondition" resultMap="resultChannel"
 		parameterType="map">
-	
-		SELECT ID,NAME,EMAIL,PHONE,CNO,PASSWORD,CREATETIME FROM BLQL_CHANNEL
+	SELECT ID,NAME,EMAIL,PHONE,CNO,PASSWORD,CREATETIME FROM ( SELECT A.*, ROWNUM RN 
+FROM (
+
+	SELECT ID,NAME,EMAIL,PHONE,CNO,PASSWORD,CREATETIME FROM BLQL_CHANNEL
 
 		<where>
 			1=1
@@ -71,10 +87,16 @@
 			<if test="name!=null">
 				AND CNO LIKE '%${cno}%'
 			</if>
+			
 			ORDER BY CREATETIME
 		</where>
 		
 
 
+) A ) WHERE RN BETWEEN #{top} AND #{bottom}
+	
+	
+	
+	
 	</select>
 </mapper>

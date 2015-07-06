@@ -27,9 +27,9 @@ public class ChannelServiceImpl implements ChannelService{
 
 	private static Logger log = Logger.getLogger(ChannelServiceImpl.class);
 	@Override
-	public List<Channel> findAll() {
+	public List<Channel> findAll(Map map) {
 		// TODO Auto-generated method stub
-		return channelDao.findAll();
+		return channelDao.findAll(map);
 	}
 
 	@Override

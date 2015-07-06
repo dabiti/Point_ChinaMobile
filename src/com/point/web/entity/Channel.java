@@ -6,7 +6,6 @@ import org.apache.ibatis.type.Alias;
  * @Title: Channel实体类
  * @Description:渠道商实体类
  * @Since: 2015年7月01日
- * @Version: 1.1.0
  * @author liuhao
  *
  */

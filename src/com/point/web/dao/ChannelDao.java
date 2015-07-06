@@ -19,7 +19,7 @@ public interface ChannelDao {
 		 * @Since: 2015年7月01日
 		 * @author liuhao 
 		 */
-	public List<Channel> findAll();
+	public List<Channel> findAll(Map map);
 	/**
 	 @Title: 查找指定渠道商的方法接口
 	 * @Description:

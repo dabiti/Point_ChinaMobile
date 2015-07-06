@@ -1,5 +1,7 @@
 package com.point.web.service.impl;
 
+import java.util.List;
+import java.util.Map;
 import javax.annotation.Resource;
 
 import org.apache.log4j.Logger;
@@ -67,7 +69,11 @@ public class OrderServiceImpl implements OrderService {
 		return orderDao.getNextSysNo();
 	}
 	
-	
+	@Override
+	public List<Order> findByCreateDate(Map createtime){
+		return orderDao.findByCreateDate(createtime);
+	}
+
 
 	
 }
