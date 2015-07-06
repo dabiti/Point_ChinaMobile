@@ -23,6 +23,7 @@ public class User {
 	private String phone = "";
 	private String email = "";
 	private String enable = "";
+	private String salt;
 	
 
 	public User(){
@@ -110,6 +111,14 @@ public class User {
 		this.enable = enable;
 	}
 	
+	public String getSalt() {
+		return salt;
+	}
+
+	public void setSalt(String salt) {
+		this.salt = salt;
+	}
+
 	@Override
 	public String toString() {
 		return "User [userId=" + Id + ", username=" + username
@@ -119,3 +128,6 @@ public class User {
 				+ ", email=" + email + ", enable=" + enable + "]";
 	}
 }
+
+
+

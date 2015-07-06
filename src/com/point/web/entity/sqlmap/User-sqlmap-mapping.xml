@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.point.web.dao.UserDao">
-
+	<mapper namespace="com.point.web.dao.UserDao">
 	<sql id="userColumns">ID,USERNAME,PASSWORD,REALNAME,JOBNUMBER,DESCRIPTION,CREATETIME,PHONE,EMAIL,ENABLE
 	</sql>
 	<resultMap id="userResultMap" type="user">
@@ -123,5 +122,9 @@
 			ORDER BY CREATETIME
 		</where>
 		) A ) WHERE RN BETWEEN #{top} AND #{bottom}
+	</select>
+
+	<select id="getByUsername" resultMap="userResultMap" parameterType="string">
+		select id,username,password,salt from blql_user where username = #{username}
 	</select>
 </mapper>

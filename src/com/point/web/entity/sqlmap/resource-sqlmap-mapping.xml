@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+	<mapper namespace="com.point.web.dao.ResourceDao">
+
+	<resultMap id="resultResource" type="Resource" >
+		<id column="id" property="id"/>
+		<result column="resname" property="resname"/>
+		<result column="resurl" property="resurl"/>
+		<result column="pid" property="pid"/>
+		<result column="resno" property="resno"/>
+		<result column="resperm" property="resperm"/>
+		<result column="restype" property="restype"/>
+	</resultMap>
+	
+	<select id="getSubMenuResource" resultMap="resultResource" parameterType="string">
+		select re.id,re.resname,re.resurl,re.pid,re.resno,re.resperm,re.restype from 
+		  blql_resource re
+		  where 
+		  	re.pid = #{id} and re.restype=1
+	</select>
+	
+	<select id="getTopMenuResource" resultMap="resultResource" parameterType="string">
+		select re.id,re.resname,re.resurl,re.pid,re.resno,re.resperm,re.restype from 
+		  blql_resource re,blql_role_resource rr,blql_role r 
+		  where 
+		  	re.id = rr.res_id and r.id = rr.role_id
+		  	and r.rolename = #{rolename} and re.pid is null and re.restype=1
+	</select>
+	
+	<select id="getAllUrlResourceByUsername" resultMap="resultResource" parameterType="string">
+		select re.id,re.resname,re.resurl,re.pid,re.resno,re.resperm,re.restype from 
+		  blql_resource re,blql_role_resource rr,blql_role r,blql_user_role ur,blql_user u
+		  where 
+		  	re.id = rr.res_id and r.id = rr.role_id and r.id = ur.role_id and ur.user_id=u.id
+		  	and u.username = #{username} and re.resurl is not null and re.restype &lt;> -1
+	</select>
+</mapper>

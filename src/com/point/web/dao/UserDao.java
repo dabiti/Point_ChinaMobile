@@ -78,4 +78,12 @@ public interface UserDao {
 	 * @param yanbin_a
 	 */
 	public List<User> findAllByCondition(Map paramMap);
+	
+	/**
+	 * @Title: 按条件用户的方法接口
+	 * @Description:
+	 * @Since: 2015年7月04日
+	 * @param yanbin_a
+	 */
+	public User getByUsername(String username);
 }
