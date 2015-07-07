@@ -90,13 +90,13 @@ public class OrderListController {
 		String datestr = "";
 		for(Order orderItem : order){
 			orderTableEntity = new OrderTableEntity();
-			datestr = sdf.format(orderItem.getCreatetime());
-			orderTableEntity.setOrderid(orderItem.getOrderid());
+			datestr = sdf.format(orderItem.getCreateTime());
+			orderTableEntity.setOrderid(orderItem.getOrderId());
 			orderTableEntity.setPhone(orderItem.getPhone());
 			orderTableEntity.setPrice(orderItem.getPrice());
 			orderTableEntity.setTitle(orderItem.getTitle());
-			orderTableEntity.setItemid(orderItem.getItemid());
-			orderTableEntity.setFinalfee(orderItem.getFinalfee());//积分金额
+			orderTableEntity.setItemid(orderItem.getItemId());
+			orderTableEntity.setFinalfee(orderItem.getFinalFee());//积分金额
 			orderTableEntity.setQuantity(orderItem.getQuantity());//商品数量
 			orderTableEntity.setOrderTime(datestr);
 			

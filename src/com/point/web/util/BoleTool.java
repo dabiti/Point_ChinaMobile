@@ -151,7 +151,7 @@ public class BoleTool {
 	}
 
 	// 验证参数
-	public final static boolean verifyParameterForResendVirtualCode(String msg) {
+	public final static boolean verifyParameterForConsumeVCfromBole(String msg) {
 		JSONObject jo = JSONObject.fromObject(msg);
 		if (null != jo && jo.containsKey("orderid")&& jo.containsKey("sign")){
 			return true;
@@ -159,6 +159,15 @@ public class BoleTool {
 		return false;
 	}
 	
+	
+	// 验证参数
+		public final static boolean verifyParameterForResendVirtualCode(String msg) {
+			JSONObject jo = JSONObject.fromObject(msg);
+			if (null != jo && jo.containsKey("orderid")&& jo.containsKey("sign")){
+				return true;
+			}
+			return false;
+		}
 	
 	
 

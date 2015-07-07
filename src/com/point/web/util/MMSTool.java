@@ -7,7 +7,6 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.net.URL;
 import java.net.URLConnection;
-import java.security.MessageDigest;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -41,6 +40,7 @@ public class MMSTool {
 			MMSMap.put("templateId", bundle.getString("templateId"));
 			MMSMap.put("port", bundle.getString("port"));
 			MMSMap.put("signature", bundle.getString("signature"));
+			MMSMap.put("uppath", bundle.getString("uppath"));
 
 		} catch (Exception e) {
 			StringWriter sw = new StringWriter();

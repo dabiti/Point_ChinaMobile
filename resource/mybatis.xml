@@ -11,11 +11,12 @@
 	
 	<!-- 指定映射文件-->
 	<mappers>
-		<mapper resource="com/point/web/entity/sqlmap/Channel-sqlmap-mapping.xml" />
 		<mapper resource="com/point/web/entity/sqlmap/Order-sqlmap-mapping.xml" />
 		<mapper resource="com/point/web/entity/sqlmap/VirtualCode-sqlmap-mapping.xml" />
+		<mapper resource="com/point/web/entity/sqlmap/Upmsg-sqlmap-mapping.xml" />
+		<mapper resource="com/point/web/entity/sqlmap/Channel-sqlmap-mapping.xml" />
 		<mapper resource="com/point/web/entity/sqlmap/User-sqlmap-mapping.xml" />
 		<mapper resource="com/point/web/entity/sqlmap/role-sqlmap-mapping.xml" />
-		<mapper resource="com/point/web/entity/sqlmap/resource-sqlmap-mapping.xml" />
+		<mapper resource="com/point/web/entity/sqlmap/resource-sqlmap-mapping.xml" />	
 	</mappers> 
 </configuration>

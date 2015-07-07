@@ -6,26 +6,31 @@
 	<mapper namespace="com.point.web.dao.VirtualCodeDao">
 
 	<resultMap id="resultVirtualcode" type="virtualcode" >
-		<id column="ORDERID" property="orderid"/>
-		<result column="VCODE" property="vcode"/>
+		<id column="ORDERID" property="orderId"/>
+		<result column="VCODE" property="virtualCode"/>
+		<result column="VPASS" property="virtualCodePass"/>
 		<result column="STATUS" property="status"/>
-		<result column="CREATETIME" property="createtime" javaType="java.util.Date"/>
+		<result column="CREATETIME" property="createTime" />
+		<result column="USEID" property="useId"/>
+		<result column="USEAMOUNT" property="useAmount"/>
+		<result column="USECONTENT" property="useContent"/>
+		<result column="USETIME" property="useDatetime" />
 	</resultMap>
 	
 	
 	<select id="get" resultMap="resultVirtualcode" parameterType="string">
-		SELECT O.ORDERID,O.VCODE,O.STATUS,O.CREATETIME
+		SELECT O.ORDERID,O.VCODE,O.VPASS,O.STATUS,O.CREATETIME,O.USEID,O.USECONTENT,O.USETIME
 	    FROM BLQL_VIRTUALCODE O
-		WHERE O.ORDERID = #{orderid}
+		WHERE O.ORDERID = #{orderId}
 	</select>
 	
 	<insert id="save" parameterType="virtualcode">
-        	insert into BLQL_VIRTUALCODE (ORDERID,VCODE,STATUS,CREATETIME) values(#{orderid},#{vcode},#{status},sysdate) 
+        	insert into BLQL_VIRTUALCODE (ORDERID,VIRTUALCODE,VIRTUALCODEPASS,STATUS,CREATETIME) values(#{orderId},#{virtualCode},#{virtualCodePass},#{status},#{createTime}) 
 	</insert>
 	
 	
 	<update id="updateStatus" parameterType="map">
-        	update BLQL_VIRTUALCODE set STATUS=#{status} WHERE ORDERID= #{orderid}
+        	update BLQL_VIRTUALCODE set STATUS=#{status} WHERE ORDERID= #{orderId}
 	</update>
 	
 </mapper>
