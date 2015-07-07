@@ -11,6 +11,7 @@
 		<result column="PHONE" property="phone" />
 		<result column="CNO" property="cno" />
 		<result column="PASSWORD" property="password" />
+		<result column="SALT" property="salt" />
 	</resultMap>
 	<!-- 查询全部 -->
 	<select id="findAll" resultMap="resultChannel" parameterType="map">
@@ -35,6 +36,10 @@
 	<select id="findById" resultMap="resultChannel" parameterType="String">
 		SELECT ID,NAME,EMAIL,PHONE,CNO,PASSWORD,CREATETIME FROM BLQL_CHANNEL
 		WHERE ID=#{id}
+	</select>
+	<select id="findByName" resultMap="resultChannel" parameterType="String">
+		SELECT ID,NAME,EMAIL,PHONE,CNO,PASSWORD,CREATETIME,SALT FROM BLQL_CHANNEL
+		WHERE name=#{name}
 	</select>
 	<!-- 插入一条记录 -->
 	<insert id="insert" parameterType="Channel">
@@ -99,4 +104,14 @@ FROM (
 	
 	
 	</select>
+	
+	<!-- 根据名称查询表中记录 -->
+	<select id="getChannelCountByName" parameterType="Channel"
+		resultType="int">
+		select count(ID) from BLQL_CHANNEL where name=#{name} 
+		<if test="id!=null">
+				AND id &lt;>#{id}
+		</if>
+	</select>
+	
 </mapper>

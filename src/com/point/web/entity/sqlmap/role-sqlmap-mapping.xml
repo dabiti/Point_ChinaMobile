@@ -14,10 +14,10 @@
 	
 	<select id="getRolesByUsername" resultMap="resultRole" parameterType="string">
 		select r.id,r.rolename,r.roledesc,r.rolecode from 
-		  blql_role r,blql_user_role ur,blql_user u 
+		  blql_role r,blql_user_role ur,blql_channel u 
 		  where 
 		  	r.id = ur.role_id and u.id = ur.user_id
-		  	and u.username = #{username}
+		  	and u.name = #{name}
 	</select>
 	
 </mapper>

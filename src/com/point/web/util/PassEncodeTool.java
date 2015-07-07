@@ -18,7 +18,7 @@ public class PassEncodeTool {
 	public static final String ALGORITHM_NAME = "SHA-256";//算法名称
 
 	public static void main(String[] args) {
-		Map<String,String> resMap = passwordEncode("oper","123");
+		Map<String,String> resMap = passwordEncode("it","123");
 		System.out.println("salt: "+resMap.get("salt"));
 		System.out.println("password: "+resMap.get("password"));
 		//salt: 46f7eddf919679b370fc0cf9c593fdc8

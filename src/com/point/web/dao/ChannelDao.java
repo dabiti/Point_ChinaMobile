@@ -27,6 +27,10 @@ public interface ChannelDao {
 	 * @author liuhao 
 	 */
 	public Channel findById(String id);
+	
+	public Channel findByName(String name);
+	
+	public int getChannelCountByName(Channel channel);
 	/**
 	* @Title: 插入渠道商的方法接口
 	 * @Description:

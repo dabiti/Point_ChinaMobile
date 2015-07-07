@@ -35,6 +35,7 @@ public class LoginController{
 			HttpServletResponse response) {
 		return "login";
 	}
+	
 	/**
 	* @Title:登出
 	* @Description:登录账号进行登出的操作，登出后进入登录页面
@@ -74,7 +75,6 @@ public class LoginController{
 			WebUtils.writeWarningMsg(response,"密码不能为空！");
 			return;
 		}
-		
 	    try {
 	        UsernamePasswordToken token = new UsernamePasswordToken(username, password);
 	        Subject subject = SecurityUtils.getSubject();
