@@ -13,5 +13,6 @@
 	<mappers>
 		<mapper resource="com/point/web/entity/sqlmap/Order-sqlmap-mapping.xml" />
 		<mapper resource="com/point/web/entity/sqlmap/VirtualCode-sqlmap-mapping.xml" />
+		<mapper resource="com/point/web/entity/sqlmap/Upmsg-sqlmap-mapping.xml" />
 	</mappers> 
 </configuration>

@@ -5,11 +5,9 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
-import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Service;
 
 import com.point.web.dao.VirtualCodeDao;
-import com.point.web.entity.Order;
 import com.point.web.entity.VirtualCode;
 import com.point.web.service.VirtualCodeService;
 

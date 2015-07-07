@@ -18,51 +18,44 @@ import org.apache.ibatis.type.Alias;
 public class Order implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	private String orderid = "";
-	private String phone = "";
-	private String itemid = "";
-	private String title = "";
-	private String price = "";
-	private String quantity = "";
-	private String finalfee = "";
-	private String discount = "";
-	private Date createtime ;
+	private String orderId ;
+	private String phone ;
+	private String itemId ;
+	private String title ;
+	private String price ;
+	private String quantity ;
+	private String finalFee ;
+	private String discount ;
+	private Date createTime ;
 	
 			
 	public Order(){
 		super();
 	}
 	
-	public Order(String orderid,String phone,String itemid,String title,String price,String quantity,String finalfee,String discount){
-		this.orderid = orderid;
+	public Order(String orderId,String phone,String itemid,String title,String price,String quantity,String finalFee,String discount){
+		this.orderId = orderId;
 		this.phone = phone;
-		this.itemid = itemid;
+		this.itemId = itemid;
 		this.title = title;
 		this.price = price;
 		this.quantity = quantity;
-		this.finalfee = finalfee;
+		this.finalFee = finalFee;
 		this.discount = discount;
 	}
 
 
 	@Override
 	public String toString() {
-		return "Order [orderid=" + orderid
-				+ ", phone=" + phone + ", itemid="+ itemid 
+		return "Order [orderId=" + orderId
+				+ ", phone=" + phone + ", itemId="+ itemId 
 				+ ", title=" + title + ", price="+ price 
-				+ ", quantity=" + quantity + ", finalfee="+ finalfee 
-				+ ", discount=" + discount + ", createtime=" + createtime + "]";
+				+ ", quantity=" + quantity + ", finalFee="+ finalFee 
+				+ ", discount=" + discount + ", createTime=" + createTime + "]";
 	}
 	
 
-	public String getOrderid() {
-		return orderid;
-	}
-
-	public void setOrderid(String orderid) {
-		this.orderid = orderid;
-	}
-
+	
 	public String getPhone() {
 		return phone;
 	}
@@ -71,13 +64,7 @@ public class Order implements Serializable {
 		this.phone = phone;
 	}
 
-	public String getItemid() {
-		return itemid;
-	}
-
-	public void setItemid(String itemid) {
-		this.itemid = itemid;
-	}
+	
 
 	public String getTitle() {
 		return title;
@@ -103,13 +90,6 @@ public class Order implements Serializable {
 		this.quantity = quantity;
 	}
 
-	public String getFinalfee() {
-		return finalfee;
-	}
-
-	public void setFinalfee(String finalfee) {
-		this.finalfee = finalfee;
-	}
 
 	public String getDiscount() {
 		return discount;
@@ -119,14 +99,39 @@ public class Order implements Serializable {
 		this.discount = discount;
 	}
 
-	public Date getCreatetime() {
-		return createtime;
+	public String getOrderId() {
+		return orderId;
 	}
 
-	public void setCreatetime(Date createtime) {
-		this.createtime = createtime;
+	public void setOrderId(String orderId) {
+		this.orderId = orderId;
 	}
 
+	public String getItemId() {
+		return itemId;
+	}
+
+	public void setItemId(String itemId) {
+		this.itemId = itemId;
+	}
+
+	public String getFinalFee() {
+		return finalFee;
+	}
+
+	public void setFinalFee(String finalFee) {
+		this.finalFee = finalFee;
+	}
+
+	public Date getCreateTime() {
+		return createTime;
+	}
+
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
+
+	
 
 	
 	

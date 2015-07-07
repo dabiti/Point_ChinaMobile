@@ -2,38 +2,42 @@ package com.point.web.entity;
 
 import java.util.Date;
 
-
-
 public class VirtualCode {
 
-	private String orderid;
-	
-	//虚拟码卡号
-	private String vcode;
-	
-	//状态
+	private String orderId;
+
+	// 虚拟码卡号
+	private String virtualCode;
+
+	// 虚拟码卡密
+	private String virtualCodePass;
+
+	// 状态
 	private String status;
-	
-	
-	private Date createtime;
-	
+
+	// 生成时间
+	private String createTime;
+
+	// 消费唯一标识
+	private String useId;
+
+	// 消费金额
+	private String useAmount;
+
+	// 消费内容
+	private String useContent;
+
+	// 消费时间
+	private String useDatetime;
+
 	@Override
 	public String toString() {
-		return "Order [orderid=" + orderid
-				+ ", vcode=" + vcode + ", status=" + status + ", createtime=" + createtime + "]";
+		return "Order [orderid=" + orderId + ", virtualCode=" + virtualCode
+				+ ", virtualCodePass=" + virtualCodePass + ", status=" + status
+				+ ", createTime=" + createTime + ", useId=" + useId
+				+ ", useAmount=" + useAmount + ", useContent=" + useContent
+				+ ", useDatetime=" + useDatetime + "]";
 	}
-	
-	
-	
-	public String getVcode() {
-		return vcode;
-	}
-
-	public void setVcode(String vcode) {
-		this.vcode = vcode;
-	}
-
-
 
 	public String getStatus() {
 		return status;
@@ -43,27 +47,68 @@ public class VirtualCode {
 		this.status = status;
 	}
 
-
-
-	public Date getCreatetime() {
-		return createtime;
+	public String getOrderId() {
+		return orderId;
 	}
 
-
-	public void setCreatetime(Date createtime) {
-		this.createtime = createtime;
+	public void setOrderId(String orderId) {
+		this.orderId = orderId;
 	}
 
-
-
-	public String getOrderid() {
-		return orderid;
+	public String getVirtualCode() {
+		return virtualCode;
 	}
 
-	public void setOrderid(String orderid) {
-		this.orderid = orderid;
+	public void setVirtualCode(String virtualCode) {
+		this.virtualCode = virtualCode;
 	}
-	
-	
-		
+
+	public String getVirtualCodePass() {
+		return virtualCodePass;
+	}
+
+	public void setVirtualCodePass(String virtualCodePass) {
+		this.virtualCodePass = virtualCodePass;
+	}
+
+	public String getUseId() {
+		return useId;
+	}
+
+	public void setUseId(String useId) {
+		this.useId = useId;
+	}
+
+	public String getUseAmount() {
+		return useAmount;
+	}
+
+	public void setUseAmount(String useAmount) {
+		this.useAmount = useAmount;
+	}
+
+	public String getUseContent() {
+		return useContent;
+	}
+
+	public void setUseContent(String useContent) {
+		this.useContent = useContent;
+	}
+
+	public String getCreateTime() {
+		return createTime;
+	}
+
+	public void setCreateTime(String createTime) {
+		this.createTime = createTime;
+	}
+
+	public String getUseDatetime() {
+		return useDatetime;
+	}
+
+	public void setUseDatetime(String useDatetime) {
+		this.useDatetime = useDatetime;
+	}
+
 }

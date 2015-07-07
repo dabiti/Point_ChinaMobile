@@ -6,15 +6,15 @@
 	<mapper namespace="com.point.web.dao.OrderDao">
 
 	<resultMap id="resultOrder" type="order" >
-		<id column="ORDERID" property="orderid"/>
+		<id column="ORDERID" property="orderId"/>
 		<result column="PHONE" property="phone"/>
-		<result column="ITEMID" property="itemid"/>
+		<result column="ITEMID" property="itemId"/>
 		<result column="TITLE" property="title"/>
 		<result column="PRICE" property="price"/>
 		<result column="QUANTITY" property="quantity"/>
-		<result column="FINALFEE" property="finalfee"/>
+		<result column="FINALFEE" property="finalFee"/>
 		<result column="DISCOUNT" property="discount"/>
-		<result column="CREATETIME" property="createtime"  javaType="java.util.Date" />
+		<result column="CREATETIME" property="createTime"  javaType="java.util.Date" />
 	</resultMap>
 	
 	<select id="get" resultMap="resultOrder" parameterType="string">
