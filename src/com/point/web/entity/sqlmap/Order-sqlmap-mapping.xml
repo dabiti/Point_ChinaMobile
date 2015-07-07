@@ -39,5 +39,23 @@
         	insert into BLQL_ORDER (ORDERID,PHONE,ITEMID,TITLE,PRICE,QUANTITY,FINALFEE,DISCOUNT,CREATETIME) values(#{orderid},#{phone},#{itemid},#{title},#{price},#{quantity},#{finalfee},#{discount},sysdate) 
 	</insert>
 	
+	<select id="findByCreateDate"  resultType="order">
+		<![CDATA[
+			SELECT * FROM (SELECT * FROM BLQL_ORDER) 
+	]]>
+		<where>
+			1=1
+			<if test="startDate != null and startDate != ''">
+				and CREATETIME >= #{startdate}
+			</if>
+			<if test="endDate != null and endDate != ''">
+				and CREATETIME &lt;= #{enddate}
+			</if>
+			<if test="phone != null and phone != ''">
+				and PHONE = #{phone}
+			</if>
+			
+		</where>
+	</select>
 	
 </mapper>

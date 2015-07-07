@@ -12,6 +12,8 @@ import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 import org.apache.log4j.Logger;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -40,6 +42,10 @@ public class MobileMallController {
 	@Resource
 	private VirtualCodeService virtualCodeService;
 
+	@Resource
+	private CreateMenuTool createMenuTool;
+	
+	
 	@RequestMapping("/test")
 	public void getOrgnizationTree(HttpSession session,
 			HttpServletResponse resopnse) {
@@ -57,12 +63,12 @@ public class MobileMallController {
 	public String jumpToLoginView(HttpServletRequest request,
 			HttpServletResponse response) {
 		// 如果已登录，直接跳到主页面，否则跳转到登陆页面
-		// Subject subject = SecurityUtils.getSubject();
-		// if (subject.isRemembered() == true || subject.isAuthenticated() ==
-		// true) {
-		return "main";
-		// } else
-		// return "login";
+		Subject subject = SecurityUtils.getSubject();
+		if (subject.isAuthenticated() == true) {
+			request.setAttribute("menu", createMenuTool.getMenu(subject));
+			return "main";
+		} else
+			return "login";
 	}
 
 	// ***正式编码***//
