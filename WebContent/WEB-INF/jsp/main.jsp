@@ -35,7 +35,6 @@
 		}
 		
 		.nav-user{
-/* 			background-position:0px 0px; */
  			background-position:-100px -480px;
 		}
 		.nav-role{

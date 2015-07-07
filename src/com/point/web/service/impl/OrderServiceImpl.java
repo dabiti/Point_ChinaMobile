@@ -2,6 +2,7 @@ package com.point.web.service.impl;
 
 import java.util.List;
 import java.util.Map;
+
 import javax.annotation.Resource;
 
 import org.apache.log4j.Logger;
@@ -15,7 +16,6 @@ import com.point.web.service.OrderService;
 @Service("OrderService")
 public class OrderServiceImpl implements OrderService {
 
-	
 	
 	@Resource
 	private OrderDao orderDao;
