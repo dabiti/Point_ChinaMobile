@@ -1,7 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
     pageEncoding="utf-8"%>
-
-<%@include file="common.jsp" %>
+<%
+	String basePath = request.getScheme() + "://"
+			+ request.getServerName() + ":" + request.getServerPort()
+			+ request.getContextPath() + "/";
+%>
+<%@include file="resources.jsp"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "hkp://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -9,14 +13,14 @@
 	<title>主页面</title>	
 	<script>
 		$(function(){
-			$('#demoTable').datagrid({
+			$('#orderTable').datagrid({
 				onLoadSuccess:function(data){
 					$('#myTotal').html(eval(data).total);
 				}
 			})
 		})
 		function searchData(){
-			$('#demoTable').datagrid('load',{
+			$('#orderTable').datagrid('load',{
 				title: $('#title').val(),
 				phone: $('#phone').val(),
 				startdate: $('#startdate').datebox("getValue")
@@ -28,11 +32,23 @@
 		function closeWin(){
 			$('#win').window('close');  
 		}
+		
+		//导出表
+		function exportorder(){
+			$('#phonef').val($('#phone').val());
+			$('#startdatef').val($('#startdate').val());
+			$('#enddatef').val($('#enddate').val());
+			$("#exportform").submit();
+			
+		}
+		
+		
 	</script>
 </head>
 <body> 
 <div class="easyui-layout" style="width:100%;height:100%;">
-	<table id='demoTable'  style="width:100%;height:100%" url="<%=basePath %>/listHandle" title="请输入查询条件" 
+	<div data-options="region:'north',split:true" style="height:90%;">
+	<table id='orderTable'  class="easyui-datagrid" style="width:100%;height:100%" url="<%=basePath %>/listHandle" title="请输入查询条件" 
 		rownumbers="true" toolbar="#searchBar" loadMsg="正在查询..." pagination="true">
 		 
 		<thead> 
@@ -58,11 +74,26 @@
 					url="getTypes.do"
 					valueField="id" textField="text">  -->
 			<a href="javascript:searchData()" class="easyui-linkbutton" data-options="iconCls:'icon-search'">查询</a> 
+			
+			
+			<a
+href="javascript:exportorder()" class="easyui-linkbutton">导出</a>
+<form method="post" action="exportOrder.do" id="exportform">
+<input type="hidden" name="phone" id="phonef">
+<input type="hidden" name="startdata" id="startdataf">
+<input type="hidden" name="enddate" id="enddatef">
+</form>
+
+	
+	
+	
+			
 		</div>
 	</div>
 	
 	<div id="win" class="easyui-window" title="add window" style="width:600px;height:400px;" closed="true"  
 	        data-options="iconCls:'icon-save',modal:true">   </div>
+	</div>	        
 	<div data-options="region:'south',split:true" style="height:50px;">
 	<label id="myTotal">合计：${total}</label>
 	<a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-print'">Print</a>
