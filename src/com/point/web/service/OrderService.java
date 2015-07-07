@@ -1,4 +1,8 @@
+
 package com.point.web.service;
+
+import java.util.List;
+import java.util.Map;
 
 import com.point.web.entity.Order;
 
@@ -15,5 +19,8 @@ public interface OrderService {
 
 	//保存
 	public void save (Order order) throws Exception;
-
+	
+	//模糊搜索查询订单
+	public List<Order> findByCreateDate(Map createtime);
 }
+

@@ -57,6 +57,8 @@
 		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"></property>
 	</bean>
 	
+	<bean class="org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor"/>
+	
 	<!-- 配置SqlSessionTemplate -->  
     <bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">  
         <constructor-arg name="sqlSessionFactory" ref="sqlSessionFactory" />  
@@ -86,6 +88,6 @@
 		  <tx:method name="*" rollback-for="Exception"/>
 		</tx:attributes>
 	</tx:advice>
-
+	
     
 </beans>

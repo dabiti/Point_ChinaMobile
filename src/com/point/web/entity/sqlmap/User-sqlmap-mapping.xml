@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	<mapper namespace="com.point.web.dao.UserDao">
+	<sql id="userColumns">ID,USERNAME,PASSWORD,REALNAME,JOBNUMBER,DESCRIPTION,CREATETIME,PHONE,EMAIL,ENABLE
+	</sql>
+	<resultMap id="userResultMap" type="user">
+		<id column="ID" property="id" />
+		<result column="USERNAME" property="username" />
+		<result column="PASSWORD" property="password" />
+		<result column="REALNAME" property="realname" />
+		<result column="JOBNUMBER" property="jobnumber" />
+		<result column="DESCRIPTION" property="description" />
+		<result column="CREATETIME" property="createtime" />
+		<result column="PHONE" property="phone" />
+		<result column="EMAIL" property="email" />
+		<result column="ENABLE" property="enable" />
+	</resultMap>
+
+	<!-- 查询全部 -->
+	<select id="findAll" resultMap="userResultMap" parameterType="map">
+		SELECT
+		<include refid="userColumns" />
+		FROM BLQL_USER
+		<where>
+			1=1
+			<if test="username!=null">
+				AND USERNAME LIKE '%${username}%'
+			</if>
+			<if test="jobnumber!=null">
+				AND JOBNUMBER LIKE '%${jobnumber}%'
+			</if>
+			<if test="enable!=null">
+				AND ENABLE LIKE '%${enable}%'
+			</if>
+			<if test="phone != null">
+				AND PHONE LIKE '%${phone}%'
+			</if>
+			ORDER BY CREATETIME
+		</where>
+	</select>
+
+	<!-- 根据ID查询单条记录 -->
+	<select id="findById" resultMap="userResultMap" parameterType="String">
+		SELECT
+		<include refid="userColumns" />
+		FROM BLQL_CHANNEL WHERE ID=#{id}
+	</select>
+
+	<!-- 根据名称查询表中记录 -->
+	<select id="getUserCountByName" parameterType="String"
+		resultType="int">
+		select count(ID) from BLQL_USER U where U.USERNAME =
+		#{username}
+	</select>
+
+	<!-- 插入一条记录 -->
+	<insert id="insertUser" parameterType="user" keyProperty="id">
+		insert
+		into BLQL_USER
+		(ID,USERNAME,PASSWORD,REALNAME,JOBNUMBER,DESCRIPTION,CREATETIME,PHONE,EMAIL,ENABLE)
+		values(to_char(sysdate,'yyyyMMdd')||seq_blql_user.nextval,#{username},#{password},#{realname},#{jobnumber},#{description},SYSDATE,#{phone},#{email},#{enable})
+	</insert>
+
+	<!-- 更新记录 -->
+	<update id="update" parameterType="user">
+		UPDATE BLQL_USER
+		<set>
+			<if test="username != null">USERNAME=#{username},</if>
+			<if test="realname!= null">REALNAME=#{realname},</if>
+			<if test="jobnumber!= null">JOBNUMBER=#{jobnumber},</if>
+			<if test="email!= null">EMAIL=#{email},</if>
+			<if test="phone!= null">PHONE=#{phone},</if>
+			<if test="enable!= null">ENABLE=#{enable},</if>
+			<if test="description!= null">DESCRIPTION=#{description}</if>
+		</set>
+		WHERE ID=#{id}
+	</update>
+
+	<!-- 删除单条记录 -->
+	<delete id="delete" parameterType="user">
+		DELETE FROM BLQL_USER WHERE ID=#{id}
+	</delete>
+
+	<!-- 批量删除记录 -->
+	<delete id="deleteByParams" parameterType="String">
+		DELETE FROM BLQL_USER WHERE ID IN
+		<foreach item="item" index="index" collection="array" open="("
+			separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+	<!-- <select id="findAllByCondition" resultMap="userResultMap" parameterType="map"> 
+		SELECT <include refid="userColumns"/> FROM BLQL_USER <where> 1=1 <if test="username!=null"> 
+		AND USERNAME LIKE '%${username}%' </if> <if test="jobnumber!=null"> AND JOBNUMBER 
+		LIKE '%${jobnumber}%' </if> <if test="enable!=null"> AND ENABLE LIKE '%${enable}%' 
+		</if> <if test="phone != null"> AND PHONE LIKE '%${phone}%' </if> ORDER BY 
+		CREATETIME </where> </select> -->
+	<!-- 根据渠道商名称，商号，邮箱 联合查询 -->
+	<select id="findAllByCondition" resultMap="userResultMap"
+		parameterType="map">
+		SELECT
+		<include refid="userColumns" />
+		FROM ( SELECT A.*, ROWNUM RN
+		FROM (SELECT
+		<include refid="userColumns" />
+		FROM BLQL_USER
+		<where>
+			1=1
+			<if test="username!=null">
+				AND USERNAME LIKE '%${username}%'
+			</if>
+			<if test="jobnumber!=null">
+				AND JOBNUMBER LIKE '%${jobnumber}%'
+			</if>
+			<if test="enable!=null">
+				AND ENABLE LIKE '%${enable}%'
+			</if>
+			<if test="phone != null">
+				AND PHONE LIKE '%${phone}%'
+			</if>
+			ORDER BY CREATETIME
+		</where>
+		) A ) WHERE RN BETWEEN #{top} AND #{bottom}
+	</select>
+
+	<select id="getByUsername" resultMap="userResultMap" parameterType="string">
+		select id,username,password,salt from blql_user where username = #{username}
+	</select>
+</mapper>

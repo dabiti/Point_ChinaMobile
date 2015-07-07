@@ -26,6 +26,7 @@ import com.point.web.service.OrderService;
 import com.point.web.service.VirtualCodeService;
 import com.point.web.util.Base64Coder;
 import com.point.web.util.BoleTool;
+import com.point.web.util.CreateMenuTool;
 import com.point.web.util.GsonTool;
 import com.point.web.util.MMSTool;
 import com.point.web.util.StringTool;
@@ -44,8 +45,7 @@ public class MobileMallController {
 
 	@Resource
 	private CreateMenuTool createMenuTool;
-	
-	
+
 	@RequestMapping("/test")
 	public void getOrgnizationTree(HttpSession session,
 			HttpServletResponse resopnse) {
@@ -160,7 +160,7 @@ public class MobileMallController {
 						order = new Order(orderId, phone, itemId, title, price,
 								quantity, finalFee, discount);
 						// 保存订单
-						log.info("准备保存订单:"+order);
+						log.info("准备保存订单:" + order);
 						orderService.save(order);
 						log.info("保存完成");
 						mallRj = new VGReturnJson("0", "ok");
@@ -198,15 +198,15 @@ public class MobileMallController {
 			log.info("准备请求伯乐，获取虚拟码");
 			String boleStr = BoleTool.sendRequest(sendJs, "notifyOrder.do");
 			boleStr = "{\"code\":\"0\",\"vcode\":\"a1b2c3\",\"msg\":\"\"}";
-			log.info("伯乐返回:"+boleStr);
+			log.info("伯乐返回:" + boleStr);
 			// 返回判断
 			if (null != boleStr || !"".equals(boleStr)) {
 				JSONObject jo = JSONObject.fromObject(boleStr);
 				if (jo.containsKey("code") && "0".equals(jo.get("code"))) {
 					// 解析出虚拟码
 					vcode = jo.getString("virtualCode");
-					vpass  = jo.getString("virtualCodePass");
-					vcreatetime   = jo.getString("createTime");
+					vpass = jo.getString("virtualCodePass");
+					vcreatetime = jo.getString("createTime");
 					// 保存
 					VirtualCode vc = new VirtualCode();
 					vc.setOrderId(orderId);
@@ -215,7 +215,7 @@ public class MobileMallController {
 					vc.setCreateTime(vcreatetime);
 					vc.setStatus("0");
 					try {
-						log.info("准备保存虚拟码:"+vc);
+						log.info("准备保存虚拟码:" + vc);
 						virtualCodeService.save(vc);
 						log.info("保存完成");
 						boleResult = true;
@@ -232,7 +232,7 @@ public class MobileMallController {
 				try {
 					log.info("准备请求短信网关，给用户发送虚拟码短信");
 					MMSReturnStr = MMSTool.sendMMS(order.getPhone(), vcode);
-					log.info("短信网关返回："+MMSReturnStr);
+					log.info("短信网关返回：" + MMSReturnStr);
 					if (null != MMSReturnStr && MMSReturnStr.contains("1000")) {
 						log.info("发送成功");
 						MMSResult = true;
@@ -264,7 +264,7 @@ public class MobileMallController {
 					log.info("准备调用移动提交虚拟码接口,参数:" + notifyCMjo);
 					String returnStr = VirtualGoodsTool.sendRequest(notifyCMjo,
 							"setVirtualCode");
-					log.info("移动商城返回："+returnStr);
+					log.info("移动商城返回：" + returnStr);
 					if (null != returnStr && !"".equals(returnStr)) {
 						JSONObject returnJson = JSONObject
 								.fromObject(returnStr);
@@ -338,9 +338,12 @@ public class MobileMallController {
 										if (jo.containsKey("code")
 												&& "0".equals(jo.get("code"))) {
 											// 解析出虚拟码
-											String vcode = jo.getString("virtualCode");
-											String vpass  = jo.getString("virtualCodePass");
-											String vcreatetime   = jo.getString("createTime");
+											String vcode = jo
+													.getString("virtualCode");
+											String vpass = jo
+													.getString("virtualCodePass");
+											String vcreatetime = jo
+													.getString("createTime");
 											// 保存
 											vc = new VirtualCode();
 											vc.setOrderId(orderid);
@@ -361,14 +364,18 @@ public class MobileMallController {
 								// 准备发送
 								log.info("准备发送短信");
 								String MMSReturnStr = MMSTool.sendMMS(
-										order.getPhone(), vc.getVirtualCodePass());
-								if (null != MMSReturnStr && MMSReturnStr.contains("1000")) {
+										order.getPhone(),
+										vc.getVirtualCodePass());
+								if (null != MMSReturnStr
+										&& MMSReturnStr.contains("1000")) {
 									rj = new VGReturnJson("0", "ok");
 									// 更新状态，发送成功
-									virtualCodeService.updateStatus(orderid, "1");
+									virtualCodeService.updateStatus(orderid,
+											"1");
 								} else {
 									// 更新状态，发送失败
-									virtualCodeService.updateStatus(orderid, "2");
+									virtualCodeService.updateStatus(orderid,
+											"2");
 								}
 							}
 						}
@@ -525,7 +532,8 @@ public class MobileMallController {
 										"订单有误，订单信息错误或者订单不存在");
 							} else {
 								log.info("更新虚拟码状态至4");
-								VirtualCode vc  = virtualCodeService.get(orderid);
+								VirtualCode vc = virtualCodeService
+										.get(orderid);
 								virtualCodeService.updateStatus(
 										order.getOrderId(), "4");
 								// TODO
@@ -533,11 +541,18 @@ public class MobileMallController {
 								JSONObject jo = new JSONObject();
 								ArrayList<Record> list = new ArrayList<Record>();
 								Record rd = new Record();
-								rd.setVirtualCode(VirtualGoodsTool.getPublicMap().get("identity_id")+"_"+vc.getVirtualCode());
-								rd.setVirtualCodePass(VirtualGoodsTool.getPublicMap().get("identity_id")+"_"+vc.getVirtualCodePass());
+								rd.setVirtualCode(VirtualGoodsTool
+										.getPublicMap().get("identity_id")
+										+ "_" + vc.getVirtualCode());
+								rd.setVirtualCodePass(VirtualGoodsTool
+										.getPublicMap().get("identity_id")
+										+ "_" + vc.getVirtualCodePass());
 								rd.setOrderId(orderid);
 								rd.setItemId(order.getItemId());
-								rd.setUseId(VirtualGoodsTool.getPublicMap().get("identity_id")+"_"+vc.getUseId());
+								rd.setUseId(VirtualGoodsTool.getPublicMap()
+										.get("identity_id")
+										+ "_"
+										+ vc.getUseId());
 								rd.setUseAmount(order.getFinalFee());
 								rd.setUseContent(vc.getUseContent());
 								rd.setUseDatetime(vc.getUseDatetime());
