@@ -18,7 +18,7 @@
 		<property name="securityManager" ref="securityManager" />
 		<property name="successUrl" value="/jumpToLoginView" />
 		<property name="loginUrl" value="/login/toLogin" />
-		<property name="unauthorizedUrl" value="/html/error.htm" />
+<!-- 		<property name="unauthorizedUrl" value="/html/error.html" /> -->
 		<property name="filters"> 
 	      <util:map> 
 	         <entry key="perms" value-ref="qxURLPermissionsFilter"/> 

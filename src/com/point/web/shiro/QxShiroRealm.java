@@ -17,9 +17,9 @@ import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.ByteSource;
 
+import com.point.web.dao.ChannelDao;
 import com.point.web.dao.ResourceDao;
-import com.point.web.entity.User;
-import com.point.web.service.UserService;
+import com.point.web.entity.Channel;
 import com.point.web.util.PassEncodeTool;
 /**
  * @Title:权限管理认证与授权类
@@ -28,9 +28,12 @@ import com.point.web.util.PassEncodeTool;
  * @author guowanyu
  */
 public class QxShiroRealm extends AuthorizingRealm {
-      @Resource
-	  private UserService userService;
-      
+//      @Resource
+//	  private UserService userService;
+	  
+	  @Resource
+	  private ChannelDao channelDao;
+	
       @Resource
       private ResourceDao resourceDao;
       
@@ -44,9 +47,10 @@ public class QxShiroRealm extends AuthorizingRealm {
 	    
 	    List<String> permissions = new ArrayList<String>();
 	    
-	    User user = userService.getByUsername(name);
+	    //User user = userService.getByUsername(name);
+	    Channel channel = channelDao.findByName(name); 
 	    
-	    if (user.getUsername().equals(name)) {
+	    if (channel.getName().equals(name)) {
 	    	List<com.point.web.entity.Resource> resList = this.resourceDao.getAllUrlResourceByUsername(name);
 	    	for(com.point.web.entity.Resource resource : resList){
 	    		if(!permissions.contains(resource.getResurl())){
@@ -67,14 +71,15 @@ public class QxShiroRealm extends AuthorizingRealm {
 	  protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authcToken)
 	      throws AuthenticationException {
 	    UsernamePasswordToken token = (UsernamePasswordToken) authcToken;
-	    User user = userService.getByUsername(token.getUsername());
-	    if (user == null) {
+	    //User user = userService.getByUsername(token.getUsername());
+	    Channel channel = channelDao.findByName(token.getUsername()); 
+	    if (channel == null) {
 	    	throw new AuthenticationException();
 	    }
 	    SimpleAuthenticationInfo info = null;
-	    if (user.getUsername().equals(token.getUsername())) {
-	    	info = new SimpleAuthenticationInfo(user.getUsername(), user.getPassword(), getName());
-	    	info.setCredentialsSalt(ByteSource.Util.bytes(PassEncodeTool.constructSalt(user.getUsername(), user.getSalt())));
+	    if (channel.getName().equals(token.getUsername())) {
+	    	info = new SimpleAuthenticationInfo(channel.getName(), channel.getPassword(), getName());
+	    	info.setCredentialsSalt(ByteSource.Util.bytes(PassEncodeTool.constructSalt(channel.getName(), channel.getSalt())));
 	    }
 	    return info;
 	  }

@@ -44,14 +44,17 @@
 	<select id="findById" resultMap="userResultMap" parameterType="String">
 		SELECT
 		<include refid="userColumns" />
-		FROM BLQL_CHANNEL WHERE ID=#{id}
+		FROM BLQL_User WHERE ID=#{id}
 	</select>
 
 	<!-- 根据名称查询表中记录 -->
-	<select id="getUserCountByName" parameterType="String"
+	<select id="getUserCountByName" parameterType="user"
 		resultType="int">
 		select count(ID) from BLQL_USER U where U.USERNAME =
 		#{username}
+		<if test="id!=null">
+				AND id &lt;>#{id}
+		</if>
 	</select>
 
 	<!-- 插入一条记录 -->
@@ -59,7 +62,10 @@
 		insert
 		into BLQL_USER
 		(ID,USERNAME,PASSWORD,REALNAME,JOBNUMBER,DESCRIPTION,CREATETIME,PHONE,EMAIL,ENABLE)
-		values(to_char(sysdate,'yyyyMMdd')||seq_blql_user.nextval,#{username},#{password},#{realname},#{jobnumber},#{description},SYSDATE,#{phone},#{email},#{enable})
+		values(to_char(sysdate,'yyyyMMdd')||seq_blql_user.nextval,#{username,jdbcType=VARCHAR},
+		#{password,jdbcType=VARCHAR},#{realname,jdbcType=VARCHAR},
+		#{jobnumber,jdbcType=VARCHAR},#{description,jdbcType=VARCHAR},
+		SYSDATE,#{phone,jdbcType=VARCHAR},#{email,jdbcType=VARCHAR},#{enable,jdbcType=VARCHAR})
 	</insert>
 
 	<!-- 更新记录 -->
@@ -127,4 +133,5 @@
 	<select id="getByUsername" resultMap="userResultMap" parameterType="string">
 		select id,username,password,salt from blql_user where username = #{username}
 	</select>
+	
 </mapper>

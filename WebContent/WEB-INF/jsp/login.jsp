@@ -6,6 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>登陆页面</title>
 <style>
+body{text-align:center}
 .login_input{  
 background-position: 5px 6px;  
 background-repeat:no-repeat;  

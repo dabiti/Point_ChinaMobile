@@ -19,11 +19,12 @@ public class Channel {
 	private String password;//渠道商密码
 	private String createtime;//渠道商密码
 	private String status;//渠道商密码
+	private String salt;
 	public Channel() {
 		super();
 	}
 	public Channel(String id, String name, String email, String phone,
-			String cno, String password, String createtime, String status) {
+			String cno, String password, String createtime, String status,String salt) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -33,6 +34,7 @@ public class Channel {
 		this.password = password;
 		this.createtime = createtime;
 		this.status = status;
+		this.salt = salt;
 	}
 	public String getId() {
 		return id;
@@ -82,7 +84,11 @@ public class Channel {
 	public void setStatus(String status) {
 		this.status = status;
 	}
-	
-	
+	public String getSalt() {
+		return salt;
+	}
+	public void setSalt(String salt) {
+		this.salt = salt;
+	}
 	
 }
