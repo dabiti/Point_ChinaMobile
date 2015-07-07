@@ -32,6 +32,17 @@
 		function closeWin(){
 			$('#win').window('close');  
 		}
+		
+		//导出表
+		function exportorder(){
+			$('#phonef').val($('#phone').val());
+			$('#startdatef').val($('#startdate').val());
+			$('#enddatef').val($('#enddate').val());
+			$("#exportform").submit();
+			
+		}
+		
+		
 	</script>
 </head>
 <body> 
@@ -63,6 +74,18 @@
 					url="getTypes.do"
 					valueField="id" textField="text">  -->
 			<a href="javascript:searchData()" class="easyui-linkbutton" data-options="iconCls:'icon-search'">查询</a> 
+			
+			
+			<a
+href="javascript:exportorder()" class="easyui-linkbutton">导出</a>
+<form method="post" action="exportOrder.do" id="exportform">
+<input type="hidden" name="phone" id="phonef">
+<input type="hidden" name="startdata" id="startdataf">
+<input type="hidden" name="enddate" id="enddatef">
+</form>
+
+	
+			
 		</div>
 	</div>
 	

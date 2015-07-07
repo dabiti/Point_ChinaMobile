@@ -1,5 +1,6 @@
 package com.point.web.controller;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -10,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -19,6 +21,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.point.web.entity.Channel;
 import com.point.web.entity.Order;
 import com.point.web.entity.OrderTableEntity;
 import com.point.web.service.OrderService;
@@ -138,4 +141,49 @@ public class OrderListController {
 	}
 	
 
+	@RequestMapping("exportOrder")
+	public void exportChannel(HttpServletRequest request,
+			HttpServletResponse response) throws IOException {
+response.setCharacterEncoding("utf-8");
+
+String phone=request.getParameter("phone");
+String startdate=request.getParameter("startDate");
+String enddate=request.getParameter("endDate");
+		String fileName ="order";//设置导出的文件名称
+		HashMap<String, String> map = new HashMap<String, String>();// map传入多个参数•page: 页号，从1计起。 •rows: 每页记录大小。 
+		map.put("phone", phone);
+		map.put("startdate", startdate);
+		map.put("enddate", enddate);
+	
+		
+		 List<Order> orders= orderService.findByCreateDate(map);
+		 
+		 String strOrder="";
+		 strOrder+="<table border='1'>";
+		 strOrder+="<tr><td>订单号</td><td>用户手机号</td><td>商品名称</td><td>商品单价</td><td>商品数量</td><td>创建日期</td></tr>";
+		 
+		 for(Order order:orders){
+			 strOrder+="<tr><td>"+order.getOrderId()+"</td><td>"+order.getPhone()+"</td><td>"+order.getTitle()+"</td><td>"+order.getPrice()+"</td><td>"+order.getQuantity()+"</td><td>"+order.getCreateTime().toString()+"</td></tr>";
+			 
+			 
+		 }
+		 //System.out.println(strchannel);
+	        
+	        StringBuffer sb = new StringBuffer(strOrder);//将表格信息放入内存
+	        
+	        
+	        String contentType ="application/vnd.ms-excel";//定义导出文件的格式的字符串
+	        String recommendedName = new String(fileName.getBytes(),"ISO-8859-1");//设置文件名称的编码格式
+	        response.setContentType(contentType);//设置导出文件格式
+	        response.setHeader("Content-Disposition", "attachment; filename=" + recommendedName + ".XLS");//
+	        response.resetBuffer();
+	        //利用输出输入流导出文件
+	        ServletOutputStream sos = response.getOutputStream();
+	        sos.write(sb.toString().getBytes());
+	        sos.flush();
+	        sos.close();
+	        
+	}
+	
+	
 }
