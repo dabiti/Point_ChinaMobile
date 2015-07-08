@@ -42,6 +42,15 @@
 					console.log('end: '+endDate);
 				}
 			});
+			
+			$('#p').panel({
+				  width:'100%',
+				  height:'15%',
+				  title: '汇总信息',
+				  style:{'margin-top':'10px'},
+				  tools: [],
+				  content:''
+				});
 		})
 		function searchData(){
 			$('#orderTable').datagrid('load',{
@@ -83,8 +92,7 @@
 </head>
 <body> 
 <div class="easyui-layout" style="width:100%;height:100%;">
-	<div data-options="region:'north',split:true" style="height:92%;">
-	<table id='orderTable'  class="easyui-datagrid" style="width:100%;height:100%" url="<%=basePath %>/listHandle" title="请输入查询条件" 
+	<table id='orderTable'  class="easyui-datagrid" style="width:100%;height:80%" url="<%=basePath %>/listHandle" title="请输入查询条件" 
 		rownumbers="true" toolbar="#searchBar" loadMsg="正在查询..." pagination="true">
 		 
 		<thead> 
@@ -122,12 +130,12 @@
 		</div>
 	</div>
 	
+	<div id="p">
+	   <div style="margin-left:5px;margin-top: 6px;vertical-align:middle"><span style="">合计：</span><span id="mytotal" >${mytotal}</span></div>
+	</div> 
+	
 	<div id="win" class="easyui-window" title="add window" style="width:600px;height:400px;" closed="true"  
 	        data-options="iconCls:'icon-save',modal:true">   </div>
-	</div>	        
-	<div data-options="region:'south',split:true" style="height:50px;">
-	 <label id="mytotal" >合计：${mytotal}</label>
-	</div>         
 </div>	
 </body> 
 </html>
