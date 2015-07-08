@@ -52,6 +52,12 @@ public class LoginController{
 		return "login";
 	}
 	
+	@RequestMapping("/login/toPassGetBack")
+	public String passGetBack(HttpServletRequest request,
+			HttpServletResponse response) {
+		return "passGetBack";
+	}
+	
 	/**
 	* @Title:登录提交数据
 	* @Description:用户输入账号相关信息，提交信息到服务端处理方法
