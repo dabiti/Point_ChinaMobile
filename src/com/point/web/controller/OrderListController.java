@@ -33,7 +33,7 @@ import com.point.web.service.OrderService;
  */
 @Controller
 public class OrderListController {
-	double total = 0.00f;
+	
 	SimpleDateFormat sdf;
 	@Resource
 	private OrderService orderService;
@@ -58,11 +58,15 @@ public class OrderListController {
 	@ResponseBody
 	@RequestMapping("/listHandle")
 	public String listHandler(HttpServletRequest request,
-			HttpServletResponse response,String title,String phone,String startdate,String enddate){
+			HttpServletResponse response,String title,String phone,String startdate,String enddate,String page,String rows ){
 		String serchDate = startdate != null?startdate:this.DateBefore();
 		Map serchterms = new HashMap();
 		Date date = null;
 		sdf = new SimpleDateFormat("yyyy-MM-dd");
+		/****/
+		String top=(Integer.parseInt(page)-1)*Integer.parseInt(rows)+1+"";//top为分页的第一条记录
+		String bottom=Integer.parseInt(page)*Integer.parseInt(rows)+"";//bottom为分页的最后一条记录
+		/****/	
 		try {
 			date = sdf.parse(serchDate);
 		} catch (ParseException e) {
@@ -76,9 +80,9 @@ public class OrderListController {
 			serchterms.put("enddate",enddate);
 			serchterms.put("phone", phone);
 		}
+			serchterms.put("top", top);
+			serchterms.put("bottom", bottom);
 		List<Order> orders = orderService.findByCreateDate(serchterms);
-		if(orders.size() < 1) 
-			return "";
 		return JSONObject.fromObject(combinationRequest(orders)).toString();
 	}
 	
@@ -90,6 +94,7 @@ public class OrderListController {
 		Map<String,Object> dataMap = new HashMap<String,Object>();
 		List<OrderTableEntity> tabledata = new ArrayList<OrderTableEntity>();
 		OrderTableEntity orderTableEntity = null;
+		double total = 0.00f;
 		String datestr = "";
 		for(Order orderItem : order){
 			orderTableEntity = new OrderTableEntity();
@@ -109,9 +114,8 @@ public class OrderListController {
 			
 		}
 		dataMap.put("rows", tabledata);
-		if(tabledata.size() < 1)
-			return null;
-		dataMap.put("total", tabledata.get(tabledata.size()-1).getTotal());
+		dataMap.put("total", tabledata.size());
+		dataMap.put("mytotal", tabledata.size() < 1 ? 0 : tabledata.get(tabledata.size()-1).getTotal());
 		
 		return dataMap;
 	}
@@ -175,7 +179,7 @@ String enddate=request.getParameter("endDate");
 	        String contentType ="application/vnd.ms-excel";//定义导出文件的格式的字符串
 	        String recommendedName = new String(fileName.getBytes(),"ISO-8859-1");//设置文件名称的编码格式
 	        response.setContentType(contentType);//设置导出文件格式
-	        response.setHeader("Content-Disposition", "attachment; filename=" + recommendedName + ".XLS");//
+	        response.setHeader("Content-Disposition", "attachment; filename=" + "订单导出" + ".XLS");//
 	        response.resetBuffer();
 	        //利用输出输入流导出文件
 	        ServletOutputStream sos = response.getOutputStream();
