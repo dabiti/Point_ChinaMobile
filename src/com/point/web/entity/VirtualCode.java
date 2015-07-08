@@ -1,7 +1,11 @@
 package com.point.web.entity;
 
-import java.util.Date;
-
+/**
+ * @Title: 虚拟码实体类
+ * @Description:虚拟码实体类
+ * @Since: 2015年7月06日上午10:20:20
+ * @author wangchunlong
+ */
 public class VirtualCode {
 
 	private String orderId;

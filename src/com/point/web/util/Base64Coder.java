@@ -4,11 +4,10 @@ package com.point.web.util;
 import java.io.UnsupportedEncodingException;
 
 /**
- * A Base64 Encoder/Decoder.
- * 
- * <p>
- * This class is used to encode and decode data in Base64 format as described in
- * RFC 1521.
+ * @Title:Base64编码类
+ * @Description:Base64
+ * @Since: 2015年7月06日上午11:17:35
+ * @author wangchunlong
  */
 public class Base64Coder {
 

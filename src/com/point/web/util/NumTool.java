@@ -2,6 +2,13 @@ package com.point.web.util;
 
 import java.util.Random;
 
+
+/**
+ * @Title:数字工具类
+ * @Description:
+ * @Since: 2015年7月06日上午11:17:35
+ * @author wangchunlong
+ */
 public class NumTool {
 	
     public static String checkCode(int count){

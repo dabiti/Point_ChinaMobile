@@ -6,6 +6,13 @@ import java.util.Map;
 
 import com.point.web.entity.Order;
 
+
+/**
+ * @Title: OrderService接口
+ * @Description:订单
+ * @Since: 2015年7月04日
+ * @author wangchunlong
+ */
 public interface OrderService {
 
 	//获得用户

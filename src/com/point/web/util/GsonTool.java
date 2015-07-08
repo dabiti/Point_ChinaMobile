@@ -15,6 +15,13 @@ import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 
+
+/**
+ * @Title:Gson工具类
+ * @Description:
+ * @Since: 2015年7月06日上午11:17:35
+ * @author wangchunlong
+ */
 public class GsonTool {
 	
     public static String objectToJsonDateSerializer(Object ts,    

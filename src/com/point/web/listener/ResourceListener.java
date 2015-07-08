@@ -13,6 +13,14 @@ import org.springframework.context.ApplicationContext;
 
 import com.point.web.util.MMSTool;
 
+
+
+/**
+ * @Title: 文件监听注册类
+ * @Description:文件监听注册类
+ * @Since: 2015年7月06日上午10:20:20
+ * @author wangchunlong
+ */
 public class ResourceListener {  
     private static ExecutorService fixedThreadPool = Executors.newFixedThreadPool(5);  
     private WatchService ws;  

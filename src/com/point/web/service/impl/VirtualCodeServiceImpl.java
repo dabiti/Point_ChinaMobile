@@ -22,7 +22,7 @@ public class VirtualCodeServiceImpl implements VirtualCodeService {
 	@Override
 	public void updateStatus(String orderId,String status) {
 		Map<String, String> map = new HashMap<String, String>();
-		map.put("orderid", orderId);
+		map.put("orderId", orderId);
 		map.put("status", status);
 		virtualCodeDao.updateStatus(map);
 	}

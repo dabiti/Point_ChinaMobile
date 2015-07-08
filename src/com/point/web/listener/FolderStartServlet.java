@@ -10,12 +10,16 @@ import javax.servlet.http.HttpServlet;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
+
+/**
+ * @Title: 文件监听启动servlet
+ * @Description:文件监听启动servlet
+ * @Since: 2015年7月06日上午10:20:20
+ * @author wangchunlong
+ */
 public class FolderStartServlet extends HttpServlet {
 	
 	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	@Override

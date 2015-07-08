@@ -19,8 +19,11 @@ import net.sf.json.JSONObject;
 
 import org.apache.log4j.Logger;
 
-/*
- * 虚拟商品工具类
+/**
+ * @Title:移动商城接口工具类
+ * @Description:发送请求
+ * @Since: 2015年7月06日上午11:17:35
+ * @author wangchunlong
  */
 public class VirtualGoodsTool {
 

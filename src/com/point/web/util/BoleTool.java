@@ -11,7 +11,6 @@ import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -20,8 +19,11 @@ import net.sf.json.JSONObject;
 
 import org.apache.log4j.Logger;
 
-/*
- * 虚拟商品工具类
+/**
+ * @Title:伯乐接口工具类
+ * @Description:发送请求
+ * @Since: 2015年7月06日上午11:17:35
+ * @author wangchunlong
  */
 public class BoleTool {
 
@@ -35,7 +37,7 @@ public class BoleTool {
 		try {
 			ResourceBundle bundle = ResourceBundle.getBundle(DEFAULT_URI);
 			PublicMap.put("url", bundle.getString("url"));
-			PublicMap.put("url", bundle.getString("secretKey"));
+			PublicMap.put("secretKey", bundle.getString("secretKey"));
 
 		} catch (Exception e) {
 			StringWriter sw = new StringWriter();
@@ -55,6 +57,7 @@ public class BoleTool {
 		String sign = creatSign(userJson);
 		//将签名加入参数
 		userJson.put("sign", sign);
+		log.info("加密前所有参数:"+userJson);
 		String req = null;
 		try {
 			req = "req=" + Base64Coder.encodeString(userJson.toString());
@@ -71,7 +74,6 @@ public class BoleTool {
 	private static String creatSign(JSONObject userJson){
 		List<String> keyList = new ArrayList<String>();
 			for (Object key : userJson.keySet()) {  
-			      System.out.println(key);
 			      keyList.add(key.toString());
 			}  
 	        Collections.sort(keyList);
@@ -79,7 +81,8 @@ public class BoleTool {
 	        for(String i : keyList){
 	        	valueSb.append(userJson.get(i));
 	        }
-	        return StringTool.MD5_32(PublicMap.get("secretKey ")+valueSb.toString()).toLowerCase();
+	        System.out.println("secretKey:" + PublicMap.get("secretKey"));
+	        return StringTool.MD5_32(PublicMap.get("secretKey")+valueSb.toString()).toLowerCase();
 	}
 	
 	
