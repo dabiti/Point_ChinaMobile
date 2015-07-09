@@ -109,7 +109,7 @@
 <body class="easyui-layout" style="margin:0 1px;" scroll="no">
 		<!-- 头部 -->
 		<div data-options="region:'north',split:true" style="height:90px;background-color:#B9DCEF;overflow:hidden;" class="Noprint">
-			<img alt="" src="<%=basePath%>images/main/bg_nav.png">
+			<img alt="" src="<%=basePath%>images/main/bg_nav.png" width='100%'>
 			<div style="z-index:100;height:50px;width:100px;background-image:<%=basePath%>images/main/bg_nav.png"></div>
 			<div class="easyui-layout" style="width:25%;height:0px;position:absolute;right:0px;bottom:-2px" align="right">
 				<a href="#" class="easyui-linkbutton" iconCls="icon-logout" plain="true" onclick="logout()">注销</a>
