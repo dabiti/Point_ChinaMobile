@@ -69,8 +69,8 @@
 		//导出表
 		function exportorder(){
 			$('#phonef').val($('#phone').val());
-			$('#startdatef').val($('#startdate').val());
-			$('#enddatef').val($('#enddate').val());
+			$('#startdatef').val($('#startdate').datebox("getValue"));
+			$('#enddatef').val($('#enddate').datebox("getValue"));
 			$("#exportform").submit();
 			
 		}
@@ -121,10 +121,10 @@
 			
 			
 			<a href="javascript:exportorder()" class="easyui-linkbutton">导出</a>
-			<form method="post" action="exportOrder.do" id="exportform">
-			<input type="hidden" name="phone" id="phonef">
-			<input type="hidden" name="startdata" id="startdataf">
-			<input type="hidden" name="enddate" id="enddatef">
+			<form method="post" action="exportOrder" id="exportform">
+				<input type="hidden" name="phone" id="phonef">
+				<input type="hidden" name="startdate" id="startdatef">
+				<input type="hidden" name="enddate" id="enddatef">
 			</form>
 			
 		</div>

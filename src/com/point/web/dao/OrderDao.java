@@ -23,4 +23,7 @@ public interface OrderDao {
 	
 	public List<Order> findByCreateDate(Map createtime);
 	
+	public List<Order> findByDataAll(Map createtime);
+	
+	public String findTotalPriceByDataAll(Map condition);
 }

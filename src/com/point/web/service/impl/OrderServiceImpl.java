@@ -78,5 +78,22 @@ public class OrderServiceImpl implements OrderService {
 	}
 
 
+
+
+	@Override
+	public List<Order> findByDataAll(Map createtime) {
+		// TODO Auto-generated method stub
+		return orderDao.findByDataAll(createtime);
+	}
+
+
+
+
+	@Override
+	public String findTotalPriceByDataAll(Map condition) {
+		return this.orderDao.findTotalPriceByDataAll(condition);
+	}
+
+
 	
 }
