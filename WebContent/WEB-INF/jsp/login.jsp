@@ -211,18 +211,18 @@ opacity:0.5; -moz-opacity:0.5;
 	     document.getElementById("login_button").click();
 	}
 	
-<<<<<<< HEAD
+
 	
 	//记住密码
 
 
 	
-=======
+
 	function changeImage(){
 		var url = "<%=basePath%>login/validateCode?r="+Math.random();
 		$("#validate_code").css("background-image","url("+url+")");
 	}
->>>>>>> origin/master
+
 </script>
 </head>
 
@@ -236,7 +236,7 @@ opacity:0.5; -moz-opacity:0.5;
 		for (Cookie c : cookies) {
 		
 			if (c.getName().equals("name")) {
-				out.print(c.getValue());
+				
 				String[] value=(CookieUtil.decrypt( new String(new BASE64Decoder().decodeBuffer(c.getValue())))).split(":");
 				
  				userName=value[0];
@@ -286,7 +286,7 @@ background:#FFFFFF;border:1px solid #ccc;line-height:25px; top:50%; left:50%;">
     		<input class="login_pass_input" type="password" id="password" name="password" value="<%=userPassword %>"/>
     	</div>
     	
-<<<<<<< HEAD
+
   	<div class="login_space_div" align="left"><!--记住密码 -->
   	
     	
@@ -295,7 +295,7 @@ background:#FFFFFF;border:1px solid #ccc;line-height:25px; top:50%; left:50%;">
     	<a href="toPassGetBack.do">忘记密码</a>
     	
     	</div>
-=======
+
     	<div class="">
     		<div style="background-color:;height:auto; margin:0 auto; background:;overflow:hidden;">
                 <div style="text-align:center;width:156px;height:42px;background-image:url(<%=basePath%>images/passgetback/shurukuang.png);float:left; border:0px solid #FF0000; overflow:hidden;">
@@ -312,7 +312,7 @@ background:#FFFFFF;border:1px solid #ccc;line-height:25px; top:50%; left:50%;">
     		<span style="margin-left:150px"><a href="#">忘记密码?</a></span>
     	</div>
     	
->>>>>>> origin/master
+
     	
     	<div class="login_button_div" id="login_button" onclick="login()">
     		
