@@ -192,9 +192,30 @@ function keyLogin(){
      document.getElementById("login_button").click(); */
 }
 
-function validcode_wait(com){
-	$(com).removeClass("vali_code_button").addClass("vali_code_click_button");
-	$(com).html('等待');
+function validcode_wait(){
+
+	
+	
+	$("#com").removeClass("vali_code_button").addClass("vali_code_click_button");
+	
+	
+	var i = 10;
+	var t = setInterval(function(){	
+		if (i == -1) {	
+			$("#com").removeClass("vali_code_click_button ").addClass("vali_code_button").html("");
+			clearInterval(t);
+		return;	
+		}	
+		document.getElementById("com").innerHTML ='等待'+i+'秒';
+		i--;
+		}
+	, 1000)
+	
+	if(i==-1){
+		$("#com").removeClass("vali_code_click_button ").addClass("vali_code_button");
+	}
+	
+	
 }
 //验证账户
 function validAccount(){

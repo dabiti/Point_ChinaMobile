@@ -1,6 +1,8 @@
 package com.point.web.controller.login;
 
+
 import java.io.IOException;
+
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -70,6 +72,7 @@ public class LoginController{
 		String username = (String)WebUtils.getParameterStr(request,"username");
 		
 		String password = (String)WebUtils.getParameterStr(request,"password");
+	
 		
 		String validcode = (String)WebUtils.getParameterStr(request,"validcode");
 		
@@ -100,8 +103,10 @@ public class LoginController{
 	        subject.login(token);
 	        
 	        if(subject.isAuthenticated()){
+	        
 	        	WebUtils.writeSuccessMsg(response,"登录成功！");
-	        	return;
+
+	        	
 	        }
 	    } catch (IncorrectCredentialsException e) {
 	    	e.printStackTrace();

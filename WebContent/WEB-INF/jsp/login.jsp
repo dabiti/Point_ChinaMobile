@@ -1,9 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 <%@include file="common.jsp" %>
+<%@page import="java.net.URLDecoder"%>
+<%@page import="com.point.web.util.CookieUtil"%>
+<%@page import="sun.misc.BASE64Decoder"%>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
 <title>登陆页面</title>
 <style>
 body{text-align:center}
@@ -86,7 +91,11 @@ cursor: pointer;
 }
 
 .login_space_div{
+
+
+
 height:0px;
+
 }
 
 .mask {       
@@ -161,7 +170,8 @@ opacity:0.5; -moz-opacity:0.5;
     function hideMask(){     
         $("#mask").hide();     
     }  
-	
+    
+ 
 	function login(){
 		if(!$.trim($('#username').val())){
 			showMsg('用户名不能为空！');
@@ -187,7 +197,9 @@ opacity:0.5; -moz-opacity:0.5;
             	hideMask();
                 var obj = eval("("+data+")");
                 if(obj.code === '901'){
-                	window.location.href='<%=basePath%>jumpToLoginView';
+                	$("#loginForm").submit();
+                	
+                	
                 }else{
                 	showMsg(obj.msg);
                 }
@@ -199,14 +211,44 @@ opacity:0.5; -moz-opacity:0.5;
 	     document.getElementById("login_button").click();
 	}
 	
+
+	
+	//记住密码
+
+
+	
+
 	function changeImage(){
 		var url = "<%=basePath%>login/validateCode?r="+Math.random();
 		$("#validate_code").css("background-image","url("+url+")");
 	}
+
 </script>
 </head>
 
 <body onkeydown="keyLogin();">
+   	<%
+    String userName = "";
+    String userPassword = "";	
+    Cookie[] cookies = request.getCookies();
+  
+	if (cookies != null) {
+		for (Cookie c : cookies) {
+		
+			if (c.getName().equals("name")) {
+				
+				String[] value=(CookieUtil.decrypt( new String(new BASE64Decoder().decodeBuffer(c.getValue())))).split(":");
+				
+ 				userName=value[0];
+				userPassword=value[1];
+				out.print("<script type='text/javascript'>window.onload=function(){document.getElementById('rp').checked=true;}</script>");
+			}
+			
+		}
+	}
+	
+	
+%>
 <div id='mask' class="mask"></div>	
 <dl id="msgBox" style="display:none;z-index:10000;width:200px;position:absolute;
 background:#FFFFFF;border:1px solid #ccc;line-height:25px; top:50%; left:50%;">
@@ -220,7 +262,7 @@ background:#FFFFFF;border:1px solid #ccc;line-height:25px; top:50%; left:50%;">
   	<input style="border:0px;width: 50px" type="button" value="确定 " id="msgBoxButton" />
   </dt>
 </dl>
-<form id="loginForm">
+<form id="loginForm" method="post" action="jumpToLoginView.do">
 <table width="1404" border="0" cellpadding="0" cellspacing="0">
   <tr>
     <th colspan="4" scope="row" height="92" width="1404" style="background-image:url(<%=basePath%>images/login/bg_top.png);">&nbsp;</th>
@@ -235,13 +277,25 @@ background:#FFFFFF;border:1px solid #ccc;line-height:25px; top:50%; left:50%;">
     <td width="283" height="220" >
     <div style="height:200px;text-align:center">
     	<div class="login_blur_div" id="username_parent_div">
-    		<input class="login_input" id="username" name="username"/>
+ 
+
+    		<input class="login_input" type="text" id="username" name="username" value="<%=userName%>" />
     	</div>
     	
     	<div class="login_blur_div" id="password_parent_div">
-    		<input class="login_pass_input" type="password" id="password" name="password"/>
+    		<input class="login_pass_input" type="password" id="password" name="password" value="<%=userPassword %>"/>
     	</div>
     	
+
+  	<div class="login_space_div" align="left"><!--记住密码 -->
+  	
+    	
+    	
+    	
+    	
+    	
+    	</div>
+
     	<div class="">
     		<div style="background-color:;height:auto; margin:0 auto; background:;overflow:hidden;">
                 <div style="text-align:center;width:156px;height:42px;background-image:url(<%=basePath%>images/passgetback/shurukuang.png);float:left; border:0px solid #FF0000; overflow:hidden;">
@@ -254,10 +308,11 @@ background:#FFFFFF;border:1px solid #ccc;line-height:25px; top:50%; left:50%;">
     	
     	
     	<div class="">
-    		<span><input type="checkbox"/>记住密码</span>
-    		<span style="margin-left:150px"><a href="#">忘记密码?</a></span>
+    		<span><input type="checkbox" name="rp" value="ever" id="rp" onclick="remeberpwd()"/>记住密码</span>
+    		<span style="margin-left:150px"><a href="toPassGetBack.do">忘记密码?</a></span>
     	</div>
     	
+
     	
     	<div class="login_button_div" id="login_button" onclick="login()">
     		
