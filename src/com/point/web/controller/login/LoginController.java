@@ -1,12 +1,9 @@
 package com.point.web.controller.login;
 
-<<<<<<< HEAD
 
-import javax.servlet.http.Cookie;
-=======
 import java.io.IOException;
 
->>>>>>> origin/master
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;

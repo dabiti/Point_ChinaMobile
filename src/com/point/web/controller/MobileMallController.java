@@ -1,12 +1,11 @@
 package com.point.web.controller;
 
 import java.io.IOException;
-<<<<<<< HEAD
+
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
-=======
->>>>>>> origin/master
+
 
 import javax.annotation.Resource;
 import javax.servlet.http.Cookie;
@@ -22,12 +21,11 @@ import org.apache.shiro.subject.Subject;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-<<<<<<< HEAD
+
 import sun.misc.BASE64Encoder;
 
 import com.google.gson.Gson;
-=======
->>>>>>> origin/master
+
 import com.point.web.entity.Order;
 import com.point.web.entity.VGReturnJson;
 import com.point.web.entity.VirtualCode;
