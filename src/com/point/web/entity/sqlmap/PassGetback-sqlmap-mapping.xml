@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	<mapper namespace="com.point.web.dao.PassGetbackDao">
+	<sql id="passGetbackColumns">id, validcode, createtime, remark, account, 
+	phone, validtime, newpasstime,shaid,isvalid</sql>
+	<resultMap id="passGetbackResultMap" type="passGetback">
+		<id column="ID" property="id" />
+		<result column="VALIDCODE" property="validcode" />
+		<result column="CREATETIME" property="createtime" />
+		<result column="REMARK" property="remark" />
+		<result column="ACCOUNT" property="account" />
+		<result column="PHONE" property="phone" />
+		<result column="VALIDTIME" property="validtime" />
+		<result column="NEWPASSTIME" property="newpasstime" />
+		<result column="SHAID" property="shaid" />
+		<result column="ISVALID" property="isvalid" />
+	</resultMap>
+	
+	<select id="findById" resultMap="passGetbackResultMap" parameterType="String">
+		SELECT
+		<include refid="passGetbackColumns" />
+		FROM BLQL_pass_getback WHERE ID=#{id}
+	</select>
+
+	<insert id="insert" parameterType="passGetback">
+	   <selectKey resultType="java.lang.String" order="BEFORE" keyProperty="id">  
+	       SELECT seq_blql_pass_getback.Nextval as id from DUAL  
+	   </selectKey>  
+		insert into blql_pass_getback
+		  (id, validcode, createtime, remark, account, phone, 
+		  validtime, newpasstime,shaid,isvalid)
+		values
+		  (#{id,jdbcType=VARCHAR}, #{validcode,jdbcType=VARCHAR}, 
+		  #{createtime,jdbcType= TIME}, #{remark,jdbcType=VARCHAR}, #{account,jdbcType=VARCHAR}, 
+		  #{phone,jdbcType=VARCHAR}, null, null,null,null)
+	</insert>
+	
+</mapper>

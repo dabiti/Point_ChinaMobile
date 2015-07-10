@@ -5,9 +5,16 @@ import javax.servlet.ServletContextListener;
 
 import org.apache.log4j.Logger;
 
+
+/**
+ * @Title: 应用事件监听类
+ * @Description:应用事件监听类
+ * @Since: 2015年7月06日上午10:20:20
+ * @author wangchunlong
+ */
 public class StartListener implements ServletContextListener {
 
-	private static Logger log = Logger.getLogger(StartListener.class);// ��ʼ����־����
+	private static Logger log = Logger.getLogger(StartListener.class);
 	
 	@Override
 	public void contextDestroyed(ServletContextEvent arg0) {

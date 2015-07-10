@@ -4,6 +4,12 @@ import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+/**
+ * @Title:字符串工具类
+ * @Description:
+ * @Since: 2015年7月06日上午11:17:35
+ * @author wangchunlong
+ */
 public class StringTool {
 	
     public static boolean isUTF8(String s){

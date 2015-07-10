@@ -6,6 +6,13 @@ import java.util.Map;
 
 import com.point.web.entity.Order;
 
+
+/**
+ * @Title: OrderService接口
+ * @Description:订单
+ * @Since: 2015年7月04日
+ * @author wangchunlong
+ */
 public interface OrderService {
 
 	//获得用户
@@ -22,5 +29,10 @@ public interface OrderService {
 	
 	//模糊搜索查询订单
 	public List<Order> findByCreateDate(Map createtime);
+	
+	//按查询条件全量查询
+	public List<Order> findByDataAll(Map createtime);
+	
+	public String findTotalPriceByDataAll(Map condition);
 }
 

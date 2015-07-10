@@ -2,6 +2,13 @@ package com.point.web.service;
 
 import com.point.web.entity.Upmsg;
 
+
+/**
+ * @Title: UpmsgService接口
+ * @Description:上行短信
+ * @Since: 2015年7月04日
+ * @author wangchunlong
+ */
 public interface UpmsgService {
 
 	//保存

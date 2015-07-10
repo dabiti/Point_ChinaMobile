@@ -68,4 +68,12 @@ public class ChannelServiceImpl implements ChannelService{
 		return channelDao.findAllByCondition(paramMap);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.point.web.service.ChannelService#findByName(java.lang.String)
+	 */
+	@Override
+	public Channel findByName(String name) {
+		return this.channelDao.findByName(name);
+	}
+
 }

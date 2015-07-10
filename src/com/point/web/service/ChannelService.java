@@ -62,4 +62,6 @@ public void delete(Channel channel);
 * @author liuhao 
 */
 public List<Channel> findAllByCondition(Map paramMap);
+
+public Channel findByName(String name);
 }

@@ -15,8 +15,11 @@ import java.util.ResourceBundle;
 import org.apache.log4j.Logger;
 
 
-/*
- * MMS配置类
+/**
+ * @Title:MMS工具类
+ * @Description:发送请求
+ * @Since: 2015年7月06日上午11:17:35
+ * @author wangchunlong
  */
 public class MMSTool {
 

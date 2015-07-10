@@ -13,17 +13,22 @@ import java.nio.file.WatchService;
 import java.util.List;
 import java.util.zip.GZIPInputStream;
 
-import javax.annotation.Resource;
-
 import net.sf.json.JSONObject;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 import com.point.web.entity.Upmsg;
-import com.point.web.entity.VirtualCode;
 import com.point.web.service.UpmsgService;
 import com.point.web.util.BoleTool;
+
+
+/**
+ * @Title: 文件监听线程类
+ * @Description:文件监听线程类
+ * @Since: 2015年7月06日上午10:20:20
+ * @author wangchunlong
+ */
 @Component
 public class FolderListner implements Runnable {  
     private WatchService service;  
