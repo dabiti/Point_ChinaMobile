@@ -109,83 +109,32 @@ function showMask(){
 function hideMask(){     
     $("#mask").hide();     
 }  
-function sendCode(){
-	if(!$.trim($('#account').val())){
-		showMsg('用户名不能为空！');
-		return;
-	}
-	if(!$.trim($('#phone').val())){
-		showMsg('手机号不能为空！');
-		return;
-	}
-	showMask();
-	var url = "<%=basePath%>pass/sendCode";
-	$.ajax({
-        cache: false,
-        type: "post",
-        url:url,
-        data:$('#passForm_ID').serialize(),
-        async: false,
-        error: function(request) {
-        	hideMask();
-        	showMsg(obj.msg);
-        },
-        success: function(data) {
-        	hideMask();
-            var obj = eval("("+data+")");
-            if(obj.code === '901'){
-            	showMsg(obj.msg);
-            	$('#pid').val(obj.data);
-            }else{
-            	showMsg(obj.msg);
-            }
-        }
-    });
-}
+
 function submitData(){
-	if(!$.trim($('#account').val())){
-		showMsg('用户名不能为空！');
+	var pass = $.trim($('#pass').val());
+	var rpass = $.trim($('#rpass').val());
+	if(!pass){
+		showMsg('密码不能为空！');
 		return;
 	} 
-	if(!$.trim($('#phone').val())){
-		showMsg('手机号不能为空！');
+	if(!rpass){
+		showMsg('重复密码不能为空！');
 		return;
+	}
+	if(pass != rpass){
+		showMsg('密码不相符！');
+		return;
+	}
+	if(!$('#vpid').val()){
+		window.location.href='<%=basePath%>pass/toPassGetback';
 	}
 	
-	if(!$.trim($('#validcode').val())){
-		showMsg('验证码不能为空！');
-		return;
-	}
-	
-	if(!$.trim($('#pid').val())){
-		showMsg('请点击发送验证码！');
-		return;
-	}
 	showMask();
-	var url = "<%=basePath%>pass/passGetsubmit";
-	$.ajax({
-        cache: false,
-        type: "post",
-        url:url,
-        data:$('#passForm_ID').serialize(),
-        async: false,
-        error: function(request) {
-        	hideMask();
-        	showMsg(obj.msg);
-        },
-        success: function(data) {
-        	hideMask();
-            var obj = eval("("+data+")");
-            if(obj.code === '901'){
-            	$('#vpid').val(obj.data);
-            	var form = document.getElementById('toPassForm_ID');
-            	form.action = "<%=basePath%>pass/toPassNew";
-            	form.submit();
-            }else{
-            	showMsg(obj.msg);
-            }
-        }
-    });
+	
+	var form = document.getElementById('passForm_ID');
+	form.action = "<%=basePath%>pass/passConfirm";
+	form.submit();
+	
 }
 function keyLogin(){
   /* if (event.keyCode==13)
@@ -196,35 +145,7 @@ function validcode_wait(com){
 	$(com).removeClass("vali_code_button").addClass("vali_code_click_button");
 	$(com).html('等待');
 }
-//验证账户
-function validAccount(){
-	if($('#account').val()){
-		showMask();
-		var url = "<%=basePath%>pass/validAccount";
-		$.ajax({
-	        cache: false,
-	        type: "post",
-	        url:url,
-	        data:{account:$('#account').val()},
-	        async: false,
-	        error: function(request) {
-	        	hideMask();
-	        	showMsg(obj.msg);
-	        },
-	        success: function(data) {
-	        	hideMask();
-	            var obj = eval("("+data+")");
-	            if(obj.code === '901'){
-	            	$('#phone').val(obj.data);
-	            }else{
-	            	showMsg(obj.msg);
-	            	$('#phone').val('');
-	            	$('#validcode').val('');
-	            }
-	        }
-	    });
-	}
-}
+
 function alertMsg(){
 	var msg = '${msg}';
 	if(msg){
@@ -234,9 +155,6 @@ function alertMsg(){
 </script>
 </head>
 <body onload="alertMsg()">
-<form id="toPassForm_ID" method="post">
-	<input type="hidden" name="vpid" id="vpid"/>
-</form>
 <div id='mask' class="mask"></div>	
 <dl id="msgBox" style="display:none;z-index:10000;width:200px;position:absolute;
 background:#FFFFFF;border:1px solid #ccc;line-height:25px; top:50%; left:50%;">
@@ -268,29 +186,17 @@ background:#FFFFFF;border:1px solid #ccc;line-height:25px; top:50%; left:50%;">
 		          <td height="249" width="395" style="background-color:#FFF;">
 		          	<table width="0" border="0" cellspacing="0" cellpadding="0" style="height: 249px;width: 395px;">
 		          	  <tr>
-		          	    <th scope="row" style="color:#909090">用户名：</th>
+		          	    <th scope="row" style="color:#909090">新密码：</th>
 		          	    <td><div style="width:302px;height:42px;text-align: center; vertical-align:middle; background-image: url(<%=basePath%>images/passgetback/yonghuming.png);">
-		                <input type="text" onblur="validAccount()" name="account" id="account" style="margin: 1px;vertical-align:middle;font-size: 18px; border:0px solid;width:290px;height:36px;line-height:36px;"/>
-		                <input type="hidden" name="pid" id="pid"/>
+		                <input type="password" name="pass" id="pass" style="margin: 1px;vertical-align:middle;font-size: 18px; border:0px solid;width:290px;height:36px;line-height:36px;"/>
+		                <input type="hidden" name="vpid" id="vpid" value="${vpid }"/>
 		                </div></td>
 		       	      </tr>
 		          	  <tr>
-		          	    <th scope="row" style="color:#909090">手机号：</th>
+		          	    <th scope="row" style="color:#909090">确认新密码：</th>
 		          	    <td><div style="width:302px;height:42px;text-align: center; vertical-align:middle; background-image: url(<%=basePath%>images/passgetback/yonghuming.png);">
-		                <input type="text" readonly='readonly' name="phone" id="phone" style="margin: 1px;vertical-align:middle;font-size: 18px; border:0px solid;width:290px;height:36px;line-height:36px;"/>
+		                <input type="password" name="rpass" id="rpass" style="margin: 1px;vertical-align:middle;font-size: 18px; border:0px solid;width:290px;height:36px;line-height:36px;"/>
 		                </div></td>
-		       	      </tr>
-		          	  <tr>
-		          	    <th scope="row" style="color:#909090">验证码：</th>
-		          	    <td>
-			                <div style="background-color:;height:auto; margin:0 auto; background:;overflow:hidden;">
-			                    <div style="text-align:center;width:156px;height:42px;background-image:url(<%=basePath%>images/passgetback/shurukuang.png);float:left; border:0px solid #FF0000; overflow:hidden;">
-			                    	<input name="validcode" id="validcode" type="text" style="margin: 1px;vertical-align:middle;font-size: 18px; border:0px solid;width:145px;height:36px;line-height:36px;"/>
-			                    </div>
-			                    <div class="vali_code_button" onclick="sendCode();">                
-			                    </div>
-			                </div>
-		                </td>
 		       	      </tr>
 		          	  <tr>
 		          	    <th scope="row">&nbsp;</th>

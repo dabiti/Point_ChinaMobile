@@ -22,7 +22,13 @@
 		<include refid="passGetbackColumns" />
 		FROM BLQL_pass_getback WHERE ID=#{id}
 	</select>
-
+	
+	<select id="findByShaid" resultMap="passGetbackResultMap" parameterType="String">
+		SELECT
+		<include refid="passGetbackColumns" />
+		FROM BLQL_pass_getback WHERE shaid=#{shaid}
+	</select>
+	
 	<insert id="insert" parameterType="passGetback">
 	   <selectKey resultType="java.lang.String" order="BEFORE" keyProperty="id">  
 	       SELECT seq_blql_pass_getback.Nextval as id from DUAL  
@@ -35,5 +41,20 @@
 		  #{createtime,jdbcType= TIME}, #{remark,jdbcType=VARCHAR}, #{account,jdbcType=VARCHAR}, 
 		  #{phone,jdbcType=VARCHAR}, null, null,null,null)
 	</insert>
+	
+	<select id="findLastByAccount" resultMap="passGetbackResultMap" parameterType="String">
+		select
+		<include refid="passGetbackColumns" />
+		from blql_pass_getback where account=#{account} and createtime = (select max(createtime) from blql_pass_getback)
+	</select>
+	
+	<update id="updateColoums" parameterType="passGetback">
+		update blql_pass_getback set shaid = #{shaid} , validtime = #{validtime,jdbcType= TIME},
+		isvalid = '0' where id = #{id} and newpasstime is null
+	</update>
+	
+	<update id="updateColoumsByCondition" parameterType="passGetback">
+		update blql_pass_getback set isvalid = '1' where id = #{id} and isvalid = '0' and newpasstime is null
+	</update>
 	
 </mapper>

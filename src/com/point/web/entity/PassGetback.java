@@ -27,7 +27,7 @@ public class PassGetback implements Serializable{
 	private Date validtime;
 	private Date newpasstime;
 	private String shaid;
-	private String isvald;
+	private String isvalid;
 	
 	public String getId() {
 		return id;
@@ -83,10 +83,10 @@ public class PassGetback implements Serializable{
 	public void setShaid(String shaid) {
 		this.shaid = shaid;
 	}
-	public String getIsvald() {
-		return isvald;
+	public String getIsvalid() {
+		return isvalid;
 	}
-	public void setIsvald(String isvald) {
-		this.isvald = isvald;
+	public void setIsvalid(String isvalid) {
+		this.isvalid = isvalid;
 	}
 }
