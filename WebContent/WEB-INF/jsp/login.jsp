@@ -290,9 +290,9 @@ background:#FFFFFF;border:1px solid #ccc;line-height:25px; top:50%; left:50%;">
   	<div class="login_space_div" align="left"><!--记住密码 -->
   	
     	
-    	<input type="checkbox" name="rp" value="ever" id="rp" onclick="remeberpwd()"/>记住密码
     	
-    	<a href="toPassGetBack.do">忘记密码</a>
+    	
+    	
     	
     	</div>
 
@@ -308,8 +308,8 @@ background:#FFFFFF;border:1px solid #ccc;line-height:25px; top:50%; left:50%;">
     	
     	
     	<div class="">
-    		<span><input type="checkbox"/>记住密码</span>
-    		<span style="margin-left:150px"><a href="#">忘记密码?</a></span>
+    		<span><input type="checkbox" name="rp" value="ever" id="rp" onclick="remeberpwd()"/>记住密码</span>
+    		<span style="margin-left:150px"><a href="toPassGetBack.do">忘记密码?</a></span>
     	</div>
     	
 
