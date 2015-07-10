@@ -1,9 +1,12 @@
 package com.point.web.controller;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 
 import javax.annotation.Resource;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -17,6 +20,8 @@ import org.apache.shiro.subject.Subject;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import sun.misc.BASE64Encoder;
+
 import com.google.gson.Gson;
 import com.point.web.entity.Order;
 import com.point.web.entity.Record;
@@ -26,6 +31,7 @@ import com.point.web.service.OrderService;
 import com.point.web.service.VirtualCodeService;
 import com.point.web.util.Base64Coder;
 import com.point.web.util.BoleTool;
+import com.point.web.util.CookieUtil;
 import com.point.web.util.CreateMenuTool;
 import com.point.web.util.GsonTool;
 import com.point.web.util.MMSTool;
@@ -61,11 +67,23 @@ public class MobileMallController {
 
 	@RequestMapping("/jumpToLoginView")
 	public String jumpToLoginView(HttpServletRequest request,
-			HttpServletResponse response) {
+			HttpServletResponse response,String username,String password,String rp) throws Exception {
 		// 如果已登录，直接跳到主页面，否则跳转到登陆页面
 		Subject subject = SecurityUtils.getSubject();
 		if (subject.isAuthenticated() == true) {
 			request.setAttribute("menu", createMenuTool.getMenu(subject));
+			String ck=username+":"+password;
+			String cks=CookieUtil.encrypt(ck);
+			
+			String base=new BASE64Encoder().encode(cks.getBytes());
+			System.err.println(base);
+			Cookie cookie = new Cookie("name", base);
+			if("ever".equals(rp)){
+				cookie.setMaxAge(Integer.MAX_VALUE);
+			}else{
+				cookie.setMaxAge(0);
+			}
+			response.addCookie(cookie);
 			return "main";
 		} else
 			return "login";

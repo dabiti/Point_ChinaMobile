@@ -1,5 +1,7 @@
 package com.point.web.controller.login;
 
+
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -71,6 +73,7 @@ public class LoginController{
 		String username = (String)WebUtils.getParameterStr(request,"username");
 		
 		String password = (String)WebUtils.getParameterStr(request,"password");
+	
 		
 		if(StringUtils.isEmpty(username)){
 			WebUtils.writeWarningMsg(response,"用户名不能为空！");
@@ -87,8 +90,10 @@ public class LoginController{
 	        subject.login(token);
 	        
 	        if(subject.isAuthenticated()){
+	        
 	        	WebUtils.writeSuccessMsg(response,"登录成功！");
-	        	return;
+
+	        	
 	        }
 	    } catch (IncorrectCredentialsException e) {
 	    	e.printStackTrace();

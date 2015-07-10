@@ -147,10 +147,33 @@ function keyLogin(){
      document.getElementById("login_button").click(); */
 }
 
-function validcode_wait(com){
-	$(com).removeClass("vali_code_button").addClass("vali_code_click_button");
-	$(com).html('等待');
+function validcode_wait(){
+
+	
+	
+	$("#com").removeClass("vali_code_button").addClass("vali_code_click_button");
+	
+	
+	var i = 10;
+	var t = setInterval(function(){	
+		if (i == -1) {	
+			$("#com").removeClass("vali_code_click_button ").addClass("vali_code_button").html("");
+			clearInterval(t);
+		return;	
+		}	
+		document.getElementById("com").innerHTML ='等待'+i+'秒';
+		i--;
+		}
+	, 1000)
+	
+	if(i==-1){
+		$("#com").removeClass("vali_code_click_button ").addClass("vali_code_button");
+	}
+	
+	
 }
+
+
 </script>
 </head>
 <body>
@@ -210,9 +233,9 @@ width: 395px;">
           	    <td>
 	                <div style="background-color:;height:auto; margin:0 auto; background:;overflow:hidden;">
 	                    <div style="text-align:center;width:156px;height:42px;background-image:url(<%=basePath%>images/passgetback/shurukuang.png);float:left; border:0px solid #FF0000; overflow:hidden;">
-	                    	<input type="text" style="margin: 1px;vertical-align:middle;font-size: 18px; border:0px solid;width:145px;height:36px;line-height:36px;"/>
+	                    	<input type="text" name="validcode" style="margin: 1px;vertical-align:middle;font-size: 18px; border:0px solid;width:145px;height:36px;line-height:36px;"/>
 	                    </div>
-	                    <div class="vali_code_button" onclick="validcode_wait(this);">                
+	                    <div class="vali_code_button" onclick="validcode_wait();" id="com">                
 	                    </div>
 	                </div>
                 </td>
