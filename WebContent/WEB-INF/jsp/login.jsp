@@ -39,6 +39,20 @@ height:39px;
 -webkit-border-radius: 5px 5px 5px 5px;
 border-radius: 5px 5px 5px 5px;
 }
+.validcode_input{  
+background-position: 5px 6px;  
+background-repeat:no-repeat;  
+font-size: 18px;
+border: 1px solid #95B8E7;
+border-color:blue;
+padding-top:10px; 
+padding-bottom:10px;
+width:200px;
+height:39px;
+-moz-border-radius: 5px 5px 5px 5px;
+-webkit-border-radius: 5px 5px 5px 5px;
+border-radius: 5px 5px 5px 5px;
+}
 .login_focus_div{
 height:42px;
 padding:1px;
@@ -46,6 +60,8 @@ background-repeat:no-repeat;
 background-image:url(<%=basePath%>images/login/input_box_click.png);
 }
 .login_blur_div{
+margin-top:5px;
+margin-bottom:5px;
 height:42px;
 padding:1px;
 background-repeat:no-repeat; 
@@ -61,6 +77,7 @@ cursor: pointer;
 }
 
 .login_button_div{
+margin-top:5px;
 height:42px;
 padding:1px;
 background-repeat:no-repeat; 
@@ -69,14 +86,26 @@ cursor: pointer;
 }
 
 .login_space_div{
-height:32px;
+height:0px;
 }
 
 .mask {       
-    position: absolute; top: 0px; filter: alpha(opacity=60); background-color: #777;     
-    z-index: 1002; left: 0px;     
-    opacity:0.5; -moz-opacity:0.5;     
+position: absolute; top: 0px; filter: alpha(opacity=60); background-color: #777;     
+z-index: 1002; left: 0px;     
+opacity:0.5; -moz-opacity:0.5;     
 }  
+
+.validate_code{
+	float:left;
+	height:42px;
+	text-align: center; 
+	vertical-align:middle; 
+	margin-left:5px;
+	cursor: pointer;
+	background-image:url(<%=basePath%>login/validateCode);
+	width:120px;
+	height:45px;
+}
 
 </style>
 <script type="text/javascript">
@@ -169,6 +198,11 @@ height:32px;
 	  if (event.keyCode==13)
 	     document.getElementById("login_button").click();
 	}
+	
+	function changeImage(){
+		var url = "<%=basePath%>login/validateCode?r="+Math.random();
+		$("#validate_code").css("background-image","url("+url+")");
+	}
 </script>
 </head>
 
@@ -204,13 +238,26 @@ background:#FFFFFF;border:1px solid #ccc;line-height:25px; top:50%; left:50%;">
     		<input class="login_input" id="username" name="username"/>
     	</div>
     	
-    	<div class="login_space_div"></div>
-    	
     	<div class="login_blur_div" id="password_parent_div">
     		<input class="login_pass_input" type="password" id="password" name="password"/>
     	</div>
     	
-    	<div class="login_space_div"></div>
+    	<div class="">
+    		<div style="background-color:;height:auto; margin:0 auto; background:;overflow:hidden;">
+                <div style="text-align:center;width:156px;height:42px;background-image:url(<%=basePath%>images/passgetback/shurukuang.png);float:left; border:0px solid #FF0000; overflow:hidden;">
+                	<input name="validcode" id="validcode" type="text" style="margin: 1px;vertical-align:middle;font-size: 18px; border:0px solid;width:145px;height:36px;line-height:36px;"/>
+                </div>
+                <div class="validate_code" id="validate_code" onclick="changeImage();">           
+                </div>
+            </div>
+    	</div>
+    	
+    	
+    	<div class="">
+    		<span><input type="checkbox"/>记住密码</span>
+    		<span style="margin-left:150px"><a href="#">忘记密码?</a></span>
+    	</div>
+    	
     	
     	<div class="login_button_div" id="login_button" onclick="login()">
     		
