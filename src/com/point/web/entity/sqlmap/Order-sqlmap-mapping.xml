@@ -62,8 +62,43 @@ FROM (
 			</if>
 
 		</where>
-		) A ) WHERE RN BETWEEN #{top} AND #{bottom}
+		  order by createtime desc
+		) A ) WHERE RN BETWEEN #{top} AND #{bottom} 
 	</select>
 
+
+	<select id="findByDataAll" resultType="order">
+	SELECT * FROM  BLQL_ORDER 
+		<where>
+			1=1
+			<if test="startdate != null and startdate != ''">
+				and CREATETIME >= to_date(#{startdate},'yyyy-mm-dd hh24:mi:ss')
+			</if>
+			<if test="enddate != null and enddate != ''">
+				and CREATETIME &lt;= to_date(#{enddate},'yyyy-mm-dd hh24:mi:ss')
+			</if>
+			<if test="phone != null and phone != ''">
+				and PHONE = #{phone}
+			</if>
+
+		</where>
+		order by createtime desc
+	</select>
+	
+	<select id="findTotalPriceByDataAll" resultType="string">
+	SELECT sum(nvl(price,0)) totalprice FROM  BLQL_ORDER 
+		<where>
+			1=1
+			<if test="startdate != null and startdate != ''">
+				and CREATETIME >= to_date(#{startdate},'yyyy-mm-dd hh24:mi:ss')
+			</if>
+			<if test="enddate != null and enddate != ''">
+				and CREATETIME &lt;= to_date(#{enddate},'yyyy-mm-dd hh24:mi:ss')
+			</if>
+			<if test="phone != null and phone != ''">
+				and PHONE = #{phone}
+			</if>
+		</where>
+	</select>
 
 </mapper>
