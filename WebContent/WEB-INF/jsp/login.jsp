@@ -91,11 +91,11 @@ cursor: pointer;
 }
 
 .login_space_div{
-<<<<<<< HEAD
-height:38px;
-=======
+
+
+
 height:0px;
->>>>>>> origin/master
+
 }
 
 .mask {       
