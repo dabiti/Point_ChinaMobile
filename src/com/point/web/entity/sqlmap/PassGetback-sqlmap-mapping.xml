@@ -50,11 +50,15 @@
 	
 	<update id="updateColoums" parameterType="passGetback">
 		update blql_pass_getback set shaid = #{shaid} , validtime = #{validtime,jdbcType= TIME},
-		isvalid = '0' where id = #{id} and newpasstime is null
+		isvalid = '0' where id = #{id} and newpasstime is null and isvalid is null
 	</update>
 	
 	<update id="updateColoumsByCondition" parameterType="passGetback">
 		update blql_pass_getback set isvalid = '1' where id = #{id} and isvalid = '0' and newpasstime is null
+	</update>
+	
+	<update id="updateColoumsByCondition2" parameterType="passGetback">
+		update blql_pass_getback set newpasstime = #{newpasstime} where id = #{id} and isvalid = '1' and newpasstime is null
 	</update>
 	
 </mapper>

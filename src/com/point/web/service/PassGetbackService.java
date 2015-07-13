@@ -15,4 +15,6 @@ public interface PassGetbackService {
 	public int updateColoumsByCondition(PassGetback passGetback);
 	
 	public PassGetback findByShaid(String id);
+	
+	public int updateColoumsByCondition2(PassGetback passGetback);
 }

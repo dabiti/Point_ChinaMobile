@@ -17,4 +17,6 @@ public interface PassGetbackDao {
 	
 	public int updateColoumsByCondition(PassGetback passGetback);
 	
+	public int updateColoumsByCondition2(PassGetback passGetback);
+	
 }

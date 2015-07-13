@@ -9,6 +9,7 @@
 package com.point.web.controller.login;
 
 import java.util.Date;
+import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -47,12 +48,17 @@ public class PassGetbackController {
 		return "pass/passGetback";
 	}
 	
+//	@RequestMapping("/pass/toPassInfo")
+//	public String passInfo(HttpServletRequest request,
+//			HttpServletResponse response) {
+//		return "pass/passInfo";
+//	}
+	
 	@RequestMapping("/pass/toPassNew")
 	public String passNew(HttpServletRequest request,
 			HttpServletResponse response) {
 		String vpid = (String)WebUtils.getParameterStr(request,"vpid");
 		if(StringUtils.isEmpty(vpid)){
-			//request.setAttribute("msg", "非法请求！");
 			return "redirect:/pass/toPassGetback";
 		}
 		PassGetback passGetback = this.passGetbackService.findByShaid(vpid);
@@ -60,7 +66,6 @@ public class PassGetbackController {
 				"1".equals(passGetback.getIsvalid())|| 
 				passGetback.getNewpasstime() != null ||
 				0 == this.passGetbackService.updateColoumsByCondition(passGetback)){
-			//request.setAttribute("msg", "网页已失效，请刷新网页！");
 			return "redirect:/pass/toPassGetback";
 		}
 		request.setAttribute("vpid", vpid);
@@ -70,23 +75,33 @@ public class PassGetbackController {
 	@RequestMapping("/pass/passConfirm")
 	public String passConfirm(HttpServletRequest request,
 			HttpServletResponse response) {
-		String vpid = (String)WebUtils.getParameterStr(request,"vpid");
-		if(StringUtils.isEmpty(vpid)){
-			//request.setAttribute("msg", "非法请求！");
-			return "redirect:/pass/toPassGetback";
+		
+		Map<String,Object> dataMap = WebUtils.convertRequestParamToMap(request);
+		
+		String vpid = (String)dataMap.get("vpid");
+		
+		String pass = (String)dataMap.get("pass");
+		
+		String rpass = (String)dataMap.get("rpass");
+		
+		String returnUrl = "pass/passInfo";
+		
+		if(StringUtils.isEmpty(vpid) || pass == null || rpass == null || !pass.equals(rpass)){
+			request.setAttribute("msg", "非法请求！");
+			return returnUrl;
 		}
-		PassGetback passGetback = this.passGetbackService.findByShaid(vpid);
-		if(passGetback == null || 
-				"1".equals(passGetback.getIsvalid())|| 
-				passGetback.getNewpasstime() != null ||
-				0 == this.passGetbackService.updateColoumsByCondition(passGetback)){
-			//request.setAttribute("msg", "网页已失效，请刷新网页！");
-			return "redirect:/pass/toPassGetback";
+		
+		String res = this.channelService.updatePassGetBack(vpid, rpass);
+		
+		if(res != null){
+			request.setAttribute("msg", res);
+		}else{
+			request.setAttribute("msg", "新密码设置成功！");
 		}
-		request.setAttribute("vpid", vpid);
-		return "pass/passNew";
+		return returnUrl;
 	}
 	
+	//用户名输入框移除焦点需要验证用户名的有效性
 	@ResponseBody
 	@RequestMapping("/pass/validAccount")
 	public void passValidAccount(HttpServletRequest request,
@@ -123,13 +138,17 @@ public class PassGetbackController {
 		return start + middle + "*************" + end;
 	}
 	
+	//发送手机验证码
 	@ResponseBody
 	@RequestMapping("/pass/sendCode")
 	public void passSendCode(HttpServletRequest request,
 			HttpServletResponse response) {
-		String account = (String)WebUtils.getParameterStr(request,"account");
 		
-		String phone = (String)WebUtils.getParameterStr(request,"phone");
+		Map<String,Object> dataMap = WebUtils.convertRequestParamToMap(request);
+		
+		String account = (String)dataMap.get("account");
+		
+		String phone = (String)dataMap.get("phone");
 		
 		if(StringUtils.isEmpty(account)){
 			WebUtils.writeWarningMsg(response,"用户名不能为空！");
@@ -154,9 +173,9 @@ public class PassGetbackController {
 	    	if(validPassGetback != null){
 		    	Date createTime = validPassGetback.getCreatetime();
 		    	
-		    	boolean flag = TimeUtils.ValidTime(TimeUtils.differSeconds(createTime, new Date()));
+		    	long differMillis = TimeUtils.differSeconds(createTime, new Date());
 		    	
-		    	if(flag){
+		    	if(differMillis - TimeUtils.differCodeSendTimeMillis < 0){
 		    		WebUtils.writeWarningMsg(response,"请等待3分钟！");
 					return;
 		    	}
@@ -174,7 +193,7 @@ public class PassGetbackController {
 	        
 	        passGetbackService.insert(passGetback);
 	        
-        	WebUtils.writeSuccessMsg(response,"发送成功！",passGetback.getId());
+        	WebUtils.writeSuccessMsg(response,"发送成功！");
         	return;
 	    } catch (Exception e) {
 	    	e.printStackTrace();
@@ -187,13 +206,14 @@ public class PassGetbackController {
 	@RequestMapping("/pass/passGetsubmit")
 	public void passGetsubmit(HttpServletRequest request,
 			HttpServletResponse response) {
-		String account = (String)WebUtils.getParameterStr(request,"account");
 		
-		String phone = (String)WebUtils.getParameterStr(request,"phone");
+		Map<String,Object> dataMap = WebUtils.convertRequestParamToMap(request);
 		
-		String validcode = (String)WebUtils.getParameterStr(request,"validcode");
+		String account = (String)dataMap.get("account");
 		
-		String pid = (String)WebUtils.getParameterStr(request,"pid");
+		String phone = (String)dataMap.get("phone");
+		
+		String validcode = (String)dataMap.get("validcode");
 		
 		if(StringUtils.isEmpty(account)){
 			WebUtils.writeWarningMsg(response,"用户名不能为空！");
@@ -210,44 +230,40 @@ public class PassGetbackController {
 			return;
 		}
 		
-		if(StringUtils.isEmpty(pid)){
-			WebUtils.writeWarningMsg(response,"请重新发送验证码！");
-			return;
-		}
-		
 	    try {
 	    	Channel channel = channelService.findByName(account);
 	    	if(channel == null){
 	    		WebUtils.writeWarningMsg(response,"用户名不存在！");
 				return;
 	    	}
+	    	//根据账号找到最近一条密码找回数据,其记录了发送短信相关信息
+	    	PassGetback validPassGetback = this.passGetbackService.findLastByAccount(account);
 	    	
-	    	//根据pid查找发送验证码的表
-	    	PassGetback passGetback = this.passGetbackService.findById(pid);
-	    	
-	    	if(passGetback == null){
-	    		WebUtils.writeWarningMsg(response,"请重新发送验证码！");
+	    	if(validPassGetback == null || validPassGetback.getIsvalid() != null
+	    			|| validPassGetback.getShaid() != null){
+	    		WebUtils.writeWarningMsg(response,"请发送短信验证码！");
 				return;
 	    	}
 	    	
-	    	if(!validcode.equals(passGetback.getValidcode())){
+	    	if(!validcode.equals(validPassGetback.getValidcode())){
 	    		WebUtils.writeWarningMsg(response,"验证码错误！");
 				return;
 	    	}
+    		
+	    	Date createTime = validPassGetback.getCreatetime();
 	    	
-            if(!account.equals(passGetback.getAccount()) || 
-        		!passGetback.getPhone().equals(channel.getPhone()) ||
-        		passGetback.getShaid() != null || 
-        		passGetback.getIsvalid() != null){
-            	WebUtils.writeWarningMsg(response,"网页已失效，请刷新网页！");
+	    	long differMillis = TimeUtils.differSeconds(createTime, new Date());
+	    	
+	    	if(differMillis - TimeUtils.differCodeValidTimeMillis > 0){
+	    		WebUtils.writeWarningMsg(response,"验证码已过期，请重新发送验证码！");
 				return;
-            }
-            
+	    	}
+	    	
             //更新 shaid 与 isvalid字段
             String shaid = PassEncodeTool.createShaId(account);
-            passGetback.setShaid(shaid);
-            passGetback.setValidtime(new Date());
-            int count = this.passGetbackService.updateColoums(passGetback);
+            validPassGetback.setShaid(shaid);
+            validPassGetback.setValidtime(new Date());
+            int count = this.passGetbackService.updateColoums(validPassGetback);
             
             if(count == 0){
             	WebUtils.writeWarningMsg(response,"网页已失效，请刷新网页！");

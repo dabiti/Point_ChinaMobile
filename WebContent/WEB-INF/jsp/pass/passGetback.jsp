@@ -1,3 +1,4 @@
+<%@page import="com.point.web.util.TimeUtils"%>
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 <%
 String path = request.getContextPath();
@@ -10,7 +11,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>无标题文档</title>
+<title>找回密码</title>
 <style>
 body{font-family:'Microsoft YaHei';text-align: center;margin:auto;}
 .vali_code_button{
@@ -84,7 +85,9 @@ $(function(){
 	
 	$('#msgBoxButton').click(function(){
 		closeMsg();
-	})
+	});
+	
+	$('#com').bind("click",sendCode);
 	
 });
 
@@ -109,6 +112,17 @@ function showMask(){
 function hideMask(){     
     $("#mask").hide();     
 }  
+
+function validAccountRex(accountVal){
+	reg=/^[a-z,A-Z][a-z,A-Z,0-9]{0,20}$/;  
+	
+    if(!reg.test(accountVal)){   
+    	return false;
+    } 
+    return true;
+}
+
+//发送短信验证码
 function sendCode(){
 	if(!$.trim($('#account').val())){
 		showMsg('用户名不能为空！');
@@ -118,6 +132,10 @@ function sendCode(){
 		showMsg('手机号不能为空！');
 		return;
 	}
+    if(!validAccountRex($('#account').val())){   
+    	showMsg("用户名格式错误");  
+    	return;
+    }  
 	showMask();
 	var url = "<%=basePath%>pass/sendCode";
 	$.ajax({
@@ -133,15 +151,14 @@ function sendCode(){
         success: function(data) {
         	hideMask();
             var obj = eval("("+data+")");
+            showMsg(obj.msg);
             if(obj.code === '901'){
-            	showMsg(obj.msg);
-            	$('#pid').val(obj.data);
-            }else{
-            	showMsg(obj.msg);
+            	validcode_wait();
             }
         }
     });
 }
+//提交找回密码数据
 function submitData(){
 	if(!$.trim($('#account').val())){
 		showMsg('用户名不能为空！');
@@ -157,10 +174,6 @@ function submitData(){
 		return;
 	}
 	
-	if(!$.trim($('#pid').val())){
-		showMsg('请点击发送验证码！');
-		return;
-	}
 	showMask();
 	var url = "<%=basePath%>pass/passGetsubmit";
 	$.ajax({
@@ -193,33 +206,30 @@ function keyLogin(){
 }
 
 function validcode_wait(){
-
-	
-	
-	$("#com").removeClass("vali_code_button").addClass("vali_code_click_button");
-	
-	
-	var i = 10;
+	var inter = parseInt('<%=TimeUtils.differCodeSendTimeMillis%>')/1000;
+	var i = inter;
 	var t = setInterval(function(){	
-		if (i == -1) {	
+		if (i == 0) {	
 			$("#com").removeClass("vali_code_click_button ").addClass("vali_code_button").html("");
+			$('#com').bind("click",sendCode);
 			clearInterval(t);
-		return;	
+			return;	
 		}	
 		document.getElementById("com").innerHTML ='等待'+i+'秒';
-		i--;
+		if( i == inter){
+			$("#com").removeClass("vali_code_button").addClass("vali_code_click_button");
+			$('#com').unbind("click");
 		}
-	, 1000)
-	
-	if(i==-1){
-		$("#com").removeClass("vali_code_click_button ").addClass("vali_code_button");
-	}
-	
-	
+		i--;
+	}, 1000);
 }
 //验证账户
 function validAccount(){
 	if($('#account').val()){
+		if(!validAccountRex($('#account').val())){   
+	    	showMsg("用户名格式错误");  
+	    	return;
+	    }
 		showMask();
 		var url = "<%=basePath%>pass/validAccount";
 		$.ajax({
@@ -292,7 +302,6 @@ background:#FFFFFF;border:1px solid #ccc;line-height:25px; top:50%; left:50%;">
 		          	    <th scope="row" style="color:#909090">用户名：</th>
 		          	    <td><div style="width:302px;height:42px;text-align: center; vertical-align:middle; background-image: url(<%=basePath%>images/passgetback/yonghuming.png);">
 		                <input type="text" onblur="validAccount()" name="account" id="account" style="margin: 1px;vertical-align:middle;font-size: 18px; border:0px solid;width:290px;height:36px;line-height:36px;"/>
-		                <input type="hidden" name="pid" id="pid"/>
 		                </div></td>
 		       	      </tr>
 		          	  <tr>
@@ -308,7 +317,7 @@ background:#FFFFFF;border:1px solid #ccc;line-height:25px; top:50%; left:50%;">
 			                    <div style="text-align:center;width:156px;height:42px;background-image:url(<%=basePath%>images/passgetback/shurukuang.png);float:left; border:0px solid #FF0000; overflow:hidden;">
 			                    	<input name="validcode" id="validcode" type="text" style="margin: 1px;vertical-align:middle;font-size: 18px; border:0px solid;width:145px;height:36px;line-height:36px;"/>
 			                    </div>
-			                    <div class="vali_code_button" onclick="sendCode();">                
+			                    <div class="vali_code_button" id="com">                
 			                    </div>
 			                </div>
 		                </td>

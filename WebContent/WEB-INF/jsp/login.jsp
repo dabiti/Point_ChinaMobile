@@ -91,11 +91,7 @@ cursor: pointer;
 }
 
 .login_space_div{
-
-
-
 height:0px;
-
 }
 
 .mask {       
@@ -198,10 +194,9 @@ opacity:0.5; -moz-opacity:0.5;
                 var obj = eval("("+data+")");
                 if(obj.code === '901'){
                 	$("#loginForm").submit();
-                	
-                	
                 }else{
                 	showMsg(obj.msg);
+                	changeImage();
                 }
             }
         });
@@ -211,13 +206,6 @@ opacity:0.5; -moz-opacity:0.5;
 	     document.getElementById("login_button").click();
 	}
 	
-
-	
-	//记住密码
-
-
-	
-
 	function changeImage(){
 		var url = "<%=basePath%>login/validateCode?r="+Math.random();
 		$("#validate_code").css("background-image","url("+url+")");
@@ -227,7 +215,7 @@ opacity:0.5; -moz-opacity:0.5;
 </head>
 
 <body onkeydown="keyLogin();">
-   	<%
+<%
     String userName = "";
     String userPassword = "";	
     Cookie[] cookies = request.getCookies();
@@ -246,8 +234,6 @@ opacity:0.5; -moz-opacity:0.5;
 			
 		}
 	}
-	
-	
 %>
 <div id='mask' class="mask"></div>	
 <dl id="msgBox" style="display:none;z-index:10000;width:200px;position:absolute;
@@ -262,7 +248,7 @@ background:#FFFFFF;border:1px solid #ccc;line-height:25px; top:50%; left:50%;">
   	<input style="border:0px;width: 50px" type="button" value="确定 " id="msgBoxButton" />
   </dt>
 </dl>
-<form id="loginForm" method="post" action="jumpToLoginView.do">
+<form id="loginForm" method="post" action="<%=basePath%>jumpToLoginView">
 <table width="1404" border="0" cellpadding="0" cellspacing="0">
   <tr>
     <th colspan="4" scope="row" height="92" width="1404" style="background-image:url(<%=basePath%>images/login/bg_top.png);">&nbsp;</th>
@@ -287,13 +273,7 @@ background:#FFFFFF;border:1px solid #ccc;line-height:25px; top:50%; left:50%;">
     	</div>
     	
 
-  	<div class="login_space_div" align="left"><!--记住密码 -->
-  	
-    	
-    	
-    	
-    	
-    	
+  		<div class="login_space_div" align="left"><!--记住密码 -->
     	</div>
 
     	<div class="">
@@ -309,10 +289,8 @@ background:#FFFFFF;border:1px solid #ccc;line-height:25px; top:50%; left:50%;">
     	
     	<div class="">
     		<span><input type="checkbox" name="rp" value="ever" id="rp" onclick="remeberpwd()"/>记住密码</span>
-    		<span style="margin-left:150px"><a href="toPassGetBack.do">忘记密码?</a></span>
+    		<span style="margin-left:150px"><a href="<%=basePath%>pass/toPassGetback">忘记密码?</a></span>
     	</div>
-    	
-
     	
     	<div class="login_button_div" id="login_button" onclick="login()">
     		
