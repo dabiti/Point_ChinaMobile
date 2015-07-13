@@ -34,9 +34,14 @@ public class VirtualCodeServiceImpl implements VirtualCodeService {
 	
 	
 	@Override
-	public void save(VirtualCode vc) throws Exception{
+	public void save(VirtualCode vc) {
 		virtualCodeDao.save(vc);
 	}
 	
+	
+	//更新
+	public void update(VirtualCode vc) {
+		virtualCodeDao.update(vc);
+	}
 	
 }

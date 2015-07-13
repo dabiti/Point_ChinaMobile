@@ -84,17 +84,12 @@ public class MobileMallController {
 			return "login";
 	}
 
-	
 	/**
-	* @Title:通知用户下单
-	* @Description:
-	* 1.接收移动商城请求
-	* 2.请求伯乐获取虚拟码
-	* 3.将虚拟码发送至客户
-	* 4.将虚拟码上传至移动商城
-	* @Since: 2015年7月6日上午10:30:52
-	* @author wangchunlong
-	*/
+	 * @Title:通知用户下单
+	 * @Description: 1.接收移动商城请求 2.请求伯乐获取虚拟码 3.将虚拟码发送至客户 4.将虚拟码上传至移动商城
+	 * @Since: 2015年7月6日上午10:30:52
+	 * @author wangchunlong
+	 */
 	@RequestMapping("/notifyOrder")
 	public void notifyOrder(HttpServletRequest request,
 			HttpServletResponse response) {
@@ -108,19 +103,24 @@ public class MobileMallController {
 		String vcode = null;
 		String vpass = null;
 		String vcreatetime = null;
+		String validityTime = null;
+		String deliveryMsg = null;
+		String templateId = null;
 		try {
 			String req = request.getParameter("req");
-			log.info("收到报文:" + req);
-			if (null != req) {
+			log.info("报文req=" + req);
+			if (null == req) {
 				log.info("报文为空");
 				mallRj = new VGReturnJson("1002", "缺少参数，某个必须传递的参数您没有传递");
 			} else {
 				// Base64解密
 				log.info("开始Base64解密");
-				// req = req.replace(" ", "+");
-				// req = Base64Coder.decodeString(req);
-				req = "df882ed62782ddf7cd7afbc73f762411{\"source\":\"2\",\"version\":\"1.0\",\"identity_id\":\"123456\","
-						+ "\"data\":{\"orderId\":\"123\",\"phone\":\"13581761989\",\"itemId\":\"123\",\"title\":\"123\",\"price\":\"123\",\"quantity\":\"123\",\"finalFee\":\"123\",\"discount\":\"123\"}}";
+				req = req.replace(" ", "+");
+				req = Base64Coder.decodeString(req);
+				// req =
+				// "df882ed62782ddf7cd7afbc73f762411{\"source\":\"2\",\"version\":\"1.0\",\"identity_id\":\"123456\","
+				// +
+				// "\"data\":{\"orderId\":\"123\",\"phone\":\"13581761989\",\"itemId\":\"123\",\"title\":\"123\",\"price\":\"123\",\"quantity\":\"123\",\"finalFee\":\"123\",\"discount\":\"123\"}}";
 				log.info("Base64解密后报文:" + req);
 				// 签名
 				String sign = req.substring(0, req.indexOf("{"));
@@ -164,10 +164,13 @@ public class MobileMallController {
 					String quantity = dataJson.getString("quantity");
 					String finalFee = dataJson.getString("finalFee");
 					String discount = dataJson.getString("discount");
-					log.info("获得参数:"+"orderId=" + orderId+",phone=" + phone+",itemId=" + itemId+",title=" + title+",price=" + price+",quantity=" + quantity+",finalFee=" + finalFee+",discount=" + discount);
+					log.info("获得参数:" + "orderId=" + orderId + ",phone=" + phone
+							+ ",itemId=" + itemId + ",title=" + title
+							+ ",price=" + price + ",quantity=" + quantity
+							+ ",finalFee=" + finalFee + ",discount=" + discount);
 					// 重复
 					order = orderService.get(orderId);
-					log.info("查询订单是否已存在：" + order!=null);
+					log.info("查询订单是否已存在：" + order != null);
 					if (null != order) {
 						mallRj = new VGReturnJson("1009", "重复订单");
 						// 插入数据库记录
@@ -212,22 +215,34 @@ public class MobileMallController {
 					"yyyy-MM-dd HH:mm:ss");
 			JSONObject sendJs = JSONObject.fromObject(sendStr);
 			String boleStr = BoleTool.sendRequest(sendJs, "notifyOrder.do");
-			boleStr = "{\"code\":\"0\",\"virtualCode\":\"a1b2c3\",\"virtualCodePass\":\"e1f2g3\",\"createTime\":\"2015-07-06 10:10:10\",\"msg\":\"\"}";
+			// boleStr =
+			// "{\"code\":0,\"msg\":\"成功\",\"virtualCode\":\"0135781716197897\",\"virtualCodePass\":\"071762\",\"validityTime\":\"2015-08-09\",\"deliveryMsg\":\"您可在m.uqianli.cn查询提货网点等信息\",\"templateId\":\"1\",\"createTime\":\"2015-07-10 10:23:17\"}";
 			// 返回判断
-			if (null != boleStr || !"".equals(boleStr)) {
+			if (null != boleStr && !"".equals(boleStr)) {
 				JSONObject jo = JSONObject.fromObject(boleStr);
-				if (jo.containsKey("code") && "0".equals(jo.get("code"))) {
+				System.out.println(jo.containsKey("code"));
+				System.out.println("0".equals(jo.getString("code")));
+				if (jo.containsKey("code") && "0".equals(jo.getString("code"))) {
 					// 解析出虚拟码
 					vcode = jo.getString("virtualCode");
 					vpass = jo.getString("virtualCodePass");
 					vcreatetime = jo.getString("createTime");
-					log.info("解析出参数:"+"virtualCode="+vcode+",virtualCodePass="+vpass+",vcreatetime="+vcreatetime);
+					validityTime = jo.getString("validityTime");
+					deliveryMsg = jo.getString("deliveryMsg");
+					templateId = jo.getString("templateId");
+					log.info("解析出参数:" + "virtualCode=" + vcode
+							+ ",virtualCodePass=" + vpass + ",vcreatetime="
+							+ vcreatetime + ",deliveryMsg=" + deliveryMsg
+							+ ",templateId=" + templateId);
 					// 保存
 					VirtualCode vc = new VirtualCode();
 					vc.setOrderId(orderId);
 					vc.setVirtualCode(vcode);
 					vc.setVirtualCodePass(vpass);
 					vc.setCreateTime(vcreatetime);
+					vc.setValidityTime(validityTime);
+					vc.setDeliveryMsg(deliveryMsg);
+					vc.setTemplateId(templateId);
 					vc.setStatus("0");
 					try {
 						log.info("准备保存虚拟码:" + vc);
@@ -246,7 +261,9 @@ public class MobileMallController {
 				String MMSReturnStr;
 				try {
 					log.info("开始请求短信网关，给用户发送虚拟码短信");
-					MMSReturnStr = MMSTool.sendMMS(order.getPhone(), vcode);
+					MMSReturnStr = MMSTool.sendMMS(order.getPhone(),
+							order.getPrice() + "|" + vpass + "|" + deliveryMsg
+									+ "|" + validityTime);
 					if (null != MMSReturnStr && MMSReturnStr.contains("1000")) {
 						log.info("发送成功,更新状态至1");
 						MMSResult = true;
@@ -272,8 +289,12 @@ public class MobileMallController {
 					notifyCMjo.put("itemId", itemId);
 					// 虚拟商品列表
 					JSONObject jcode = new JSONObject();
-					jcode.put("vcode", vcode);
-					jcode.put("vcodePass", vpass);
+					jcode.put("vcode",
+							VirtualGoodsTool.getPublicMap().get("identity_id")
+									+ "_" + vcode);
+					jcode.put("vcodePass",
+							VirtualGoodsTool.getPublicMap().get("identity_id")
+									+ "_" + vpass);
 					JSONArray codeList = new JSONArray();
 					codeList.add(jcode);
 					notifyCMjo.put("virtualCodes", codeList.toString());
@@ -289,7 +310,7 @@ public class MobileMallController {
 							virtualCodeService.updateStatus(orderId, "3");
 							log.info("更新完成");
 						}
-					}else{
+					} else {
 						log.info("上传失败,更新状态至4");
 						virtualCodeService.updateStatus(orderId, "4");
 						log.info("更新完成");
@@ -306,11 +327,16 @@ public class MobileMallController {
 		log.info("准备重发虚拟码for伯乐");
 		VGReturnJson rj = new VGReturnJson("9999", "平台内部错误");
 		try {
+			String vcode = null;
+			String vpass = null;
+			String deliveryMsg = null;
+			String validityTime = null;
 			String req = request.getParameter("req");
 			if (null != req) {
 				log.info("报文为空");
 				rj = new VGReturnJson("1002", "缺少参数，某个必须传递的参数您没有传递");
 			} else {
+				log.info("报文req=" + req);
 				// Base64解密
 				log.info("开始Base64解密");
 				// req = Base64Coder.decodeString(req);
@@ -358,12 +384,26 @@ public class MobileMallController {
 										if (jo.containsKey("code")
 												&& "0".equals(jo.get("code"))) {
 											// 解析出虚拟码
-											String vcode = jo
-													.getString("virtualCode");
-											String vpass = jo
+											vcode = jo.getString("virtualCode");
+											vpass = jo
 													.getString("virtualCodePass");
 											String vcreatetime = jo
 													.getString("createTime");
+											validityTime = jo
+													.getString("validityTime");
+											deliveryMsg = jo
+													.getString("deliveryMsg");
+											String templateId = jo
+													.getString("templateId");
+											log.info("解析出参数:" + "virtualCode="
+													+ vcode
+													+ ",virtualCodePass="
+													+ vpass + ",vcreatetime="
+													+ vcreatetime
+													+ ",deliveryMsg="
+													+ deliveryMsg
+													+ ",templateId="
+													+ templateId);
 											// 保存
 											vc = new VirtualCode();
 											vc.setOrderId(orderId);
@@ -373,34 +413,49 @@ public class MobileMallController {
 											vc.setStatus("0");
 											try {
 												virtualCodeService.save(vc);
-													// 通知移动商城发送的虚拟码
-													JSONObject notifyCMjo = new JSONObject();
-													notifyCMjo.put("orderId", orderId);
-													notifyCMjo.put("itemId", order.getItemId());
-													// 虚拟商品列表
-													JSONObject jcode = new JSONObject();
-													jcode.put("vcode", vcode);
-													jcode.put("vcodePass", vpass);
-													JSONArray codeList = new JSONArray();
-													codeList.add(jcode);
-													notifyCMjo.put("virtualCodes", codeList.toString());
-													log.info("准备调用移动提交虚拟码接口,参数:" + notifyCMjo);
-													String returnStr = VirtualGoodsTool.sendRequest(notifyCMjo,
-															"setVirtualCode");
-													if (null != returnStr && !"".equals(returnStr)) {
-														JSONObject returnJson = JSONObject
-																.fromObject(returnStr);
-														if (returnJson.containsKey("code")
-																&& "0".equals(returnJson.get("code"))) {
-															log.info("上传成功,更新状态至3");
-															virtualCodeService.updateStatus(orderId, "3");
-															log.info("更新完成");
-														}
-													}else{
-														log.info("上传失败,更新状态至4");
-														virtualCodeService.updateStatus(orderId, "4");
+												// 通知移动商城发送的虚拟码
+												JSONObject notifyCMjo = new JSONObject();
+												notifyCMjo.put("orderId",
+														orderId);
+												notifyCMjo.put("itemId",
+														order.getItemId());
+												// 虚拟商品列表
+												JSONObject jcode = new JSONObject();
+												jcode.put("vcode", vcode);
+												jcode.put("vcodePass", vpass);
+												JSONArray codeList = new JSONArray();
+												codeList.add(jcode);
+												notifyCMjo.put("virtualCodes",
+														codeList.toString());
+												log.info("准备调用移动提交虚拟码接口,参数:"
+														+ notifyCMjo);
+												String returnStr = VirtualGoodsTool
+														.sendRequest(
+																notifyCMjo,
+																"setVirtualCode");
+												if (null != returnStr
+														&& !"".equals(returnStr)) {
+													JSONObject returnJson = JSONObject
+															.fromObject(returnStr);
+													if (returnJson
+															.containsKey("code")
+															&& "0".equals(returnJson
+																	.get("code"))) {
+														log.info("上传成功,更新状态至3");
+														virtualCodeService
+																.updateStatus(
+																		orderId,
+																		"3");
 														log.info("更新完成");
 													}
+												} else {
+													log.info("上传失败,更新状态至4");
+													virtualCodeService
+															.updateStatus(
+																	orderId,
+																	"4");
+													log.info("更新完成");
+												}
 											} catch (Exception e) {
 												log.error(e.getMessage());
 												e.printStackTrace();
@@ -413,8 +468,10 @@ public class MobileMallController {
 								// 准备发送
 								log.info("准备发送短信");
 								String MMSReturnStr = MMSTool.sendMMS(
-										order.getPhone(),
-										vc.getVirtualCodePass());
+										order.getPhone(), order.getPrice()
+												+ "|" + vpass + "|"
+												+ deliveryMsg + "|"
+												+ validityTime);
 								if (null != MMSReturnStr
 										&& MMSReturnStr.contains("1000")) {
 									rj = new VGReturnJson("0", "ok");
@@ -451,17 +508,24 @@ public class MobileMallController {
 		// 根据请求参数查询到该订单的虚拟码
 		VGReturnJson rj = new VGReturnJson("9999", "平台内部错误");
 		try {
+			String vcode = null;
+			String vpass = null;
+			String deliveryMsg = null;
+			String validityTime = null;
 			String req = request.getParameter("req");
-			if (null != req) {
+			if (null == req) {
 				log.info("报文为空");
 				rj = new VGReturnJson("1002", "缺少参数，某个必须传递的参数您没有传递");
 			} else {
+				log.info("报文req=" + req);
 				// Base64解密
 				log.info("开始Base64解密");
-				// req = req.replace(" ", "+");
-				// req = Base64Coder.decodeString(req);
-				req = "df882ed62782ddf7cd7afbc73f762411{\"source\":\"2\",\"version\":\"1.0\",\"identity_id\":\"123456\","
-						+ "\"data\":{\"orderId\":\"123\",\"phone\":\"13581761989\",\"itemId\":\"123\",\"title\":\"123\",\"price\":\"123\",\"quantity\":\"123\",\"finalFee\":\"123\",\"discount\":\"123\"}}";
+				req = req.replace(" ", "+");
+				req = Base64Coder.decodeString(req);
+				// req =
+				// "df882ed62782ddf7cd7afbc73f762411{\"source\":\"2\",\"version\":\"1.0\",\"identity_id\":\"123456\","
+				// +
+				// "\"data\":{\"orderId\":\"123\",\"phone\":\"13581761989\",\"itemId\":\"123\",\"title\":\"123\",\"price\":\"123\",\"quantity\":\"123\",\"finalFee\":\"123\",\"discount\":\"123\"}}";
 				log.info("Base64解密后报文:" + req);
 				// 签名
 				String sign = req.substring(0, req.indexOf("{"));
@@ -507,11 +571,95 @@ public class MobileMallController {
 					} else {
 						log.info("根据订单号查询虚拟码");
 						VirtualCode vc = virtualCodeService.get(orderId);
+						// 如果虚拟码为空，则向伯乐后台重新获取虚拟码
+						if (null == vc) {
+							String sendStr = GsonTool
+									.objectToJsonDateSerializer(order,
+											"yyyy-MM-dd HH:mm:ss");
+							JSONObject sendJs = JSONObject.fromObject(sendStr);
+							String boleStr = BoleTool.sendRequest(sendJs,
+									"notifyOrder.do");
+							// 返回判断
+							if (null != boleStr || !"".equals(boleStr)) {
+								JSONObject jo = JSONObject.fromObject(boleStr);
+								if (jo.containsKey("code")
+										&& "0".equals(jo.get("code"))) {
+									// 解析出虚拟码
+									vcode = jo.getString("virtualCode");
+									vpass = jo.getString("virtualCodePass");
+									String vcreatetime = jo
+											.getString("createTime");
+									validityTime = jo.getString("validityTime");
+									deliveryMsg = jo.getString("deliveryMsg");
+									String templateId = jo
+											.getString("templateId");
+									log.info("解析出参数:" + "virtualCode=" + vcode
+											+ ",virtualCodePass=" + vpass
+											+ ",vcreatetime=" + vcreatetime
+											+ ",deliveryMsg=" + deliveryMsg
+											+ ",templateId=" + templateId);
+									// 保存
+									vc = new VirtualCode();
+									vc.setOrderId(orderId);
+									vc.setVirtualCode(vcode);
+									vc.setVirtualCodePass(vpass);
+									vc.setCreateTime(vcreatetime);
+									vc.setStatus("0");
+									try {
+										virtualCodeService.save(vc);
+										// 通知移动商城发送的虚拟码
+										JSONObject notifyCMjo = new JSONObject();
+										notifyCMjo.put("orderId", orderId);
+										notifyCMjo.put("itemId",
+												order.getItemId());
+										// 虚拟商品列表
+										JSONObject jcode = new JSONObject();
+										jcode.put("vcode", vcode);
+										jcode.put("vcodePass", vpass);
+										JSONArray codeList = new JSONArray();
+										codeList.add(jcode);
+										notifyCMjo.put("virtualCodes",
+												codeList.toString());
+										log.info("准备调用移动提交虚拟码接口,参数:"
+												+ notifyCMjo);
+										String returnStr = VirtualGoodsTool
+												.sendRequest(notifyCMjo,
+														"setVirtualCode");
+										if (null != returnStr
+												&& !"".equals(returnStr)) {
+											JSONObject returnJson = JSONObject
+													.fromObject(returnStr);
+											if (returnJson.containsKey("code")
+													&& "0".equals(returnJson
+															.get("code"))) {
+												log.info("上传成功,更新状态至3");
+												virtualCodeService
+														.updateStatus(orderId,
+																"3");
+												log.info("更新完成");
+											}
+										} else {
+											log.info("上传失败,更新状态至4");
+											virtualCodeService.updateStatus(
+													orderId, "4");
+											log.info("更新完成");
+										}
+									} catch (Exception e) {
+										log.error(e.getMessage());
+										e.printStackTrace();
+									}
+								}
+							}
+						}
 						log.info("获得虚拟码:" + vc);
 						// 准备发送
 						log.info("准备发送短信");
-						String MMSReturnStr = MMSTool.sendMMS(order.getPhone(),
-								vc.getVirtualCodePass());
+						String MMSReturnStr = MMSTool.sendMMS(
+								order.getPhone(),
+								order.getPrice() + "|"
+										+ vc.getVirtualCodePass() + "|"
+										+ vc.getDeliveryMsg() + "|"
+										+ vc.getValidityTime());
 						if (null != MMSReturnStr
 								&& MMSReturnStr.contains("1000")) {
 							// 发送成功
@@ -544,15 +692,16 @@ public class MobileMallController {
 		VGReturnJson rj = new VGReturnJson("9999", "平台内部错误");
 		try {
 			String req = request.getParameter("req");
-			if (null != req) {
+			if (null == req) {
 				log.info("报文为空");
 				rj = new VGReturnJson("1002", "缺少参数，某个必须传递的参数您没有传递");
 			} else {
+				log.info("报文req=" + req);
 				// Base64解密
 				log.info("开始Base64解密");
-				// req = Base64Coder.decodeString(req);
+				req = Base64Coder.decodeString(req);
 				log.info("Base64解密后报文:" + req);
-				req = "{\"orderid\":\"123\",\"sign\":\"13581761989\"}";
+				// req = "{\"orderid\":\"123\",\"sign\":\"13581761989\"}";
 				if (!StringTool.isUTF8(req)) {
 					log.error("错误的编码格式");
 					rj = new VGReturnJson("1006", "错误的编码格式");
@@ -567,37 +716,55 @@ public class MobileMallController {
 							rj = new VGReturnJson("1001",
 									"验签失败，您所传递的数据签名在API服务器端没有验证通过");
 						} else {
+							log.info("获得请求参数:" + req);
 							JSONObject reqJson = JSONObject.fromObject(req);
-							String orderid = reqJson.getString("orderid");
-							Order order = orderService.get(orderid);
+							String orderId = reqJson.getString("orderId");
+							String useId = reqJson.getString("useId");
+							String useAmount = reqJson.getString("useAmount");
+							String useDatetime = reqJson
+									.getString("useDatetime");
+							String useContent = reqJson.getString("useContent");
+							Order order = orderService.get(orderId);
 							log.info("获得订单:" + order);
 							if (null == order) {
 								log.info("订单不存在");
 								rj = new VGReturnJson("1011",
 										"订单有误，订单信息错误或者订单不存在");
 							} else {
-								log.info("更新虚拟码状态至4");
-								VirtualCode vc = virtualCodeService
-										.get(orderid);
-								virtualCodeService.updateStatus(
-										order.getOrderId(), "4");
+								log.info("更新虚拟码状态至5,添加消费内容");
+
+								// virtualCodeService.updateStatus(
+								// order.getOrderId(), "4");
+								VirtualCode vc = new VirtualCode();
+								vc.setOrderId(orderId);
+								vc.setUseId(useId);
+								vc.setUseAmount(useAmount);
+								vc.setUseDatetime(useDatetime);
+								vc.setUseContent(useContent);
+								vc.setStatus("5");
+								virtualCodeService.update(vc);
+								vc = virtualCodeService.get(orderId);
+								rj = new VGReturnJson("0", "ok");
 								// TODO
 								// 通知移动商城
 								JSONObject jo = new JSONObject();
-//								ArrayList<Record> list = new ArrayList<Record>();
+								// ArrayList<Record> list = new
+								// ArrayList<Record>();
 								JSONArray ja = new JSONArray();
 								JSONObject recordJo = new JSONObject();
-								recordJo.put("orderId", orderid);
+								recordJo.put("orderId", orderId);
 								recordJo.put("itemId", order.getItemId());
 								recordJo.put("useId", VirtualGoodsTool
 										.getPublicMap().get("identity_id")
-										+ "_" +vc.getUseId());
+										+ "_" + vc.getUseId());
 								recordJo.put("virtualCode", VirtualGoodsTool
 										.getPublicMap().get("identity_id")
-										+ "_" +vc.getVirtualCode());
-								recordJo.put("virtualCodePass", VirtualGoodsTool
-										.getPublicMap().get("identity_id")
-										+ "_" +vc.getVirtualCodePass());
+										+ "_" + vc.getVirtualCode());
+								recordJo.put(
+										"virtualCodePass",
+										VirtualGoodsTool.getPublicMap().get(
+												"identity_id")
+												+ "_" + vc.getVirtualCodePass());
 								recordJo.put("useAmount", vc.getUseAmount());
 								recordJo.put("useDatetime", vc.getUseDatetime());
 								recordJo.put("useContent", vc.getUseContent());
@@ -605,6 +772,7 @@ public class MobileMallController {
 								ja.add(recordJo);
 								String listJson = ja.toString();
 								jo.put("recordList", listJson);
+								log.info("准备通知移动消费情况，参数" + jo);
 								VirtualGoodsTool.sendRequest(jo, "setRecord");
 							}
 						}
@@ -633,6 +801,7 @@ public class MobileMallController {
 	public void setCodeInvalid(HttpServletRequest request,
 			HttpServletResponse response) {
 		/************************************** 接收移动商城请求，作废虚拟码 ******************************************/
+		log.info("准备失效虚拟码");
 		// 根据请求参数查询到该订单的虚拟码
 		VGReturnJson rj = new VGReturnJson("9999", "平台内部错误");
 		String orderId = null;
@@ -642,6 +811,7 @@ public class MobileMallController {
 				log.info("报文为空");
 				rj = new VGReturnJson("1002", "缺少参数，某个必须传递的参数您没有传递");
 			} else {
+				log.info("报文req=" + req);
 				// Base64解密
 				log.info("开始Base64解密");
 				req = req.replace(" ", "+");
@@ -688,8 +858,8 @@ public class MobileMallController {
 					orderId = dataJson.getString("orderId");
 					log.info("orderId:" + orderId);
 					// 作废
-					log.info("准备作废订单-3");
-					virtualCodeService.updateStatus(orderId, "4");
+					log.info("准备作废订单-6");
+					virtualCodeService.updateStatus(orderId, "6");
 					log.info("作废成功");
 					rj = new VGReturnJson("0", "ok");
 				}
@@ -712,7 +882,8 @@ public class MobileMallController {
 		if (orderId != null) {
 			JSONObject sendBoleJs = new JSONObject();
 			sendBoleJs.put("orderid", orderId);
-			String boleStr = BoleTool.sendRequest(sendBoleJs, "notifyOrder.do");
+			String boleStr = BoleTool.sendRequest(sendBoleJs,
+					"notifyinvalid.do");
 			// 返回判断
 			if (null != boleStr || !"".equals(boleStr)) {
 				JSONObject jo = JSONObject.fromObject(boleStr);

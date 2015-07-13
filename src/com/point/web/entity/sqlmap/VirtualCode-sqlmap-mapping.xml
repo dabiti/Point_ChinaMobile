@@ -15,22 +15,41 @@
 		<result column="USEAMOUNT" property="useAmount"/>
 		<result column="USECONTENT" property="useContent"/>
 		<result column="USETIME" property="useDatetime" />
+		<result column="VALIDITYTIME" property="validityTime" />
+		<result column="DELIVERYMSG" property="deliveryMsg" />
+		<result column="TEMPLATEID" property="templateId" />
 	</resultMap>
 	
 	
 	<select id="get" resultMap="resultVirtualcode" parameterType="string">
-		SELECT O.ORDERID,O.VCODE,O.VPASS,O.STATUS,O.CREATETIME,O.USEID,O.USECONTENT,O.USETIME
+		SELECT O.ORDERID,O.VCODE,O.VPASS,O.STATUS,O.CREATETIME,O.USEID,O.USEAMOUNT,O.USECONTENT,O.USETIME,O.VALIDITYTIME,O.DELIVERYMSG,O.TEMPLATEID
 	    FROM BLQL_VIRTUALCODE O
 		WHERE O.ORDERID = #{orderId}
 	</select>
 	
 	<insert id="save" parameterType="virtualcode">
-        	insert into BLQL_VIRTUALCODE (ORDERID,VCODE,VPASS,STATUS,CREATETIME) values(#{orderId},#{virtualCode},#{virtualCodePass},#{status},#{createTime}) 
+        	insert into BLQL_VIRTUALCODE (ORDERID,VCODE,VPASS,STATUS,CREATETIME,VALIDITYTIME,DELIVERYMSG,TEMPLATEID) values(#{orderId},#{virtualCode},#{virtualCodePass},#{status},#{createTime},#{validityTime},#{deliveryMsg},#{templateId}) 
 	</insert>
 	
 	
 	<update id="updateStatus" parameterType="map">
         	update BLQL_VIRTUALCODE set STATUS=#{status} WHERE ORDERID= #{orderId}
 	</update>
+	
+	
+	
+	<!-- 更新记录 -->
+	<update id="update" parameterType="virtualcode">
+		UPDATE BLQL_VIRTUALCODE
+		<set>
+			<if test="useAmount!= null">USEAMOUNT=#{useAmount},</if>
+			<if test="useContent!= null">USECONTENT=#{useContent},</if>
+			<if test="useDatetime!= null">USETIME=#{useDatetime},</if>
+			<if test="useId!= null">USEID=#{useId},</if>
+			<if test="status!= null">STATUS=#{status}</if>
+		</set>
+		WHERE ORDERID=#{orderId}
+	</update>
+	
 	
 </mapper>

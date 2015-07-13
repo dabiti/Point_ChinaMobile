@@ -100,11 +100,18 @@
         <servlet-name>default</servlet-name>
         <url-pattern>*.swf</url-pattern>
     </servlet-mapping>
- <servlet>
+<!--  <servlet>
   <servlet-name>FolderStart</servlet-name>
   <servlet-class>com.point.web.listener.FolderStartServlet</servlet-class>
   <load-on-startup>10</load-on-startup>
   </servlet>
+  
+   <servlet>
+  <servlet-name>FTPStart</servlet-name>
+  <servlet-class>com.point.web.listener.MMSFTPStartServlet</servlet-class>
+  <load-on-startup>10</load-on-startup>
+  </servlet> -->
+  
   <listener>
 		<listener-class>
 			com.point.web.listener.StartListener

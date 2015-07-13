@@ -12,16 +12,13 @@ import javax.servlet.http.HttpServletResponse;
 import net.sf.json.JSONObject;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSONArray;
-import com.google.gson.Gson;
 import com.point.web.entity.Channel;
 import com.point.web.service.ChannelService;
-import com.point.web.util.Pager;
 
 @Controller
 

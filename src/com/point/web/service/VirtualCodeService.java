@@ -14,9 +14,12 @@ public interface VirtualCodeService {
 	public void updateStatus(String orderId,String status) ;
 	
 	//查询
-	public VirtualCode get(String orderId);
+	public VirtualCode get(String orderId) ;
 
 	//保存虚拟码
-	void save(VirtualCode vc) throws Exception;
+	public void save(VirtualCode vc) ;
+	
+	//更新
+	public void update(VirtualCode vc) ;
 	
 }
