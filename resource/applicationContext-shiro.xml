@@ -28,8 +28,8 @@
 			<value>
 			    /**=anon
 				<!-- /=anon
-				/login/toLogin=anon
-				/login/login=anon
+				/login/**=anon
+				/pass/**=anon
 				/login/logout=logout
 				/jumpToLoginView=anon
 				/html/**=anon

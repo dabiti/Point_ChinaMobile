@@ -28,7 +28,6 @@
 					startDate = y+'/'+m+'/'+d;
 					if(endDate != null)
 						comptime(startDate,endDate);
-					console.log('start: '+startDate);
 				}
 			})
 			$('#enddate').datebox({
@@ -39,7 +38,6 @@
 					endDate = y+'/'+m+'/'+d;
 					if(startDate != null)
 						comptime(startDate,endDate);
-					console.log('end: '+endDate);
 				}
 			});
 			
@@ -92,7 +90,7 @@
 </head>
 <body> 
 <div class="easyui-layout" style="width:100%;height:100%;">
-	<table id='orderTable'  class="easyui-datagrid" style="width:100%;height:80%" url="<%=basePath %>/listHandle" title="请输入查询条件" 
+	<table id='orderTable' style="width:100%;height:80%" url="<%=basePath %>/listHandle" title="请输入查询条件" 
 		rownumbers="true" toolbar="#searchBar" loadMsg="正在查询..." pagination="true">
 		 
 		<thead> 

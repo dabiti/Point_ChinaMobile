@@ -11,7 +11,7 @@
 
 <title>登陆页面</title>
 <style>
-body{text-align:center}
+body{font-family:'Microsoft YaHei';text-align: center;margin:auto;}
 .login_input{  
 background-position: 5px 6px;  
 background-repeat:no-repeat;  

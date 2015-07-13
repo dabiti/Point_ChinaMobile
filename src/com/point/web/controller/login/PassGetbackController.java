@@ -24,6 +24,7 @@ import com.point.web.entity.Channel;
 import com.point.web.entity.PassGetback;
 import com.point.web.service.ChannelService;
 import com.point.web.service.PassGetbackService;
+import com.point.web.util.MMSTool;
 import com.point.web.util.PassEncodeTool;
 import com.point.web.util.TimeUtils;
 import com.point.web.util.ValidCodeProductTool;
@@ -182,8 +183,14 @@ public class PassGetbackController {
 	    	}
 	    	
 	        String validCode = ValidCodeProductTool.productCode();
+	        String sendTemp = "blql send validcode : "+validCode;
 	        
-	        //String result = MMSTool.sendMMS(channel.getPhone(), validCode);
+	        String result = MMSTool.sendMMS(channel.getPhone(), sendTemp);
+	        
+	        if(!result.contains("1000")){
+	        	WebUtils.writeWarningMsg(response,"发送失败！");
+	        	return;
+	        }
 	        //发送验证码，如果验证码发送成功，结果中包含‘1000’，则写入数据库
 	        PassGetback passGetback = new PassGetback();
 	        passGetback.setAccount(account);
