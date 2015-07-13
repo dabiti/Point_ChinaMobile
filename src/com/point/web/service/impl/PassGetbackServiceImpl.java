@@ -21,4 +21,29 @@ public class PassGetbackServiceImpl implements PassGetbackService{
 	public PassGetback findById(String id) {
 		return this.passGetbackDao.findById(id);
 	}
+
+	@Override
+	public PassGetback findLastByAccount(String account) {
+		return this.passGetbackDao.findLastByAccount(account);
+	}
+
+	@Override
+	public int updateColoums(PassGetback passGetback) {
+		return this.passGetbackDao.updateColoums(passGetback);
+	}
+
+	@Override
+	public int updateColoumsByCondition(PassGetback passGetback) {
+		return this.passGetbackDao.updateColoumsByCondition(passGetback);
+	}
+
+	@Override
+	public PassGetback findByShaid(String shaid) {
+		return this.passGetbackDao.findByShaid(shaid);
+	}
+	
+	@Override
+	public int updateColoumsByCondition2(PassGetback passGetback) {
+		return this.passGetbackDao.updateColoumsByCondition2(passGetback);
+	}
 }

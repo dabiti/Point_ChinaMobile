@@ -1,6 +1,10 @@
 package com.point.web.controller.login;
 
+
 import java.io.IOException;
+
+
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -67,11 +71,13 @@ public class LoginController{
 	@RequestMapping("/login/login")
 	public void login(HttpServletRequest request,HttpServletResponse response) {
 		
-		String username = (String)WebUtils.getParameterStr(request,"username");
+		Map<String,Object> dataMap = WebUtils.convertRequestParamToMap(request);
 		
-		String password = (String)WebUtils.getParameterStr(request,"password");
+		String username = (String)dataMap.get("username");
 		
-		String validcode = (String)WebUtils.getParameterStr(request,"validcode");
+		String password = (String)dataMap.get("password");
+		
+		String validcode = (String)dataMap.get("validcode");
 		
 		if(StringUtils.isEmpty(username)){
 			WebUtils.writeWarningMsg(response,"用户名不能为空！");
@@ -101,8 +107,8 @@ public class LoginController{
 	        
 	        if(subject.isAuthenticated()){
 	        	WebUtils.writeSuccessMsg(response,"登录成功！");
-	        	return;
 	        }
+	        
 	    } catch (IncorrectCredentialsException e) {
 	    	e.printStackTrace();
 	    	WebUtils.writeWarningMsg(response,"密码错误！");

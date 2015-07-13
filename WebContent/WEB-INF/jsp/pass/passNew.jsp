@@ -1,4 +1,3 @@
-<%@page import="com.point.web.util.TimeUtils"%>
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 <%
 String path = request.getContextPath();
@@ -11,7 +10,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>找回密码</title>
+<title>密码重置</title>
 <style>
 body{font-family:'Microsoft YaHei';text-align: center;margin:auto;}
 .vali_code_button{
@@ -85,9 +84,7 @@ $(function(){
 	
 	$('#msgBoxButton').click(function(){
 		closeMsg();
-	});
-	
-	$('#com').bind("click",sendCode);
+	})
 	
 });
 
@@ -112,150 +109,64 @@ function showMask(){
 function hideMask(){     
     $("#mask").hide();     
 }  
-
-function validAccountRex(accountVal){
-	reg=/^[a-z,A-Z][a-z,A-Z,0-9]{0,20}$/;  
+function validPassRex(passVal){
+	reg1 = /((?=.*\d)(?=.*\D)|(?=.*[a-zA-Z])(?=.*[^a-zA-Z]))^.{6,20}$/;
 	
-    if(!reg.test(accountVal)){   
+	reg2 = /[^\x00-\xff]/;
+	
+    if(!reg1.test(passVal)){   
+    	return false;
+    } 
+    if(reg2.test(passVal)){   
     	return false;
     } 
     return true;
 }
-
-//发送短信验证码
-function sendCode(){
-	if(!$.trim($('#account').val())){
-		showMsg('用户名不能为空！');
-		return;
-	}
-	if(!$.trim($('#phone').val())){
-		showMsg('手机号不能为空！');
-		return;
-	}
-    if(!validAccountRex($('#account').val())){   
-    	showMsg("用户名格式错误");  
-    	return;
-    }  
-	showMask();
-	var url = "<%=basePath%>pass/sendCode";
-	$.ajax({
-        cache: false,
-        type: "post",
-        url:url,
-        data:$('#passForm_ID').serialize(),
-        async: false,
-        error: function(request) {
-        	hideMask();
-        	showMsg(obj.msg);
-        },
-        success: function(data) {
-        	hideMask();
-            var obj = eval("("+data+")");
-            showMsg(obj.msg);
-            if(obj.code === '901'){
-            	validcode_wait();
-            }
-        }
-    });
-}
-//提交找回密码数据
+//提交重置密码
 function submitData(){
-	if(!$.trim($('#account').val())){
-		showMsg('用户名不能为空！');
+	var pass = $.trim($('#pass').val());
+	var rpass = $.trim($('#rpass').val());
+	if(!pass){
+		showMsg('密码不能为空！');
 		return;
 	} 
-	if(!$.trim($('#phone').val())){
-		showMsg('手机号不能为空！');
+	
+	if(!validPassRex($('#pass').val())){
+		showMsg('密码格式错误！');
 		return;
 	}
 	
-	if(!$.trim($('#validcode').val())){
-		showMsg('验证码不能为空！');
+	if(!rpass){
+		showMsg('重复密码不能为空！');
 		return;
+	}
+	
+	if(pass != rpass){
+		showMsg('密码不相符！');
+		return;
+	}
+	
+	if(!$('#vpid').val()){
+		window.location.href='<%=basePath%>pass/toPassGetback';
 	}
 	
 	showMask();
-	var url = "<%=basePath%>pass/passGetsubmit";
-	$.ajax({
-        cache: false,
-        type: "post",
-        url:url,
-        data:$('#passForm_ID').serialize(),
-        async: false,
-        error: function(request) {
-        	hideMask();
-        	showMsg(obj.msg);
-        },
-        success: function(data) {
-        	hideMask();
-            var obj = eval("("+data+")");
-            if(obj.code === '901'){
-            	$('#vpid').val(obj.data);
-            	var form = document.getElementById('toPassForm_ID');
-            	form.action = "<%=basePath%>pass/toPassNew";
-            	form.submit();
-            }else{
-            	showMsg(obj.msg);
-            }
-        }
-    });
+	
+	var form = document.getElementById('passForm_ID');
+	form.action = "<%=basePath%>pass/passConfirm";
+	form.submit();
+	
 }
 function keyLogin(){
   /* if (event.keyCode==13)
      document.getElementById("login_button").click(); */
 }
 
-function validcode_wait(){
-	var inter = parseInt('<%=TimeUtils.differCodeSendTimeMillis%>')/1000;
-	var i = inter;
-	var t = setInterval(function(){	
-		if (i == 0) {	
-			$("#com").removeClass("vali_code_click_button ").addClass("vali_code_button").html("");
-			$('#com').bind("click",sendCode);
-			clearInterval(t);
-			return;	
-		}	
-		document.getElementById("com").innerHTML ='等待'+i+'秒';
-		if( i == inter){
-			$("#com").removeClass("vali_code_button").addClass("vali_code_click_button");
-			$('#com').unbind("click");
-		}
-		i--;
-	}, 1000);
+function validcode_wait(com){
+	$(com).removeClass("vali_code_button").addClass("vali_code_click_button");
+	$(com).html('等待');
 }
-//验证账户
-function validAccount(){
-	if($('#account').val()){
-		if(!validAccountRex($('#account').val())){   
-	    	showMsg("用户名格式错误");  
-	    	return;
-	    }
-		showMask();
-		var url = "<%=basePath%>pass/validAccount";
-		$.ajax({
-	        cache: false,
-	        type: "post",
-	        url:url,
-	        data:{account:$('#account').val()},
-	        async: false,
-	        error: function(request) {
-	        	hideMask();
-	        	showMsg(obj.msg);
-	        },
-	        success: function(data) {
-	        	hideMask();
-	            var obj = eval("("+data+")");
-	            if(obj.code === '901'){
-	            	$('#phone').val(obj.data);
-	            }else{
-	            	showMsg(obj.msg);
-	            	$('#phone').val('');
-	            	$('#validcode').val('');
-	            }
-	        }
-	    });
-	}
-}
+
 function alertMsg(){
 	var msg = '${msg}';
 	if(msg){
@@ -265,9 +176,6 @@ function alertMsg(){
 </script>
 </head>
 <body onload="alertMsg()">
-<form id="toPassForm_ID" method="post">
-	<input type="hidden" name="vpid" id="vpid"/>
-</form>
 <div id='mask' class="mask"></div>	
 <dl id="msgBox" style="display:none;z-index:10000;width:200px;position:absolute;
 background:#FFFFFF;border:1px solid #ccc;line-height:25px; top:50%; left:50%;">
@@ -281,7 +189,7 @@ background:#FFFFFF;border:1px solid #ccc;line-height:25px; top:50%; left:50%;">
   	<input style="border:0px;width: 50px" type="button" value="确定 " id="msgBoxButton" />
   </dt>
 </dl>
-<form id="passForm_ID">
+<form id="passForm_ID" method="post">
   <div style="height:768; width:1404; border:0px; background-color:;">
 	    <table width="1404" border="0" cellpadding="0" cellspacing="0">
 	      <tr>
@@ -292,35 +200,24 @@ background:#FFFFFF;border:1px solid #ccc;line-height:25px; top:50%; left:50%;">
         	<div style="width: 1024; height: 462;margin: auto; text-align:center;background-color: ;">
 		      <table width="1024" border="0" cellpadding="0" cellspacing="0">
 		        <tr>
-		          <th colspan="3" scope="row" height="138" width="1024" style="background-image:url(<%=basePath%>images/passgetback/bg_top.png); background-repeat:no-repeat;background-position: center;">&nbsp;</th>
+		          <th colspan="3" scope="row" height="138" width="1024" style="background-color:white;background-image:url(<%=basePath%>images/passgetback/bg_chongzhimima.png); background-repeat:no-repeat;background-position: center;">&nbsp;</th>
 		        </tr>
 		        <tr>
-		          <th rowspan="2" scope="row" height="324" width="315" style="background-image:url(<%=basePath%>images/passgetback/bg_left.png);background-repeat:no-repeat">&nbsp;</th>
+		          <th rowspan="2" scope="row" height="324" width="315" style="background-color:white;">&nbsp;</th>
 		          <td height="249" width="395" style="background-color:#FFF;">
 		          	<table width="0" border="0" cellspacing="0" cellpadding="0" style="height: 249px;width: 395px;">
 		          	  <tr>
-		          	    <th scope="row" style="color:#909090">用户名：</th>
+		          	    <th scope="row" style="color:#909090">新密码：</th>
 		          	    <td><div style="width:302px;height:42px;text-align: center; vertical-align:middle; background-image: url(<%=basePath%>images/passgetback/yonghuming.png);">
-		                <input type="text" onblur="validAccount()" name="account" id="account" style="margin: 1px;vertical-align:middle;font-size: 18px; border:0px solid;width:290px;height:36px;line-height:36px;"/>
+		                <input type="password" name="pass" id="pass" style="margin: 1px;vertical-align:middle;font-size: 18px; border:0px solid;width:290px;height:36px;line-height:36px;"/>
+		                <input type="hidden" name="vpid" id="vpid" value="${vpid }"/>
 		                </div></td>
 		       	      </tr>
 		          	  <tr>
-		          	    <th scope="row" style="color:#909090">手机号：</th>
+		          	    <th scope="row" style="color:#909090">确认密码：</th>
 		          	    <td><div style="width:302px;height:42px;text-align: center; vertical-align:middle; background-image: url(<%=basePath%>images/passgetback/yonghuming.png);">
-		                <input type="text" readonly='readonly' name="phone" id="phone" style="margin: 1px;vertical-align:middle;font-size: 18px; border:0px solid;width:290px;height:36px;line-height:36px;"/>
+		                <input type="password" name="rpass" id="rpass" style="margin: 1px;vertical-align:middle;font-size: 18px; border:0px solid;width:290px;height:36px;line-height:36px;"/>
 		                </div></td>
-		       	      </tr>
-		          	  <tr>
-		          	    <th scope="row" style="color:#909090">验证码：</th>
-		          	    <td>
-			                <div style="background-color:;height:auto; margin:0 auto; background:;overflow:hidden;">
-			                    <div style="text-align:center;width:156px;height:42px;background-image:url(<%=basePath%>images/passgetback/shurukuang.png);float:left; border:0px solid #FF0000; overflow:hidden;">
-			                    	<input name="validcode" id="validcode" type="text" style="margin: 1px;vertical-align:middle;font-size: 18px; border:0px solid;width:145px;height:36px;line-height:36px;"/>
-			                    </div>
-			                    <div class="vali_code_button" id="com">                
-			                    </div>
-			                </div>
-		                </td>
 		       	      </tr>
 		          	  <tr>
 		          	    <th scope="row">&nbsp;</th>
@@ -328,10 +225,10 @@ background:#FFFFFF;border:1px solid #ccc;line-height:25px; top:50%; left:50%;">
 		       	      </tr>
 			   	      </table>
 		   	      </td>
-		          <td rowspan="2" height="324" width="314" style="background-image:url(<%=basePath%>images/passgetback/bg_right.png);background-repeat:no-repeat" >&nbsp;</td>
+		          <td rowspan="2" height="324" width="314" style="background-color:white;" >&nbsp;</td>
 		        </tr>
 		        <tr>
-		          <td height="75" width="395" style="background-image:url(<%=basePath%>images/passgetback/bg_bottom.png);background-repeat:no-repeat; ">&nbsp;</td>
+		          <td height="75" width="395" style="background-color:white;">&nbsp;</td>
 		        </tr>
 		      </table>
 	    	</div>

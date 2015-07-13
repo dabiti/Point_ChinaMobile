@@ -56,7 +56,8 @@
 			<if test="email!= null">EMAIL=#{email},</if>
 			<if test="phone!= null">PHONE=#{phone},</if>
 			<if test="cno!= null">CNO=#{cno},</if>
-			<if test="password!= null">PASSWORD=#{password}</if>
+			<if test="password!= null">PASSWORD=#{password},</if>
+			<if test="salt!= null">SALT=#{salt}</if>
 		</set>
 		WHERE ID=#{id}
 	</update>

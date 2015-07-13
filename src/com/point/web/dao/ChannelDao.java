@@ -44,7 +44,7 @@ public interface ChannelDao {
 	 * @Since: 2015年7月01日
 	 * @author liuhao 
 	 */
-	public void update(Channel channel);
+	public int update(Channel channel);
 	/**
 	 @Title: 删除批量渠道商的方法接口
 	 * @Description:

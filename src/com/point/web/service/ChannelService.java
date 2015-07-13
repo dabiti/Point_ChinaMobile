@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.point.web.entity.Channel;
+import com.point.web.entity.PassGetback;
 
 /**
  * @Title: ChannelService接口
@@ -40,7 +41,7 @@ public void insert(Channel channel);
 * @Since: 2015年7月01日
 * @author liuhao 
 */
-public void update(Channel channel);
+public int update(Channel channel);
 /**
 @Title: 删除批量渠道商的方法接口
 * @Description:
@@ -64,4 +65,6 @@ public void delete(Channel channel);
 public List<Channel> findAllByCondition(Map paramMap);
 
 public Channel findByName(String name);
+
+public String updatePassGetBack(String vpid,String pass);
 }

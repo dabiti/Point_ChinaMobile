@@ -1,34 +1,26 @@
-/**   
-* @Title: PassGetback.java 
-* @Package com.point.web.entity 
-* @Description: TODO
-* @author guowanyu   
-* @date 2015年7月9日 上午10:24:17 
-* @version V1.0   
-*/
-package com.point.web.entity;
+package com.point.web.entity; 
 
 import java.io.Serializable;
 import java.util.Date;
+
 /**
- * @title :
- * @author : 
- * @since：2015年7月9日 上午10:24:17 
+ * @title :密码找回类
+ * @author : 刘浩
+ * @since：2015年7月9日 下午1:11:39 
  * @Description:
  */
 public class PassGetback implements Serializable{
 	private static final long serialVersionUID = 1L;
 	private String id;
-	private String validcode;
-	private Date createtime;
-	private String remark;
-	private String account;
-	private String phone;
-	private Date validtime;
-	private Date newpasstime;
+	private String validcode;//验证码
+	private Date createtime;//验证码创建时间
+	private String remark;//备注
+	private String account;//账号
+	private String phone;//手机号
+	private Date validtime;//密码找回验证码验证时间
+	private Date newpasstime;//新密码确认时间
 	private String shaid;
-	private String isvald;
-	
+	private String isvalid;
 	public String getId() {
 		return id;
 	}
@@ -83,10 +75,14 @@ public class PassGetback implements Serializable{
 	public void setShaid(String shaid) {
 		this.shaid = shaid;
 	}
-	public String getIsvald() {
-		return isvald;
+	public String getIsvalid() {
+		return isvalid;
 	}
-	public void setIsvald(String isvald) {
-		this.isvald = isvald;
+	public void setIsvalid(String isvalid) {
+		this.isvalid = isvalid;
 	}
+	
+	
+	
 }
+ 
