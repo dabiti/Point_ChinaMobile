@@ -156,7 +156,7 @@ public class BoleTool {
 	// 验证参数
 	public final static boolean verifyParameterForConsumeVCfromBole(String msg) {
 		JSONObject jo = JSONObject.fromObject(msg);
-		if (null != jo && jo.containsKey("orderid")&& jo.containsKey("sign")){
+		if (null != jo && jo.containsKey("orderId")&& jo.containsKey("sign")&& jo.containsKey("useId")&& jo.containsKey("sign")&& jo.containsKey("useAmount")&& jo.containsKey("useDatetime")&& jo.containsKey("useContent")){
 			return true;
 		}
 		return false;

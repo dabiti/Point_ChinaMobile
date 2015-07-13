@@ -34,13 +34,27 @@ public class VirtualCode {
 	// 消费时间
 	private String useDatetime;
 
+	
+	// 有效期
+	private String validityTime;
+		
+	// 提货信息
+	private String deliveryMsg;
+	
+	// 短信模版
+	private String templateId;
+	
 	@Override
 	public String toString() {
 		return "Order [orderid=" + orderId + ", virtualCode=" + virtualCode
 				+ ", virtualCodePass=" + virtualCodePass + ", status=" + status
 				+ ", createTime=" + createTime + ", useId=" + useId
 				+ ", useAmount=" + useAmount + ", useContent=" + useContent
-				+ ", useDatetime=" + useDatetime + "]";
+				+ ", useDatetime=" + useDatetime 
+				+ ", validityTime=" + validityTime 
+				+ ", deliveryMsg=" + deliveryMsg 
+				+ ", templateId=" + templateId 
+				+ "]";
 	}
 
 	public String getStatus() {
@@ -115,4 +129,31 @@ public class VirtualCode {
 		this.useDatetime = useDatetime;
 	}
 
+	public String getValidityTime() {
+		return validityTime;
+	}
+
+	public void setValidityTime(String validityTime) {
+		this.validityTime = validityTime;
+	}
+
+	public String getDeliveryMsg() {
+		return deliveryMsg;
+	}
+
+	public void setDeliveryMsg(String deliveryMsg) {
+		this.deliveryMsg = deliveryMsg;
+	}
+
+	public String getTemplateId() {
+		return templateId;
+	}
+
+	public void setTemplateId(String templateId) {
+		this.templateId = templateId;
+	}
+
+	
+	
+	
 }
