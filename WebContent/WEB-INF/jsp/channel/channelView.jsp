@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=utf-8"
+	<%@ page language="java" contentType="text/html; charset=utf-8"
 	pageEncoding="utf-8"%>
 <%
 	String basePath = request.getScheme() + "://"
@@ -240,7 +240,6 @@
 				<th field='id' checkbox="true" ></th>
 				<th field='cno' width="10%" >商号</th>
 				<th field='name' width="20%">渠道商名称</th>
-				<th field='password' width="10%">密码</th>
 				<th field='phone' width="20%" align='right'>电话</th>
 				<th field='email' width="20%" align='right'>邮箱</th>
 				<th field='createtime' width="20%" align='left'>创建时间</th>
@@ -359,7 +358,7 @@
 
 <!-- 		</div> -->
 
-<!-- 		<!-- 以上是增加的表单 --> -->
+<!-- 		<!-- 以上是增加的表单 --> 
 
 <!-- 	</div> -->
 	<!-- 以上是增加的表单的窗口 -->
@@ -427,7 +426,7 @@
 			</div>
 <!-- 		</div> -->
 
-<!-- 		<!-- 以上是修改的表单 --> -->
+<!-- 		<!-- 以上是修改的表单 --> 
 
 <!-- 	</div> -->
 	<!-- 以上是修改的表单的窗口 -->
