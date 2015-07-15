@@ -2,11 +2,6 @@ package com.point.web.controller;
 
 import java.io.IOException;
 
-import java.io.UnsupportedEncodingException;
-import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-
-
 import javax.annotation.Resource;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -21,10 +16,7 @@ import org.apache.shiro.subject.Subject;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-
 import sun.misc.BASE64Encoder;
-
-import com.google.gson.Gson;
 
 import com.point.web.entity.Order;
 import com.point.web.entity.VGReturnJson;
@@ -117,10 +109,6 @@ public class MobileMallController {
 				log.info("开始Base64解密");
 				req = req.replace(" ", "+");
 				req = Base64Coder.decodeString(req);
-				// req =
-				// "df882ed62782ddf7cd7afbc73f762411{\"source\":\"2\",\"version\":\"1.0\",\"identity_id\":\"123456\","
-				// +
-				// "\"data\":{\"orderId\":\"123\",\"phone\":\"13581761989\",\"itemId\":\"123\",\"title\":\"123\",\"price\":\"123\",\"quantity\":\"123\",\"finalFee\":\"123\",\"discount\":\"123\"}}";
 				log.info("Base64解密后报文:" + req);
 				// 签名
 				String sign = req.substring(0, req.indexOf("{"));
@@ -263,7 +251,7 @@ public class MobileMallController {
 					log.info("开始请求短信网关，给用户发送虚拟码短信");
 					MMSReturnStr = MMSTool.sendMMS(order.getPhone(),
 							order.getPrice() + "|" + vpass + "|" + deliveryMsg
-									+ "|" + validityTime);
+									+ "|" + validityTime,MMSTool.getMMSMap().get("cm_templateId"));
 					if (null != MMSReturnStr && MMSReturnStr.contains("1000")) {
 						log.info("发送成功,更新状态至1");
 						MMSResult = true;
@@ -332,16 +320,15 @@ public class MobileMallController {
 			String deliveryMsg = null;
 			String validityTime = null;
 			String req = request.getParameter("req");
-			if (null != req) {
+			if (null == req) {
 				log.info("报文为空");
 				rj = new VGReturnJson("1002", "缺少参数，某个必须传递的参数您没有传递");
 			} else {
 				log.info("报文req=" + req);
 				// Base64解密
 				log.info("开始Base64解密");
-				// req = Base64Coder.decodeString(req);
+				req = Base64Coder.decodeString(req);
 				log.info("Base64解密后报文:" + req);
-				req = "{\"orderid\":\"123\",\"sign\":\"13581761989\"}";
 				if (!StringTool.isUTF8(req)) {
 					log.error("错误的编码格式");
 					rj = new VGReturnJson("1006", "错误的编码格式");
@@ -471,7 +458,7 @@ public class MobileMallController {
 										order.getPhone(), order.getPrice()
 												+ "|" + vpass + "|"
 												+ deliveryMsg + "|"
-												+ validityTime);
+												+ validityTime,MMSTool.getMMSMap().get("cm_templateId"));
 								if (null != MMSReturnStr
 										&& MMSReturnStr.contains("1000")) {
 									rj = new VGReturnJson("0", "ok");
@@ -513,19 +500,18 @@ public class MobileMallController {
 			String deliveryMsg = null;
 			String validityTime = null;
 			String req = request.getParameter("req");
-			if (null == req) {
+			//TODO
+			if (null != req) {
 				log.info("报文为空");
 				rj = new VGReturnJson("1002", "缺少参数，某个必须传递的参数您没有传递");
 			} else {
 				log.info("报文req=" + req);
 				// Base64解密
 				log.info("开始Base64解密");
-				req = req.replace(" ", "+");
-				req = Base64Coder.decodeString(req);
-				// req =
-				// "df882ed62782ddf7cd7afbc73f762411{\"source\":\"2\",\"version\":\"1.0\",\"identity_id\":\"123456\","
-				// +
-				// "\"data\":{\"orderId\":\"123\",\"phone\":\"13581761989\",\"itemId\":\"123\",\"title\":\"123\",\"price\":\"123\",\"quantity\":\"123\",\"finalFee\":\"123\",\"discount\":\"123\"}}";
+//				req = req.replace(" ", "+");
+//				req = Base64Coder.decodeString(req);
+				req ="df882ed62782ddf7cd7afbc73f762411{\"source\":\"2\",\"version\":\"1.0\",\"identity_id\":\"123456\","+
+				 "\"data\":{\"orderId\":\"422292521\"}}";	
 				log.info("Base64解密后报文:" + req);
 				// 签名
 				String sign = req.substring(0, req.indexOf("{"));
@@ -535,7 +521,8 @@ public class MobileMallController {
 				log.info("参数为:" + jsonStr);
 				// 验证签名
 				log.info("开始验证签名");
-				if (!VirtualGoodsTool.verifySign(jsonStr, sign)) {
+				//TODO
+				if (VirtualGoodsTool.verifySign(jsonStr, sign)) {
 					log.error("验证签名未通过");
 					rj = new VGReturnJson("1001",
 							"验签失败，您所传递的数据签名在API服务器端没有验证通过");
@@ -659,7 +646,7 @@ public class MobileMallController {
 								order.getPrice() + "|"
 										+ vc.getVirtualCodePass() + "|"
 										+ vc.getDeliveryMsg() + "|"
-										+ vc.getValidityTime());
+										+ vc.getValidityTime(),MMSTool.getMMSMap().get("cm_templateId"));
 						if (null != MMSReturnStr
 								&& MMSReturnStr.contains("1000")) {
 							// 发送成功
@@ -701,7 +688,6 @@ public class MobileMallController {
 				log.info("开始Base64解密");
 				req = Base64Coder.decodeString(req);
 				log.info("Base64解密后报文:" + req);
-				// req = "{\"orderid\":\"123\",\"sign\":\"13581761989\"}";
 				if (!StringTool.isUTF8(req)) {
 					log.error("错误的编码格式");
 					rj = new VGReturnJson("1006", "错误的编码格式");
@@ -732,9 +718,6 @@ public class MobileMallController {
 										"订单有误，订单信息错误或者订单不存在");
 							} else {
 								log.info("更新虚拟码状态至5,添加消费内容");
-
-								// virtualCodeService.updateStatus(
-								// order.getOrderId(), "4");
 								VirtualCode vc = new VirtualCode();
 								vc.setOrderId(orderId);
 								vc.setUseId(useId);
@@ -748,8 +731,6 @@ public class MobileMallController {
 								// TODO
 								// 通知移动商城
 								JSONObject jo = new JSONObject();
-								// ArrayList<Record> list = new
-								// ArrayList<Record>();
 								JSONArray ja = new JSONArray();
 								JSONObject recordJo = new JSONObject();
 								recordJo.put("orderId", orderId);
@@ -816,10 +797,6 @@ public class MobileMallController {
 				log.info("开始Base64解密");
 				req = req.replace(" ", "+");
 				req = Base64Coder.decodeString(req);
-				// req =
-				// "df882ed62782ddf7cd7afbc73f762411{\"source\":\"2\",\"version\":\"1.0\",\"identity_id\":\"123456\","
-				// +
-				// "\"data\":{\"orderId\":\"123\",\"phone\":\"13581761989\",\"itemId\":\"123\",\"title\":\"123\",\"price\":\"123\",\"quantity\":\"123\",\"finalFee\":\"123\",\"discount\":\"123\"}}";
 				log.info("Base64解密后报文:" + req);
 				// 签名
 				String sign = req.substring(0, req.indexOf("{"));

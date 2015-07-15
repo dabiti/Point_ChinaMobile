@@ -18,12 +18,14 @@ public class StartListener implements ServletContextListener {
 	
 	@Override
 	public void contextDestroyed(ServletContextEvent arg0) {
-		log.info("off");
+		MMSFTPStartServlet.MMSftpButton = false;
+		log.info("MMSftp_off");
 	}
 
 	@Override
 	public void contextInitialized(ServletContextEvent arg0) {
-		log.info("on");
+		MMSFTPStartServlet.MMSftpButton = true;
+		log.info("MMSftp_on");
 	}
 
 }

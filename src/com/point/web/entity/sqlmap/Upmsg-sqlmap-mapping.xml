@@ -20,7 +20,7 @@
 
 
 	<update id="updateStatus" parameterType="map">
-        	update BLQL_UPMSG set STATUS=#{status} WHERE USERID= #{userId} AND PHONE= #{phone} AND PHONE= #{upTime}
+        	update BLQL_UPMSG set STATUS=#{status} WHERE USERID= #{userId} AND PHONE= #{phone} AND UPTIME= #{upTime}
 	</update>
 
 </mapper>

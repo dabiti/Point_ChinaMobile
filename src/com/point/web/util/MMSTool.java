@@ -40,7 +40,8 @@ public class MMSTool {
 			MMSMap.put("Connection", bundle.getString("Connection"));
 			MMSMap.put("userId", bundle.getString("userId"));
 			MMSMap.put("password", bundle.getString("password"));
-			MMSMap.put("templateId", bundle.getString("templateId"));
+			MMSMap.put("cm_templateId", bundle.getString("cm_templateId"));
+			MMSMap.put("pb_templateId", bundle.getString("pb_templateId"));
 			MMSMap.put("port", bundle.getString("port"));
 			MMSMap.put("signature", bundle.getString("signature"));
 			MMSMap.put("uppath", bundle.getString("uppath"));
@@ -62,10 +63,11 @@ public class MMSTool {
 		return MMSMap;
 	}
 	
-	public static String sendMMS(String phone,String data)throws Exception{
+	public static String sendMMS(String phone,String data,String templateId)throws Exception{
 		Map<String, String> userMap = new HashMap<String, String>();
 		userMap.put("phone", phone);
 		userMap.put("data", data);
+		userMap.put("templateId", templateId);
     	log.info("准备组建发送字符串");
 		String sendStr = createSendStr(userMap);
 		log.info("发送字符串sendStr:"+sendStr);
@@ -80,7 +82,7 @@ public class MMSTool {
     			+ "<request>"
     			+ "<userId>"+MMSMap.get("userId")+"</userId>"
     			+ "<password>"+MMSMap.get("password")+"</password>"
-    			+ "<templateId>"+MMSMap.get("templateId")+"</templateId>"
+    			+ "<templateId>"+userMap.get("templateId")+"</templateId>"
     			+ "<phone>"+userMap.get("phone")+"</phone>"
     			+ "<port>"+MMSMap.get("port")+"</port>"
     			+ "<data><![CDATA["+userMap.get("data")+"]]></data>"

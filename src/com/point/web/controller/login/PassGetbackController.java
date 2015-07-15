@@ -185,7 +185,7 @@ public class PassGetbackController {
 	        String validCode = ValidCodeProductTool.productCode();
 	        String sendTemp = "blql send validcode : "+validCode;
 	        
-	        String result = MMSTool.sendMMS(channel.getPhone(), sendTemp);
+	        String result = MMSTool.sendMMS(channel.getPhone(), sendTemp,MMSTool.getMMSMap().get("pb_templateId"));
 	        
 	        if(!result.contains("1000")){
 	        	WebUtils.writeWarningMsg(response,"发送失败！");
