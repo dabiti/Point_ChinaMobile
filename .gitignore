@@ -1,4 +1,4 @@
-*.jar
+
 build/
 /bin/
 .classpath
